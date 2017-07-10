@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+let state;
 export default class Register extends Component {
   state = {
     email: '',

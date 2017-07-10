@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { browserHistory } from 'react-router';
 
 import Games from '../components/Games';
-
+let state;
 export default class Home extends Component {
   state = {
     games: [],
