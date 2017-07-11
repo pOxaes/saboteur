@@ -1,9 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
+import request from "../services/request";
+import userService from "../services/user";
 
 export default class Register extends Component {
   state = {
-    email: '',
-    password: '',
+    email: "",
+    password: ""
   };
 
   handleChange(event) {
@@ -12,8 +14,10 @@ export default class Register extends Component {
 
   submit(event) {
     event.preventDefault();
-    this.props.history.push('/');
-      // TODO: SUBMIT FORM
+    request.post(`http://localhost:3008/login`, this.state).then(user => {
+      userService.set(user);
+      this.props.history.push("/");
+    });
   }
 
   render() {
@@ -40,7 +44,7 @@ export default class Register extends Component {
           />
 
           <button className="button" type="submit">
-              Login
+            Login
           </button>
         </form>
       </div>

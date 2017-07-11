@@ -7,22 +7,26 @@
     {
       "name": "Hugo",
       "id": 0,
-      "malus": ["light"],
+      "malus": ["LIGHT"],
       "cards": [
         {
-          "type": "build",
-          "path": 1010
+          "type": "PATH",
+          "item": "EMPTY",
+          "layout": 1010
         },
         {
-          "type": "malus",
-          "subtype": ["light"]
+          "type": "ACTION",
+          "action": "BLOCK",
+          "subtype": ["LIGHT"]
         },
         {
-          "type": "bonus",
-          "subtype": ["pickaxe", "chariot"]
+          "type": "ACTION",
+          "action": "FREE",
+          "subtype": ["PICKAXE", "CHARIOT"]
         },
         {
-          "type": "destroy"
+          "type": "ACTION",
+          "action": "DESTROY"
         }
       ],
       "gold": [1],
@@ -31,20 +35,19 @@
     {
       "name": "Vincent",
       "id": 1,
-      "malus": ["chariot"],
-      "cardsCount": 3,
+      "malus": ["CHARIOT"],
       "cards": [
         {
-          "type": "hidden"
+          "type": "HIDDEN"
         },
         {
-          "type": "hidden"
+          "type": "HIDDEN"
         },
         {
-          "type": "hidden"
+          "type": "HIDDEN"
         },
         {
-          "type": "hidden"
+          "type": "HIDDEN"
         }
       ],
       "gold": [3]
@@ -55,13 +58,13 @@
       "malus": [],
       "cards": [
         {
-          "type": "hidden"
+          "type": "HIDDEN"
         },
         {
-          "type": "hidden"
+          "type": "HIDDEN"
         },
         {
-          "type": "hidden"
+          "type": "HIDDEN"
         }
       ],
       "gold": [2]
@@ -69,16 +72,16 @@
     {
       "name": "Viet",
       "id": 3,
-      "malus": ["light"],
+      "malus": ["LIGHT"],
       "cards": [
         {
-          "type": "hidden"
+          "type": "HIDDEN"
         },
         {
-          "type": "hidden"
+          "type": "HIDDEN"
         },
         {
-          "type": "hidden"
+          "type": "HIDDEN"
         }
       ],
       "gold": [0]
@@ -89,16 +92,16 @@
       "malus": [],
       "cards": [
         {
-          "type": "hidden"
+          "type": "HIDDEN"
         },
         {
-          "type": "hidden"
+          "type": "HIDDEN"
         },
         {
-          "type": "hidden"
+          "type": "HIDDEN"
         },
         {
-          "type": "hidden"
+          "type": "HIDDEN"
         }
       ],
       "gold": [3]

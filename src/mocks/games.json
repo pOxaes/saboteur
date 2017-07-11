@@ -1,6 +1,14 @@
 [
   {
     "id": 0,
-    "name": "number 1"
+    "name": "number 1",
+    "playersCount": 4,
+    "maxPlayers": 6
+  },
+  {
+    "id": 1,
+    "name": "number 2",
+    "playersCount": 3,
+    "maxPlayers": 5
   }
 ]

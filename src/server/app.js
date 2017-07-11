@@ -16,14 +16,15 @@ const fakeLatencyMiddleware = (req, res, next) => {
 
 app.use(
   cors({
-    origin: ["http://localhost:3002"]
+    origin: ["http://localhost:3002", "http://localhost:3000"]
   }),
   fakeLatencyMiddleware
 );
 
-app.get("/games", mock("games"));
-
-app.get("/games/:id", mock("game.playing"));
+app
+  .get("/games", mock("games"))
+  .get("/games/:id", mock("game.playing"))
+  .post("/login", mock("login"));
 
 app.listen(3008, function() {
   console.log("Listening port 3008");
