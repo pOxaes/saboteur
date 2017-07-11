@@ -1,7 +1,8 @@
-import React from 'react';
+import React from "react";
 
-export default ({ game, onClick }) => (
+export default ({ game, onClick }) =>
   <button className="game" onClick={() => onClick(game)}>
-    <span className="game__name">{ game.name }</span>
-  </button>
-);
+    <span className="game__name">
+      {game.name}
+    </span>
+  </button>;

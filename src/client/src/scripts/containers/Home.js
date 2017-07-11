@@ -28,7 +28,10 @@ export default class Home extends Component {
         <p>
           Welcome {this.state.user.name}
         </p>
-        <Games games={this.state.games} onSelectGame={this.onSelectGame.bind(this)} />
+        <Games
+          games={this.state.games}
+          onSelectGame={this.onSelectGame.bind(this)}
+        />
       </div>
     );
   }

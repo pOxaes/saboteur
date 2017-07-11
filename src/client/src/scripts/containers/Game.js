@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { Redirect } from "react-router-dom";
 import request from "../services/request";
 import PlayersList from "../components/PlayersList";
@@ -8,7 +9,7 @@ const GAME_STATUS = {
   PLAYING: "PLAYING"
 };
 
-export default class Home extends Component {
+export class Home extends Component {
   state = {
     id: this.props.match.params.gameId
   };
@@ -22,13 +23,16 @@ export default class Home extends Component {
   }
 
   isLobby() {
-    return this.state.game && this.state.game.status === GAME_STATUS.WAITING_FOR_PLAYERS;
+    return (
+      this.state.game &&
+      this.state.game.status === GAME_STATUS.WAITING_FOR_PLAYERS
+    );
   }
 
-  kickPlayer(player) {
+  kickPlayer = player => {
     // TODO: kick player
     console.log("kick", player, this.state.id);
-  }
+  };
 
   renderLobby() {
     return (
@@ -66,7 +70,7 @@ export default class Home extends Component {
         {this.state.game &&
           <PlayersList
             players={this.state.game.players}
-            onKickPlayer={this.kickPlayer.bind(this)}
+            onKickPlayer={this.kickPlayer}
             canKickPlayer={this.state.game._canKick}
           />}
         {this.state.game && this.renderByStatus()}
@@ -74,3 +78,9 @@ export default class Home extends Component {
     );
   }
 }
+
+Home.propTypes = {
+  match: PropTypes.object.isRequired
+};
+
+export default Home;

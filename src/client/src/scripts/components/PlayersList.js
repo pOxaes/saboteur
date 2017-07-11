@@ -8,7 +8,11 @@ export default ({ players, onKickPlayer, canKickPlayer }) =>
       ? <p>No players</p>
       : players.map(player =>
           <li className="player" key={player.id}>
-            <Player player={player} canKick={canKickPlayer} kick={onKickPlayer} />
+            <Player
+              player={player}
+              canKick={canKickPlayer}
+              kick={onKickPlayer}
+            />
           </li>
         )}
   </div>;

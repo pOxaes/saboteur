@@ -3,13 +3,11 @@ import Card from "./Card";
 import "../../../node_modules/reset-css/reset.css";
 import "../../styles/Player.css";
 
-const malusToCard = subtype => {
-  return {
-    type: "ACTION",
-    action: "BLOCK",
-    subtype
-  };
-};
+const malusToCard = subtype => ({
+  type: "ACTION",
+  action: "BLOCK",
+  subtype
+});
 
 export default ({ player, kick, canKick }) =>
   <div className="player">
@@ -30,13 +28,13 @@ export default ({ player, kick, canKick }) =>
     <div>
       malus:
       {player.malus &&
-        player.malus.map((malus, index) => <Card card={malusToCard(malus)} key={index} />)}
+        player.malus.map((malus, index) =>
+          <Card card={malusToCard(malus)} key={index} />
+        )}
     </div>
     <div>
       cards:
       {player.cards &&
-        player.cards.map((card, index) => {
-          return <Card card={card} key={index} />;
-        })}
+        player.cards.map((card, index) => <Card card={card} key={index} />)}
     </div>
   </div>;
