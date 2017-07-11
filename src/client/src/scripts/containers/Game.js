@@ -25,7 +25,6 @@ const MOCKS = {
   },
 
   playing: {
-    _canKick: false,
     status: GAME_STATUS.PLAYING,
     id: 1,
     currentPlayerId: 4,
@@ -34,22 +33,22 @@ const MOCKS = {
       {
         name: "Hugo",
         id: 0,
-        malus: ["pickaxe"],
+        malus: ["light"],
         cards: [
           {
-            nature: "build",
+            type: "build",
             path: 1010
           },
           {
-            nature: "malus",
-            type: "light"
+            type: "malus",
+            subtype: ["light"]
           },
           {
-            nature: "bonus",
-            type: ["pickaxe", "chariot"]
+            type: "bonus",
+            subtype: ["pickaxe", "chariot"]
           },
           {
-            nature: "destroy"
+            type: "destroy"
           }
         ],
         gold: [1],

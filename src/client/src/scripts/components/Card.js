@@ -8,3 +8,11 @@ export default ({ card, onClick }) =>
     }}>
     {card} malus
   </div>;
+
+// {
+//   type: ACTION | PATH
+//   action: DESTRUCTION | BLOCK | FREE, // for type === ACTION
+//   subtype: [ PICKAXE | LIGHT | CHARIOT ], // for action === BLOCK | FREE
+//   item: GOLD | ROCK | LADDER | EMPTY // for type === PATH
+//   layout: 1 | 0 {4}
+// }
