@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-let state;
+
 export default class Register extends Component {
   state = {
     email: '',
@@ -11,8 +11,8 @@ export default class Register extends Component {
   }
 
   submit(event) {
-      event.preventDefault();
-      this.props.history.push('/');
+    event.preventDefault();
+    this.props.history.push('/');
       // TODO: SUBMIT FORM
   }
 
@@ -21,19 +21,23 @@ export default class Register extends Component {
       <div>
         <h2>Login</h2>
         <form onSubmit={this.submit.bind(this)}>
-          <input type="email"
+          <input
+            type="email"
             name="email"
             placeholder="email"
             onChange={this.handleChange.bind(this)}
             value={this.state.email}
-            required/>
+            required
+          />
 
-          <input type="password"
+          <input
+            type="password"
             name="password"
             placeholder="password"
             onChange={this.handleChange.bind(this)}
             value={this.state.password}
-            required/>
+            required
+          />
 
           <button className="button" type="submit">
               Login
@@ -42,4 +46,4 @@ export default class Register extends Component {
       </div>
     );
   }
-};
+}
