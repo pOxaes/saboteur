@@ -6,7 +6,7 @@ export default ({ card, onClick }) =>
     onClick={() => {
       onClick && onClick(card);
     }}>
-    {card} malus
+    {card || "card"}
   </div>;
 
 // {

@@ -1,151 +1,28 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
-
+import request from "../services/request";
 import PlayersList from "../components/PlayersList";
 
 const GAME_STATUS = {
-  LOBBY: "LOBBY",
+  WAITING_FOR_PLAYERS: "WAITING_FOR_PLAYERS",
   PLAYING: "PLAYING"
-};
-
-const MOCKS = {
-  lobby: {
-    _canKick: true,
-    status: GAME_STATUS.LOBBY,
-    players: [
-      {
-        name: "Hugo",
-        id: 0
-      },
-      {
-        name: "Vincent",
-        id: 1
-      }
-    ]
-  },
-
-  playing: {
-    status: GAME_STATUS.PLAYING,
-    id: 1,
-    currentPlayerId: 4,
-    deck: 12,
-    players: [
-      {
-        name: "Hugo",
-        id: 0,
-        malus: ["light"],
-        cards: [
-          {
-            type: "build",
-            path: 1010
-          },
-          {
-            type: "malus",
-            subtype: ["light"]
-          },
-          {
-            type: "bonus",
-            subtype: ["pickaxe", "chariot"]
-          },
-          {
-            type: "destroy"
-          }
-        ],
-        gold: [1],
-        role: "builder"
-      },
-      {
-        name: "Vincent",
-        id: 1,
-        malus: ["chariot"],
-        cardsCount: 3,
-        cards: [
-          {
-            nature: "hidden"
-          },
-          {
-            nature: "hidden"
-          },
-          {
-            nature: "hidden"
-          },
-          {
-            nature: "hidden"
-          }
-        ],
-        gold: [3]
-      },
-      {
-        name: "Samuel",
-        id: 2,
-        malus: [],
-        cards: [
-          {
-            nature: "hidden"
-          },
-          {
-            nature: "hidden"
-          },
-          {
-            nature: "hidden"
-          }
-        ],
-        gold: [2]
-      },
-      {
-        name: "Viet",
-        id: 3,
-        malus: ["light"],
-        cards: [
-          {
-            nature: "hidden"
-          },
-          {
-            nature: "hidden"
-          },
-          {
-            nature: "hidden"
-          }
-        ],
-        gold: [0]
-      },
-      {
-        name: "Gab",
-        id: 4,
-        malus: [],
-        cards: [
-          {
-            nature: "hidden"
-          },
-          {
-            nature: "hidden"
-          },
-          {
-            nature: "hidden"
-          },
-          {
-            nature: "hidden"
-          }
-        ],
-        gold: [3]
-      }
-    ]
-  }
 };
 
 export default class Home extends Component {
   state = {
-    game: {}
+    id: this.props.match.params.gameId
   };
 
   componentWillMount() {
-    this.setState({ id: this.props.match.params.gameId });
-    // TODO: FETCH GAME
-    this.setState({ game: MOCKS.playing });
+    request.get(`http://localhost:3008/games/${this.state.id}`).then(game => {
+      this.setState({
+        game
+      });
+    });
   }
 
   isLobby() {
-    return this.state.game && this.state.game.status === GAME_STATUS.LOBBY;
+    return this.state.game && this.state.game.status === GAME_STATUS.WAITING_FOR_PLAYERS;
   }
 
   kickPlayer(player) {
@@ -171,7 +48,7 @@ export default class Home extends Component {
 
   renderByStatus() {
     switch (this.state.game.status) {
-      case GAME_STATUS.LOBBY:
+      case GAME_STATUS.WAITING_FOR_PLAYERS:
         return this.renderLobby();
       case GAME_STATUS.PLAYING:
         return this.renderPlayingGame();
@@ -186,12 +63,13 @@ export default class Home extends Component {
         <h2>
           Current - {this.state.id}
         </h2>
-        <PlayersList
-          players={this.state.game.players}
-          onKickPlayer={this.kickPlayer.bind(this)}
-          canKickPlayer={this.state.game._canKick}
-        />
-        {this.renderByStatus()}
+        {this.state.game &&
+          <PlayersList
+            players={this.state.game.players}
+            onKickPlayer={this.kickPlayer.bind(this)}
+            canKickPlayer={this.state.game._canKick}
+          />}
+        {this.state.game && this.renderByStatus()}
       </div>
     );
   }

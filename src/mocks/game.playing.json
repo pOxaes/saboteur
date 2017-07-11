@@ -1,0 +1,107 @@
+{
+  "id": 0,
+  "status": "PLAYING",
+  "currentPlayerId": 4,
+  "deck": 12,
+  "players": [
+    {
+      "name": "Hugo",
+      "id": 0,
+      "malus": ["light"],
+      "cards": [
+        {
+          "type": "build",
+          "path": 1010
+        },
+        {
+          "type": "malus",
+          "subtype": ["light"]
+        },
+        {
+          "type": "bonus",
+          "subtype": ["pickaxe", "chariot"]
+        },
+        {
+          "type": "destroy"
+        }
+      ],
+      "gold": [1],
+      "role": "builder"
+    },
+    {
+      "name": "Vincent",
+      "id": 1,
+      "malus": ["chariot"],
+      "cardsCount": 3,
+      "cards": [
+        {
+          "type": "hidden"
+        },
+        {
+          "type": "hidden"
+        },
+        {
+          "type": "hidden"
+        },
+        {
+          "type": "hidden"
+        }
+      ],
+      "gold": [3]
+    },
+    {
+      "name": "Samuel",
+      "id": 2,
+      "malus": [],
+      "cards": [
+        {
+          "type": "hidden"
+        },
+        {
+          "type": "hidden"
+        },
+        {
+          "type": "hidden"
+        }
+      ],
+      "gold": [2]
+    },
+    {
+      "name": "Viet",
+      "id": 3,
+      "malus": ["light"],
+      "cards": [
+        {
+          "type": "hidden"
+        },
+        {
+          "type": "hidden"
+        },
+        {
+          "type": "hidden"
+        }
+      ],
+      "gold": [0]
+    },
+    {
+      "name": "Gab",
+      "id": 4,
+      "malus": [],
+      "cards": [
+        {
+          "type": "hidden"
+        },
+        {
+          "type": "hidden"
+        },
+        {
+          "type": "hidden"
+        },
+        {
+          "type": "hidden"
+        }
+      ],
+      "gold": [3]
+    }
+  ]
+}

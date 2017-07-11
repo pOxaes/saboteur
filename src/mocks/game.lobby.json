@@ -1,0 +1,15 @@
+{
+  "_canKick": true,
+  "id": 0,
+  "status": "WAITING_FOR_PLAYERS",
+  "players": [
+    {
+      "name": "Hugo",
+      "id": 0
+    },
+    {
+      "name": "Vincent",
+      "id": 1
+    }
+  ]
+}

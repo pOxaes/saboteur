@@ -12,6 +12,6 @@ export default ({ player, kick, canKick }) =>
     {player.malus && player.malus.map((malus, index) => <Card card={malus} key={index} />)}
     {player.cards &&
       player.cards.map((card, index) => {
-        <Card />;
+        return <Card />;
       })}
   </div>;
