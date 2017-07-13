@@ -1,9 +1,14 @@
 import React from "react";
+import "../../styles/Card.css";
 
 const computeCardClass = card =>
-  ["card", `card--${card.type}`, card.action && `card--${card.action}`].join(
-    " "
-  );
+  [
+    "card",
+    `card--${card.type}`, 
+    card.action && `card--action-${card.action}`,
+    card.item && `card--item-${card.item}`,
+    card.subtype && card.subtype.map(subtype => `card--subtype-${subtype}`).join(" ")
+  ].join(" ");
 
 export default ({ card, onClick }) =>
   <div
@@ -12,8 +17,17 @@ export default ({ card, onClick }) =>
       onClick && onClick(card);
     }}
   >
+    <div className="card__inner">
+    
     {card.item && <div className={`card__item card__item--${card.item}`} />}
-    card {card.type} {card.action} {card.subtype} {card.item} {card.layout}
+    {card.subtype && card.subtype.length &&
+      card.subtype.map((subtype, index) =>
+        <span className="card__subtype" key={index}>{subtype}</span>
+    )} 
+      <small>
+        {card.item} {card.layout}
+      </small>
+    </div>
   </div>;
 
 // {

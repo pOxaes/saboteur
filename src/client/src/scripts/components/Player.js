@@ -6,7 +6,7 @@ import "../../styles/Player.css";
 const malusToCard = subtype => ({
   type: "ACTION",
   action: "BLOCK",
-  subtype
+  subtype: [subtype]
 });
 
 export default ({ player, kick, canKick }) =>

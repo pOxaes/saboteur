@@ -1,3 +1,90 @@
+:root {
+  --card-width: 63px;
+  --card-height: 88px;
+}
+
 .card {
+  position: relative;
   background: #fff;
+  border: 1px solid lightgrey;
+  border-radius: 3px;
+  width: var(--card-width);
+  height: var(--card-height);
+}
+
+.card__inner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ACTION */
+
+.card--ACTION .card__inner::after {
+  content: "";
+  font-size: 8px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 30px;
+  height: 30px;
+  margin-top: -17px;
+  margin-left: -17px;
+
+  border: 2px solid grey;
+  border-radius: 50%;
+}
+
+.card--action-BLOCK .card__inner::after {
+  border-color: red;
+}
+
+.card--action-FREE .card__inner::after {
+  border-color: green;
+}
+
+.card--action-DESTROY .card__inner::after {
+  border-color: grey;
+  background-color: grey;
+}
+
+.card__subtype {
+  font-size: 10px;
+  text-align: center;
+}
+
+/* PATH */
+
+.card--PATH .card__inner::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  margin-top: -5px;
+  margin-left: -5px;
+
+  border-radius: 50%;
+}
+
+.card--PATH.card--subtype-GOLD .card__inner::after {
+    background-color: yellow;
+}
+
+.card--PATH.card--subtype-ROCK .card__inner::after {
+    background-color: darkslategrey;
+}
+
+.card--PATH.card--subtype-LADDER .card__inner::after {
+  content: "H";
+  font-weight: bold;
+  color: red;
 }
