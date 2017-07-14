@@ -1,3 +1,57 @@
 .player {
-  background: #ccc;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.player__gold {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.player__malus {
+  position: absolute;
+  right: 0;
+  top: 0;
+  transform: scale(.3);
+  transform-origin: top right;
+}
+
+/* CARDS */
+
+.player__cards {
+  display: flex;
+  width: 88px;
+  height: 95px;
+  margin-top: 20px;
+}
+
+.player__cards__card-wrapper {
+  position: absolute;
+  width: 10px;
+  transform-origin: bottom right;
+  margin-left: 15px;
+}
+
+.player__cards__card-wrapper:nth-child(1) {
+  transform: rotate(-10deg);
+}
+
+.player__cards__card-wrapper:nth-child(2) {
+  transform: rotate(-5deg);
+}
+
+.player__cards__card-wrapper:nth-child(3) {
+  transform: rotate(0deg);
+}
+
+.player__cards__card-wrapper:nth-child(4) {
+  transform: rotate(5deg);
+}
+
+.player__cards__card-wrapper:nth-child(5) {
+  transform: rotate(-10deg);
 }

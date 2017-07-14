@@ -31,7 +31,7 @@ export default ({ card, onClick }) =>
   </div>;
 
 // {
-//   type: ACTION | PATH
+//   type: ACTION | PATH | HIDDEN
 //   action: DESTROY | BLOCK | FREE, // for type === ACTION
 //   subtype: [ PICKAXE | LIGHT | CHARIOT ], // for action === BLOCK | FREE
 //   item: GOLD | ROCK | LADDER | EMPTY // for type === PATH

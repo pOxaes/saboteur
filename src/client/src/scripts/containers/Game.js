@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Redirect } from "react-router-dom";
+import userService from "../services/user";
 import request from "../services/request";
 import PlayersList from "../components/PlayersList";
 
@@ -9,13 +10,32 @@ const GAME_STATUS = {
   PLAYING: "PLAYING"
 };
 
+const POSITIONS_BY_PLAYERS_COUNT = {
+  2: ["bottom", "top"],
+  3: ["bottom", "top-left", "top-right"],
+  4: ["bottom", "left", "top", "right"],
+  5: ["bottom", "left", "top-left", "top-right", "right"],
+  6: ["bottom", "left", "top-left", "top", "top-right", "right"]
+};
+
 export class Home extends Component {
   state = {
-    id: this.props.match.params.gameId
+    id: this.props.match.params.gameId,
+    user: userService.get()
   };
+
+  withPosition(players) {
+    const playersCount = players.length;
+    const currentPlayerIndex = players.map(player => player.id).indexOf(this.state.user.id);
+    const positionsList = POSITIONS_BY_PLAYERS_COUNT[playersCount];
+    for (let i = currentPlayerIndex, j = 0; i < currentPlayerIndex + playersCount; i++, j++) {
+      players[i % playersCount].position = positionsList[j];
+    }
+  }
 
   componentWillMount() {
     request.get(`http://localhost:3008/games/${this.state.id}`).then(game => {
+      this.withPosition(game.players);
       this.setState({
         game
       });
@@ -37,7 +57,7 @@ export class Home extends Component {
   renderLobby() {
     return (
       <p>
-        Lobby #{this.state.game.id}
+        {/*Lobby #{this.state.game.id}*/}
       </p>
     );
   }
@@ -45,7 +65,7 @@ export class Home extends Component {
   renderPlayingGame() {
     return (
       <p>
-        Playing #{this.state.game.id}
+        {/*Playing #{this.state.game.id}*/}
       </p>
     );
   }
@@ -64,9 +84,6 @@ export class Home extends Component {
   render() {
     return (
       <div>
-        <h2>
-          Current - {this.state.id}
-        </h2>
         {this.state.game &&
           <PlayersList
             players={this.state.game.players}

@@ -16,25 +16,25 @@ export default ({ player, kick, canKick }) =>
       <button type="button" onClick={() => kick(player)}>
         kick
       </button>}
-    <div>
-      gold:
+    <div className="player__gold">
       {player.gold &&
         player.gold.map((goldValue, index) =>
           <span key={index}>
-            {goldValue}
+            ${goldValue}
           </span>
         )}
     </div>
-    <div>
-      malus:
+    <div className="player__malus">
       {player.malus &&
         player.malus.map((malus, index) =>
           <Card card={malusToCard(malus)} key={index} />
         )}
     </div>
-    <div>
-      cards:
+    <div className="player__cards">
       {player.cards &&
-        player.cards.map((card, index) => <Card card={card} key={index} />)}
+        player.cards.map((card, index) => (
+          <div className="player__cards__card-wrapper" key={index}>
+            <Card card={card} />
+          </div>))}
     </div>
   </div>;

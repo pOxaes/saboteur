@@ -88,3 +88,9 @@
   font-weight: bold;
   color: red;
 }
+
+/* HIDDEN */
+
+.card--HIDDEN {
+  background: lightgoldenrodyellow;
+}
