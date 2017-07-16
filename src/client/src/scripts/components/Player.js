@@ -9,8 +9,14 @@ const malusToCard = subtype => ({
   subtype: [subtype]
 });
 
-export default ({ player, kick, canKick }) =>
-  <div className="player">
+const computePlayerClass = (player, isCurrentPlayer) =>
+  [
+    "player",
+    isCurrentPlayer ? `player--playable` : ""
+  ].join(" ");
+
+export default ({ player, kick, canKick, isCurrentPlayer, onCardPlay }) =>
+  <div className={computePlayerClass(player, isCurrentPlayer)} >
     {player.name}
     {canKick &&
       <button type="button" onClick={() => kick(player)}>
@@ -34,7 +40,7 @@ export default ({ player, kick, canKick }) =>
       {player.cards &&
         player.cards.map((card, index) => (
           <div className="player__cards__card-wrapper" key={index}>
-            <Card card={card} />
+            <Card card={card} onPlay={onCardPlay} />
           </div>))}
     </div>
   </div>;

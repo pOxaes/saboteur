@@ -24,34 +24,47 @@
 
 .player__cards {
   display: flex;
-  width: 88px;
-  height: 95px;
   margin-top: 20px;
 }
 
-.player__cards__card-wrapper {
+.player:not(.player--playable) .player__cards {
+  width: 88px;
+  height: 95px;
+}
+
+.player:not(.player--playable) .player__cards__card-wrapper {
   position: absolute;
   width: 10px;
   transform-origin: bottom right;
   margin-left: 15px;
 }
 
-.player__cards__card-wrapper:nth-child(1) {
+.player:not(.player--playable) .player__cards__card-wrapper:nth-child(1) {
   transform: rotate(-10deg);
 }
 
-.player__cards__card-wrapper:nth-child(2) {
+.player:not(.player--playable) .player__cards__card-wrapper:nth-child(2) {
   transform: rotate(-5deg);
 }
 
-.player__cards__card-wrapper:nth-child(3) {
+.player:not(.player--playable) .player__cards__card-wrapper:nth-child(3) {
   transform: rotate(0deg);
 }
 
-.player__cards__card-wrapper:nth-child(4) {
+.player:not(.player--playable) .player__cards__card-wrapper:nth-child(4) {
   transform: rotate(5deg);
 }
 
-.player__cards__card-wrapper:nth-child(5) {
+.player:not(.player--playable) .player__cards__card-wrapper:nth-child(5) {
   transform: rotate(-10deg);
+}
+
+/* PLAYABLE PLAYER */
+
+.player--playable .player__cards {
+  margin-top: 50px;
+}
+
+.player--playable .player__cards__card-wrapper:not(:first-child) {
+  margin-left: 15px;
 }

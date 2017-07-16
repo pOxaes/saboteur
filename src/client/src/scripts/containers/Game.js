@@ -52,7 +52,21 @@ export class Home extends Component {
   kickPlayer = player => {
     // TODO: kick player
     console.log("kick", player, this.state.id);
-  };
+  }
+
+  onCardPlay = card => {
+    // TODO: on card play
+    if (card.type === "HIDDEN") {
+      console.log("Hehe you can't see other player's cards.");
+    } else 
+    if (!card.isPlayable) {
+      console.log("You can't play this card.");
+      return;
+    }
+    else {
+      console.log("let's play this card", card);
+    }
+  }
 
   renderLobby() {
     return (
@@ -89,6 +103,7 @@ export class Home extends Component {
             players={this.state.game.players}
             onKickPlayer={this.kickPlayer}
             canKickPlayer={this.state.game._canKick}
+            onCardPlay={this.onCardPlay}
           />}
         {this.state.game && this.renderByStatus()}
       </div>

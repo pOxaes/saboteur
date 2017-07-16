@@ -25,6 +25,25 @@
   align-items: center;
 }
 
+
+.card--is-playable {
+    transition: transform .2s ease-out;
+    cursor: pointer;
+    transform: translateY(-10px);
+}
+
+.card--is-playable:hover {
+  transform: translateY(-30px);
+}
+
+.card__layout {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
 /* ACTION */
 
 .card--ACTION .card__inner::after {

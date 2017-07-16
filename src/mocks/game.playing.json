@@ -11,22 +11,25 @@
       "cards": [
         {
           "type": "PATH",
-          "item": "EMPTY",
-          "layout": 1010
+          "item": "GOLD",
+          "layout": 1110
         },
         {
           "type": "ACTION",
           "action": "BLOCK",
-          "subtype": ["LIGHT"]
+          "subtype": ["LIGHT"],
+          "isPlayable": true
         },
         {
           "type": "ACTION",
           "action": "FREE",
-          "subtype": ["PICKAXE", "CHARIOT"]
+          "subtype": ["PICKAXE", "CHARIOT"],
+          "isPlayable": true
         },
         {
           "type": "ACTION",
-          "action": "DESTROY"
+          "action": "DESTROY",
+          "isPlayable": true
         }
       ],
       "gold": [1],

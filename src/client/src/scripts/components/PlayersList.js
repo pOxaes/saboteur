@@ -8,7 +8,7 @@ const computePlayerItemClass = player =>
     `player-list__item--position-${player.position}`,
   ].join(" ");
 
-export default ({ players, onKickPlayer, canKickPlayer }) =>
+export default ({ players, onKickPlayer, canKickPlayer, onCardPlay }) =>
   <div className="players-list">
     {players.length === 0
       ? <p>No players</p>
@@ -18,6 +18,8 @@ export default ({ players, onKickPlayer, canKickPlayer }) =>
               player={player}
               canKick={canKickPlayer}
               kick={onKickPlayer}
+              isCurrentPlayer={player.position === "bottom"}
+              onCardPlay={onCardPlay}
             />
           </li>
         )}
