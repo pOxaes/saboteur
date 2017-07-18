@@ -81,6 +81,10 @@
 
 /* PATH */
 
+.card--PATH {
+  background: #DDD;
+}
+
 .card--PATH .card__inner::after {
   content: "";
   position: absolute;

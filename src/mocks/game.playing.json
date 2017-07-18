@@ -12,7 +12,7 @@
         {
           "type": "PATH",
           "item": "GOLD",
-          "layout": 1110
+          "layout": "1110"
         },
         {
           "type": "ACTION",

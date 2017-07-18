@@ -12,7 +12,7 @@ export default ({ players, onKickPlayer, canKickPlayer, onCardPlay }) =>
   <div className="players-list">
     {players.length === 0
       ? <p>No players</p>
-      : players.map(player =>
+      : [players[0]].map(player =>
           <li className={computePlayerItemClass(player)} key={player.id}>
             <Player
               player={player}
