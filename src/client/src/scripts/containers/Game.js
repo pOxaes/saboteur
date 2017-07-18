@@ -4,6 +4,7 @@ import { Redirect } from "react-router-dom";
 import userService from "../services/user";
 import request from "../services/request";
 import PlayersList from "../components/PlayersList";
+import Board from "../components/Board";
 
 const GAME_STATUS = {
   WAITING_FOR_PLAYERS: "WAITING_FOR_PLAYERS",
@@ -17,6 +18,17 @@ const POSITIONS_BY_PLAYERS_COUNT = {
   5: ["bottom", "left", "top-left", "top-right", "right"],
   6: ["bottom", "left", "top-left", "top", "top-right", "right"]
 };
+
+const formatCardLayout = card => {
+  if (card.layout) {
+    card.layout = {
+      top: card.layout[0] === "1",
+      right: card.layout[1] === "1",
+      bottom: card.layout[2] === "1",
+      left: card.layout[3] === "1",
+    };
+  }
+}
 
 export class Home extends Component {
   state = {
@@ -35,6 +47,8 @@ export class Home extends Component {
 
   componentWillMount() {
     request.get(`http://localhost:3008/games/${this.state.id}`).then(game => {
+      game.board.forEach(formatCardLayout);
+      game.players.forEach(player => player.cards.forEach(formatCardLayout));
       this.withPosition(game.players);
       this.setState({
         game
@@ -78,9 +92,7 @@ export class Home extends Component {
 
   renderPlayingGame() {
     return (
-      <p>
-        {/*Playing #{this.state.game.id}*/}
-      </p>
+      <Board cards={this.state.game.board} />
     );
   }
 
@@ -98,7 +110,7 @@ export class Home extends Component {
   render() {
     return (
       <div>
-        {this.state.game &&
+        {false && this.state.game &&
           <PlayersList
             players={this.state.game.players}
             onKickPlayer={this.kickPlayer}

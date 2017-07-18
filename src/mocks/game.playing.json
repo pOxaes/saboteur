@@ -3,6 +3,38 @@
   "status": "PLAYING",
   "currentPlayerId": 4,
   "deck": 12,
+  "board": [
+    {
+      "x": 0,
+      "y": 0,
+      "layout": "1111",
+      "item": "LADDER"
+    },
+    {
+      "x": 8,
+      "y": 0
+    },
+    {
+      "x": 8,
+      "y": 2
+    },
+    {
+      "x": 8,
+      "y": -2
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "layout": "0101",
+      "item": "EMPTY"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "layout": "1011",
+      "item": "EMPTY"
+    }
+  ],
   "players": [
     {
       "name": "Hugo",
