@@ -29,6 +29,12 @@
       "item": "EMPTY"
     },
     {
+      "x": 4,
+      "y": 0,
+      "layout": "1101",
+      "item": "EMPTY"
+    },
+    {
       "x": 2,
       "y": 0,
       "layout": "1011",
