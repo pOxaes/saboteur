@@ -2,19 +2,21 @@ import React from "react";
 import CardLayout from "./CardLayout"
 import "../../styles/Card.css";
 
-const computeCardClass = card =>
+const computeCardClass = (card, modifiers = {}) =>
   [
     "card",
     card.isPlayable && "card--is-playable",
     `card--${card.type}`, 
     card.action && `card--action-${card.action}`,
     card.item && `card--item-${card.item}`,
-    card.subtype && card.subtype.map(subtype => `card--subtype-${subtype}`).join(" ")
+    card.subtype && card.subtype.map(subtype => `card--subtype-${subtype}`).join(" "),
+    modifiers.isBig && 'card--big',
+    modifiers.isSmall && 'card--small',
   ].join(" ");
 
-export default ({ card, onPlay }) =>
+export default ({ card, onPlay, modifiers }) =>
   <div
-    className={computeCardClass(card)}
+    className={computeCardClass(card, modifiers)}
     onClick={() => {
       onPlay && onPlay(card);
     }}

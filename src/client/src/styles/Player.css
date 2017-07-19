@@ -34,8 +34,7 @@
 
 .player:not(.player--playable) .player__cards__card-wrapper {
   position: absolute;
-  width: 10px;
-  transform-origin: bottom right;
+  transform-origin: bottom left;
   margin-left: 15px;
 }
 
@@ -60,11 +59,14 @@
 }
 
 /* PLAYABLE PLAYER */
+.player--playable {
+  margin-bottom: -50px;
+}
 
 .player--playable .player__cards {
   margin-top: 50px;
 }
 
 .player--playable .player__cards__card-wrapper:not(:first-child) {
-  margin-left: 15px;
+  margin-left: 20px;
 }

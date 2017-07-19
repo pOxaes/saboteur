@@ -1,17 +1,13 @@
-:root {
-  --card-width: 63px;
-  --card-height: 88px;
-}
-
 .card {
   position: relative;
   background: #fff;
-  border-radius: 3px;
+  border-radius: var(--card-border-radius);
   width: var(--card-width);
   height: var(--card-height);
   max-width: 100%;
   max-height: 100%;
   box-sizing: border-box;
+  border: var(--card-border-width) solid rgba(0, 0, 0, .1);
 }
 
 .card__inner {
@@ -29,13 +25,13 @@
 
 
 .card--is-playable {
-    transition: transform .2s ease-out;
-    cursor: pointer;
-    transform: translateY(-10px);
+  transition: transform .2s ease-out;
+  cursor: pointer;
+  transform: translateY(-10px);
 }
 
 .card--is-playable:hover {
-  transform: translateY(-30px);
+  transform: translateY(var(--card-hover-translateY));
 }
 
 .card__layout {
@@ -117,5 +113,17 @@
 /* HIDDEN */
 
 .card--HIDDEN {
-  background: lightgoldenrodyellow;
+  background: #BBB;
+}
+
+/* BIG */
+
+.card--big {
+  border-width: var(--card-border-width--big);
+  width: var(--card-width--big);
+  height: var(--card-height--big);
+}
+
+.card--big.card--is-playable:hover {
+  transform: translateY(var(--card-hover-translateY--big));
 }

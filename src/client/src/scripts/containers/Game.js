@@ -5,6 +5,7 @@ import userService from "../services/user";
 import request from "../services/request";
 import PlayersList from "../components/PlayersList";
 import Board from "../components/Board";
+import Deck from "../components/Deck";
 
 const GAME_STATUS = {
   WAITING_FOR_PLAYERS: "WAITING_FOR_PLAYERS",
@@ -92,7 +93,10 @@ export class Home extends Component {
 
   renderPlayingGame() {
     return (
-      <Board cards={this.state.game.board} />
+      <div>
+        <Board cards={this.state.game.board} />
+        <Deck count={this.state.game.deck} />
+      </div>
     );
   }
 

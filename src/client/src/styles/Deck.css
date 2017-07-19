@@ -1,0 +1,23 @@
+.deck {
+  position: absolute;
+  top: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  box-sizing: border-box;
+  border-radius: 12px;
+}
+
+.deck--empty {
+  border: 3px dotted #DDD;
+  width: var(--card-width);
+  height: var(--card-height);
+}
+
+.deck__cards {
+  display: flex;
+  max-width: 100%;
+}
+
+.deck__card:not(:first-child) {
+   margin-left: -58px;
+}

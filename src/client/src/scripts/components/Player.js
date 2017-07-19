@@ -40,7 +40,7 @@ export default ({ player, kick, canKick, isCurrentPlayer, onCardPlay }) =>
       {player.cards &&
         player.cards.map((card, index) => (
           <div className="player__cards__card-wrapper" key={index}>
-            <Card card={card} onPlay={onCardPlay} />
+            <Card card={card} onPlay={onCardPlay} modifiers={{isBig: isCurrentPlayer}} />
           </div>))}
     </div>
   </div>;

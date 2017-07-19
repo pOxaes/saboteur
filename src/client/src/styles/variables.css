@@ -1,3 +1,15 @@
 :root {
   --background-color: #eee;
+
+  --card-width: 63px;
+  --card-height: 88px;
+  --card-border-width: 2px;
+  --card-hover-translateY: -30px;
+
+  --card-width--big: calc(var(--card-width) * 2);
+  --card-height--big: calc(var(--card-height) * 2);
+  --card-border-width--big: calc(var(--card-border-width) * 2);
+  --card-hover-translateY--big: calc(var(--card-hover-translateY) * 2);
+
+  --card-border-radius: 5%;
 }
