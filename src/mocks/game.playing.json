@@ -36,6 +36,24 @@
     },
     {
       "x": 2,
+      "y": -1,
+      "layout": "1110",
+      "item": "ROCK"
+    },
+    {
+      "x": 3,
+      "y": -1,
+      "layout": "0101",
+      "item": "EMPTY"
+    },
+    {
+      "x": -1,
+      "y": 0,
+      "layout": "0101",
+      "item": "EMPTY"
+    },
+    {
+      "x": 2,
       "y": 0,
       "layout": "1011",
       "item": "EMPTY"

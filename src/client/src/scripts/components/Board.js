@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import ReactDOM from 'react-dom';
 import BoardSlot from "./BoardSlot";
 import ReactResizeDetector from 'react-resize-detector';
+import boardService from "../services/board";
 import "../../styles/Board.css";
 
 const RESIZE_THROTTLE_TIME = 300;
@@ -33,9 +34,15 @@ const updateSlot = (slots, x, y, card, shouldForce) => {
   }  
 }
 
+const withLink = (card, index, cards) => {
+  return Object.assign({
+    isLinkedToStart: boardService.isLinkedToStart(card, cards),
+  }, card);
+}
+
 const createSlotsFromCards = cards => cards.reduce((slots, card) => {
   updateSlot(slots, card.x, card.y, boardItemToCard(card));
-  if (card.layout) {
+  if (card.layout && card.isLinkedToStart) {
     if (card.layout.top) {
       updateSlot(slots, card.x, card.y - 1);
     }
@@ -83,7 +90,7 @@ const computeInnerStyle = ({ innerHeight, innerWidth }) => ({
 
 export default class CardLayout extends Component {
   state = {
-    slots: createSlotsFromCards(this.props.cards),
+    slots: createSlotsFromCards(this.props.cards.map(withLink)),
   };
 
   onResize() {
@@ -138,7 +145,7 @@ export default class CardLayout extends Component {
 
   componentWillReceiveProps() {
     this.setState({
-      slots: createSlotsFromCards(this.props.cards),
+      slots: createSlotsFromCards(this.props.cards.map(withLink)),
     });
   }
 
