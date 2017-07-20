@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { Redirect } from "react-router-dom";
 import userService from "../services/user";
 import request from "../services/request";
+import boardService from "../services/board";
 import PlayersList from "../components/PlayersList";
 import Board from "../components/Board";
 import Deck from "../components/Deck";
@@ -31,6 +32,41 @@ const formatCardLayout = card => {
   }
 }
 
+const formatPlayerCard = (card, slots, players) => {
+  formatCardLayout(card);
+
+  if (card.type === "HIDDEN") {
+    return;
+  }
+
+  if (card.action === "DESTROY") {
+    card.isPlayable = slots.some(slot => slot.card && (slot.x !== 0 || slot.y !== 0));
+    return;
+  }
+
+  if (card.action === "BLOCK") {
+    card.isPlayable = players.some(player => !player.malus || player.malus.length === 0);
+    return;
+  }
+
+  if (card.action === "FREE") {
+    card.isPlayable = players.some(player =>
+      player.malus && player.malus.some(malus => card.subtype.indexOf(malus) !== -1)
+    );
+    return;
+  }
+
+  if (card.path) {
+    console.log(card.layout);
+  }
+
+  console.log(card, card.isPlayable);
+}
+
+const attachLinkedToStart = (card, index, cards) => {
+  card.isLinkedToStart = boardService.isLinkedToStart(card, cards);
+}
+
 export class Home extends Component {
   state = {
     id: this.props.match.params.gameId,
@@ -47,13 +83,20 @@ export class Home extends Component {
   }
 
   componentWillMount() {
-    request.get(`http://localhost:3008/games/${this.state.id}`).then(game => {
-      game.board.forEach(formatCardLayout);
-      game.players.forEach(player => player.cards.forEach(formatCardLayout));
-      this.withPosition(game.players);
-      this.setState({
-        game
-      });
+    request.get(`http://localhost:3008/games/${this.state.id}`).then(this.updateGame.bind(this));
+  }
+
+  updateGame(game) {
+    game.board.forEach(formatCardLayout);
+    game.board.forEach(attachLinkedToStart);
+
+    const slots = boardService.createSlotsFromCards(game.board);
+
+    game.players.forEach(player => player.cards.forEach(card => formatPlayerCard(card, slots, game.players)));
+    this.withPosition(game.players);
+    this.setState({
+      game,
+      slots,
     });
   }
 
@@ -85,16 +128,14 @@ export class Home extends Component {
 
   renderLobby() {
     return (
-      <p>
-        {/*Lobby #{this.state.game.id}*/}
-      </p>
+      <p>Lobby</p>
     );
   }
 
   renderPlayingGame() {
     return (
       <div>
-        <Board cards={this.state.game.board} />
+        <Board slots={this.state.slots} />
         <Deck count={this.state.game.deck} />
       </div>
     );

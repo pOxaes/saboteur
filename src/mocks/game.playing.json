@@ -53,6 +53,18 @@
       "item": "EMPTY"
     },
     {
+      "x": 0,
+      "y": 2,
+      "layout": "1010",
+      "item": "EMPTY"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "layout": "0110",
+      "item": "EMPTY"
+    },
+    {
       "x": 2,
       "y": 0,
       "layout": "1011",
@@ -73,19 +85,16 @@
         {
           "type": "ACTION",
           "action": "BLOCK",
-          "subtype": ["LIGHT"],
-          "isPlayable": true
+          "subtype": ["LIGHT"]
         },
         {
           "type": "ACTION",
           "action": "FREE",
-          "subtype": ["PICKAXE", "CHARIOT"],
-          "isPlayable": true
+          "subtype": ["PICKAXE", "CHARIOT"]
         },
         {
           "type": "ACTION",
-          "action": "DESTROY",
-          "isPlayable": true
+          "action": "DESTROY"
         }
       ],
       "gold": [1],
