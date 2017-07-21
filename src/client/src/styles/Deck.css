@@ -1,8 +1,7 @@
 .deck {
   position: absolute;
-  top: 100px;
-  left: 50%;
-  transform: translateX(-50%);
+  bottom: 30px;
+  left: 30px;
   box-sizing: border-box;
   border-radius: 12px;
 }

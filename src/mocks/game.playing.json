@@ -79,7 +79,7 @@
       "cards": [
         {
           "type": "PATH",
-          "item": "GOLD",
+          "item": "EMPTY",
           "layout": "1110"
         },
         {
