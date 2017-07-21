@@ -4,6 +4,11 @@
 
 .player-list__item {
   position: absolute;
+  
+}
+
+.player-list__item > .player {
+  border: 1px solid green;
 }
 
 .player-list__item--position-bottom {

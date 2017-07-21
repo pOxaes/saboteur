@@ -116,14 +116,38 @@
   background: #BBB;
 }
 
-/* BIG */
+/* HAND */
 
-.card--big {
-  border-width: var(--card-border-width--big);
-  width: var(--card-width--big);
-  height: var(--card-height--big);
+.card--hand {
+  border-width: var(--card-border-width--hand);
+  width: var(--card-width--hand);
+  height: var(--card-height--hand);
 }
 
-.card--big.card--is-playable:hover {
-  transform: translateY(var(--card-hover-translateY--big));
+.card--hand.card--is-playable:hover {
+  transform: translateY(var(--card-hover-translateY--hand));
+}
+
+/* MALUS */
+
+.card--malus {
+  border-width: var(--card-border-width--malus);
+  width: var(--card-width--malus);
+  height: var(--card-height--malus);
+}
+
+.card--malus.card--is-playable:hover {
+  transform: translateY(var(--card-hover-translateY--malus));
+}
+
+/* PLAYER */
+
+.card--player {
+  border-width: var(--card-border-width--player);
+  width: var(--card-width--player);
+  height: var(--card-height--player);
+}
+
+.card--player.card--is-playable:hover {
+  transform: translateY(var(--card-hover-translateY--player));
 }

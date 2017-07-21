@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import ReactDOM from 'react-dom';
+import ReactDOM from "react-dom";
 import BoardSlot from "./BoardSlot";
 import ReactResizeDetector from 'react-resize-detector';
 import "../../styles/Board.css";
@@ -40,7 +40,7 @@ const computeInnerStyle = ({ innerHeight, innerWidth }) => ({
   height: innerHeight,
 });
 
-export default class CardLayout extends Component {
+export default class Board extends Component {
   state = {
     resizeTimeout: undefined,
     lastResizeDate: undefined,

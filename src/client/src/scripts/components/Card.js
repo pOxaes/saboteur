@@ -10,8 +10,9 @@ const computeCardClass = (card, modifiers = {}) =>
     card.action && `card--action-${card.action}`,
     card.item && `card--item-${card.item}`,
     card.subtype && card.subtype.map(subtype => `card--subtype-${subtype}`).join(" "),
-    modifiers.isBig && 'card--big',
-    modifiers.isSmall && 'card--small',
+    modifiers.isHand && 'card--hand',
+    modifiers.isPlayer && 'card--player',
+    modifiers.isMalus && 'card--malus',
   ].join(" ");
 
 export default ({ card, onPlay, modifiers }) =>

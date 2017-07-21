@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Switch, Route } from "react-router-dom";
 import "../styles/variables.css";
+import "../../node_modules/reset-css/reset.css";
 import "../styles/App.css";
 
 import HomeContainer from "./containers/Home";

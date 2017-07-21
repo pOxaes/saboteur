@@ -146,8 +146,49 @@ const checkCardCompatibility = (card, slot) => {
     || compareLayouts(slot.authorizedLayout, rotateLayout(card.layout));
 };
 
+const formatCardLayout = card => {
+  if (card.layout) {
+    card.layout = {
+      top: card.layout[0] === "1",
+      right: card.layout[1] === "1",
+      bottom: card.layout[2] === "1",
+      left: card.layout[3] === "1",
+    };
+  }
+};
+  
+const attachPlayability = (card, slots, players) => {
+  if (card.type === "HIDDEN") {
+    return;
+  }
+
+  // Can destroy if a card, different from the origin, exists
+  if (card.action === "DESTROY") {
+    card.isPlayable = slots.some(slot => slot.card && slot.card.layout && (slot.x !== 0 || slot.y !== 0));
+    return;
+  }
+
+  if (card.action === "BLOCK") {
+    card.isPlayable = players.some(player => !player.malus || player.malus.length === 0);
+    return;
+  }
+
+  if (card.action === "FREE") {
+    card.isPlayable = players.some(player =>
+      player.malus && player.malus.some(malus => card.subtype.indexOf(malus) !== -1)
+    );
+    return;
+  }
+
+  if (card.type === "PATH") {
+    card.isPlayable = slots.some(slot => !slot.card && checkCardCompatibility(card, slot));
+  }
+}
+
 export default {
+  attachPlayability,
   checkCardCompatibility,
   createSlotsFromCards,
+  formatCardLayout,
   isLinkedToStart,
 };

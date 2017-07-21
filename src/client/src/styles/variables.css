@@ -6,10 +6,25 @@
   --card-border-width: 2px;
   --card-hover-translateY: -30px;
 
-  --card-width--big: calc(var(--card-width) * 2);
-  --card-height--big: calc(var(--card-height) * 2);
-  --card-border-width--big: calc(var(--card-border-width) * 2);
-  --card-hover-translateY--big: calc(var(--card-hover-translateY) * 2);
+  --card-hand-coef: 2;
+  --card-width--hand: calc(var(--card-width) * var(--card-hand-coef));
+  --card-height--hand: calc(var(--card-height) * var(--card-hand-coef));
+  --card-border-width--hand: calc(var(--card-border-width) * var(--card-hand-coef));
+  --card-hover-translateY--hand: calc(var(--card-hover-translateY) * var(--card-hand-coef));
+
+  --card-player-coef: 0.3;
+  --card-width--player: calc(var(--card-width) * var(--card-player-coef));
+  --card-height--player: calc(var(--card-height) * var(--card-player-coef));
+  --card-border-width--player: calc(var(--card-border-width) * var(--card-player-coef));
+  --card-hover-translateY--player: calc(var(--card-hover-translateY) * var(--card-player-coef));
+
+  --card-malus-coef: 0.5;
+  --card-width--malus: calc(var(--card-width) * var(--card-malus-coef));
+  --card-height--malus: calc(var(--card-height) * var(--card-malus-coef));
+  --card-border-width--malus: calc(var(--card-border-width) * var(--card-malus-coef));
+  --card-hover-translateY--malus: calc(var(--card-hover-translateY) * var(--card-malus-coef));
 
   --card-border-radius: 5%;
+
+  --player-width: 150px;
 }

@@ -20,9 +20,6 @@
 
 .board__slot {
   position: absolute;
-  /* transition: width .3s ease-out,
-    height .3s ease-out,
-    margin .3s ease-out; */
   box-sizing: border-box;
   padding: 1px;
   border-radius: var(--card-border-radius);
