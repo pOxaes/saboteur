@@ -8,7 +8,7 @@ const getLinkedSiblings = (cards, sourceCard) => {
 }
 
 const isPathOpen = (sourceCard, card) =>
-      (card.y === sourceCard.y && sourceCard.x === card.x + 1 && card.layout.right)
+     (card.y === sourceCard.y && sourceCard.x === card.x + 1 && card.layout.right)
   || (card.y === sourceCard.y && sourceCard.x === card.x - 1 && card.layout.left)
   || (card.x === sourceCard.x && sourceCard.y === card.y + 1 && card.layout.top)
   || (card.x === sourceCard.x && sourceCard.y === card.y - 1 && card.layout.bottom);
@@ -76,6 +76,7 @@ const updateSlot = (slots, x, y, card, shouldForce) => {
 }
 
 const createSlotsFromCards = cards => {
+  // Create card slots + empty slot
   const slots = cards.reduce((acc, card) => {
     updateSlot(acc, card.x, card.y, boardItemToCard(card));
     if (card.layout && card.isLinkedToStart) {
@@ -95,13 +96,14 @@ const createSlotsFromCards = cards => {
     return acc;
   }, []);
 
+  // Attach authorized layout for each empty slot
   slots
     .filter(slot => !slot.card)
     .forEach(slot => {
       const siblingsCoords = {
         top: {
           x: slot.x,
-          y: slot.y + 1,
+          y: slot.y - 1,
         },
         right: {
           x: slot.x + 1,
@@ -109,7 +111,7 @@ const createSlotsFromCards = cards => {
         },
         bottom: {
           x: slot.x,
-          y: slot.y - 1,
+          y: slot.y + 1,
         },
         left: {
           x: slot.x - 1,
@@ -117,18 +119,35 @@ const createSlotsFromCards = cards => {
         }
       };
 
-      const siblings = Object.keys(siblingsCoords).reduce((acc, side) => {
-        acc[side] = getCardByCoord(cards, siblingsCoords[side]);
+      slot.authorizedLayout = Object.keys(siblingsCoords).reduce((acc, side) => {
+        const sideCard = getCardByCoord(cards, siblingsCoords[side]);
+        if (sideCard) {
+          acc[side] = isPathOpen(slot, sideCard);
+        }
         return acc;
-      }, {})
-
-      console.log(slot, siblings);
+      }, {});
     });
 
   return slots;
 };
 
+const compareLayouts = (authLayout, checkedLayout) => Object.keys(authLayout)
+  .every(side => authLayout[side] === checkedLayout[side]);
+
+const rotateLayout = ({ top, right, bottom, left }) => ({
+  top: bottom,
+  right: left,
+  bottom: top,
+  left: right,
+});
+
+const checkCardCompatibility = (card, slot) => {
+  return compareLayouts(slot.authorizedLayout, card.layout)
+    || compareLayouts(slot.authorizedLayout, rotateLayout(card.layout));
+};
+
 export default {
+  checkCardCompatibility,
   createSlotsFromCards,
   isLinkedToStart,
 };

@@ -39,8 +39,9 @@ const formatPlayerCard = (card, slots, players) => {
     return;
   }
 
+  // Can destroy if a card, different from the origin, exists
   if (card.action === "DESTROY") {
-    card.isPlayable = slots.some(slot => slot.card && (slot.x !== 0 || slot.y !== 0));
+    card.isPlayable = slots.some(slot => slot.card && slot.card.layout && (slot.x !== 0 || slot.y !== 0));
     return;
   }
 
@@ -56,11 +57,11 @@ const formatPlayerCard = (card, slots, players) => {
     return;
   }
 
-  if (card.path) {
-    console.log(card.layout);
+  if (card.type === "PATH") {
+    card.isPlayable = slots.some(slot => !slot.card 
+      && boardService.checkCardCompatibility(card, slot)
+    );
   }
-
-  console.log(card, card.isPlayable);
 }
 
 const attachLinkedToStart = (card, index, cards) => {
@@ -155,7 +156,7 @@ export class Home extends Component {
   render() {
     return (
       <div>
-        {false && this.state.game &&
+        {true && this.state.game &&
           <PlayersList
             players={this.state.game.players}
             onKickPlayer={this.kickPlayer}
