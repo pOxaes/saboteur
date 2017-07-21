@@ -5,19 +5,38 @@
 }
 
 .player-status__name {
-  text-align: center;
-  flex: 1 1;
-  padding: 0 var(--card-width--malus);
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #555;
 }
 
-.player-status__gold {
-  position: absolute;
-  left: 0;
-  top: 0;
+.player-status--direction-left .player-status__name  {
+  flex-direction: row-reverse;
 }
 
 .player-status__malus {
   position: absolute;
   right: 0;
-  top: 0;
+  top: 100%;
+  margin-top: 4px;
+}
+
+.player-status--direction-left .player-status__malus {
+  left: 0;
+}
+
+/* CURRENT PLAYER */
+
+.player-status--direction-top {
+  display: flex;
+  width: 100%;
+}
+
+.player-status--direction-top .player-status__name {
+  flex: 1 1;
+  margin-right: 20px;
+}
+
+.player-status--direction-top .player-status__malus {
+  position: static;
 }

@@ -26,5 +26,11 @@
 
   --card-border-radius: 5%;
 
-  --player-width: 150px;
+  --player-width: 100px;
+
+  /* Z-INDEX */
+
+  --z-playersList: 50;
+  --z-board: 100;
+  --z-currentPlayer: 150;
 }

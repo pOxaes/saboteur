@@ -1,45 +1,13 @@
 .players-list {
   list-style: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: var(--z-playersList);
 }
 
 .player-list__item {
   position: absolute;
-  
 }
-
-.player-list__item > .player {
-  border: 1px solid green;
-}
-
-.player-list__item--position-bottom {
-  bottom: 12px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.player-list__item--position-left {
-  top: 35%;
-  left: 12px;
-}
-
-.player-list__item--position-top-left {
-  top: 12px;
-  left: 10%;
-}
-
-.player-list__item--position-top {
-  top: 12px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.player-list__item--position-top-right {
-  top: 12px;
-  right: 10%;
-}
-
-.player-list__item--position-right {
-  top: 35%;
-  right: 12px;
-}
-

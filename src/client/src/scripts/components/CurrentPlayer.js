@@ -5,7 +5,7 @@ import "../../styles/CurrentPlayer.css";
 
 export default ({ player, onCardPlay }) =>
   <div className="current-player">
-    <PlayerStatus player={player} />
+    <PlayerStatus player={player} direction="top"/>
     <div className="current-player__hand">
       {player.cards &&
         player.cards.map((card, index) => (

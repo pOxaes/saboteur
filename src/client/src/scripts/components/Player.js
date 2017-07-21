@@ -15,12 +15,12 @@ export default ({ player, kick, canKick, direction }) =>
       <button type="button" onClick={() => kick(player)}>
         kick
       </button>}
-    <PlayerStatus player={player} />
+    <PlayerStatus player={player} direction={direction} />
     <div className="player__cards">
       {player.cards &&
         player.cards.map((card, index) => (
           <div className="player__cards__card-wrapper" key={index}>
             <Card card={card}  modifiers={{ isPlayer: true }}/>
           </div>))}
-    </div>
+    </div> 
   </div>;

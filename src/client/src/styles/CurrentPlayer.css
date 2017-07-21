@@ -3,6 +3,7 @@
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
+  z-index: var(--z-currentPlayer);
 
   display: flex;
   flex-direction: column;
@@ -10,7 +11,7 @@
 }
 
 .current-player__hand {
-  margin-top: 50px;
+  margin-top: 20px;
   margin-bottom: -30px;
   display: flex;
 }
