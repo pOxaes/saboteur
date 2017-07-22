@@ -18,10 +18,6 @@ const attachLinkedToStart = (card, index, cards) => {
   card.isLinkedToStart = boardService.isLinkedToStart(card, cards);
 };
 
-const unhilight = item => { 
-  item.isHighlighted = false;
-};
-
 export class Home extends Component {
   state = {
     id: this.props.match.params.gameId,
@@ -75,7 +71,7 @@ export class Home extends Component {
       return;
     }
 
-    if (card == this.state.selectedCard) {
+    if (card === this.state.selectedCard) {
       this.setState({
         selectedCard: undefined,
       });
