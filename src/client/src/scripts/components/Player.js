@@ -16,11 +16,13 @@ export default ({ player, kick, canKick, direction }) =>
         kick
       </button>}
     <PlayerStatus player={player} direction={direction} />
-    <div className="player__cards">
-      {player.cards &&
-        player.cards.map((card, index) => (
-          <div className="player__cards__card-wrapper" key={index}>
-            <Card card={card}  modifiers={{ isPlayer: true }}/>
-          </div>))}
-    </div> 
+    { direction ?
+      <div className="player__cards">
+        {player.cards &&
+          player.cards.map((card, index) => (
+            <div className="player__cards__card-wrapper" key={index}>
+              <Card card={card}  modifiers={{ isPlayer: true }}/>
+            </div>))}
+      </div> : <div className="player__cards">{player.cards.length}</div>
+    }
   </div>;

@@ -3,8 +3,8 @@
   top: 50%;
   left: 50%;
   margin-top: -50px;
-  width: 566px;
-  height: 500px;
+  width: var(--board-width);
+  height: var(--board-height);
   max-width: calc(100% - 20px);
   max-height: 100%;
   transform: translate(-50%, -50%);

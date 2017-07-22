@@ -11,3 +11,34 @@
 .player-list__item {
   position: absolute;
 }
+
+/* DISPLAY INLINE */
+
+.players-list--display-inline {
+  bottom: auto;
+  display: flex;
+  justify-content: space-around;
+}
+
+.players-list--display-inline .player-list__item {
+  position: static;
+  margin-left: 8px;
+}
+
+.players-list--display-inline .player {
+  flex: 1 1;
+  position: relative;
+  transform: none;
+  flex-direction: row;
+  width: auto;
+  /* min-width: 40px;  */
+}
+
+.players-list--display-inline .player-status__name {
+  font-size: 12px;
+  flex-direction: row;
+  max-width: 35px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow-x: hidden;
+}

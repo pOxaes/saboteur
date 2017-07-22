@@ -14,4 +14,13 @@
   margin-top: 20px;
   margin-bottom: -30px;
   display: flex;
+  max-width: 100%;
+}
+
+.current-player__hand__card-wrapper {
+  max-width: 20vw;
+}
+
+.current-player__hand__card-wrapper .card {
+  max-width: none;
 }

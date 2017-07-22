@@ -14,14 +14,6 @@ const GAME_STATUS = {
   PLAYING: "PLAYING"
 };
 
-// const POSITIONS_BY_PLAYERS_COUNT = {
-//   2: ["bottom", "top"],
-//   3: ["bottom", "top-left", "top-right"],
-//   4: ["bottom", "left", "top", "right"],
-//   5: ["bottom", "left", "top-left", "top-right", "right"],
-//   6: ["bottom", "left", "top-left", "top", "top-right", "right"]
-// };
-
 const attachLinkedToStart = (card, index, cards) => {
   card.isLinkedToStart = boardService.isLinkedToStart(card, cards);
 }
@@ -31,15 +23,6 @@ export class Home extends Component {
     id: this.props.match.params.gameId,
     user: userService.get()
   };
-
-  // withPosition(players) {
-  //   const playersCount = players.length;
-  //   const currentPlayerIndex = players.map(player => player.id).indexOf(this.state.user.id);
-  //   const positionsList = POSITIONS_BY_PLAYERS_COUNT[playersCount];
-  //   for (let i = currentPlayerIndex, j = 0; i < currentPlayerIndex + playersCount; i++, j++) {
-  //     players[i % playersCount].position = positionsList[j];
-  //   }
-  // }
 
   componentWillMount() {
     request.get(`http://localhost:3008/games/${this.state.id}`).then(this.updateGame.bind(this));
@@ -58,7 +41,6 @@ export class Home extends Component {
       boardService.attachPlayability(card, slots, game.players);
     });
 
-    // this.withPosition(game.players);
     this.setState({
       game,
       slots,
