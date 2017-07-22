@@ -141,9 +141,12 @@ const rotateLayout = ({ top, right, bottom, left }) => ({
   left: right,
 });
 
-const checkCardCompatibility = (card, slot) => {
+const checkCardCompatibility = (card, slot, shouldCompareRotation = true) => {
   return compareLayouts(slot.authorizedLayout, card.layout)
-    || compareLayouts(slot.authorizedLayout, rotateLayout(card.layout));
+    || (
+      shouldCompareRotation
+      && compareLayouts(slot.authorizedLayout, rotateLayout(card.layout))
+    );
 };
 
 const formatCardLayout = card => {
@@ -185,10 +188,49 @@ const attachPlayability = (card, slots, players) => {
   }
 }
 
+const canPlayCardOnPlayer = (card, player) => 
+  (
+    card.action === "BLOCK"
+    && (!player.malus || !player.malus.length)
+  )
+  ||
+  (
+    card.action === "FREE"
+    && (
+      player.malus
+      && player.malus.some(malus => card.subtype.indexOf(malus) !== -1)
+    )
+  );
+
+const canPlayCardOnSlot = (card, slot) => 
+  (
+    card.action === "DESTROY"
+    && (
+      slot.card 
+      && slot.card.layout 
+      && (slot.x !== 0 || slot.y !== 0)
+    )
+  )
+  ||
+  (
+    card.type === "PATH"
+    && (
+      slot.authorizedLayout && checkCardCompatibility(card, slot, false)
+    )
+  );
+
+const rotateCardLayout = card => {
+  card.layout = rotateLayout(card.layout);
+  card.isRotated = !card.isRotated;
+};
+
 export default {
   attachPlayability,
   checkCardCompatibility,
   createSlotsFromCards,
   formatCardLayout,
   isLinkedToStart,
+  rotateCardLayout,
+  canPlayCardOnPlayer,
+  canPlayCardOnSlot,
 };

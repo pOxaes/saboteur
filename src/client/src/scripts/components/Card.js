@@ -1,5 +1,6 @@
 import React from "react";
 import CardLayout from "./CardLayout"
+import boardService from "../services/board";
 import "../../styles/Card.css";
 
 const computeCardClass = (card, modifiers = {}) =>
@@ -13,23 +14,26 @@ const computeCardClass = (card, modifiers = {}) =>
     modifiers.isHand && 'card--hand',
     modifiers.isPlayer && 'card--player',
     modifiers.isMalus && 'card--malus',
+    modifiers.isSelected && 'card--selected',
   ].join(" ");
 
 export default ({ card, onPlay, modifiers }) =>
-  <div
-    className={computeCardClass(card, modifiers)}
-    onClick={() => {
-      onPlay && onPlay(card);
-    }}
-  >
+  <div className={computeCardClass(card, modifiers)}>
 
-    <div className="card__inner">
-    
-    {card.item && <div className={`card__item card__item--${card.item}`} />}
-    {card.subtype && card.subtype.length &&
-      card.subtype.map((subtype, index) =>
-        <span className="card__subtype" key={index}>{subtype}</span>
-    )} 
+    <div className="card__inner" onClick={() => {
+      onPlay && onPlay(card);
+    }}>
+
+      {card.canRotate && 
+      <button className="card__rotate" type="button" onClick={() => {
+        boardService.rotateCardLayout(card);
+      }}>rotate</button>}
+
+      {card.item && <div className={`card__item card__item--${card.item}`} />}
+      {card.subtype && card.subtype.length &&
+        card.subtype.map((subtype, index) =>
+          <span className="card__subtype" key={index}>{subtype}</span>
+      )} 
       {card.layout && 
         <CardLayout layout={card.layout} item={card.item} />}
     </div>

@@ -14,6 +14,7 @@ const computeSlotClass = slot =>
   [
     "board__slot",
     !slot.card && `board__slot--no-card`,
+    slot.isHighlighted && "board__slot--highlighted",
   ].join(" ");
 
 export default ({ slot, cardStyle }) =>

@@ -128,6 +128,18 @@
   transform: translateY(var(--card-hover-translateY--hand));
 }
 
+.card--hand.card--selected {
+  transform: translateY(var(--card-hover-translateY--hand));
+  border-color: red;
+}
+
+.card__rotate {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
 /* MALUS */
 
 .card--malus {

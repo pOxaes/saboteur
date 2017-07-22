@@ -3,14 +3,15 @@ import Card from "./Card";
 import PlayerStatus from "./PlayerStatus";
 import "../../styles/Player.css";
 
-const computePlayerClass = (direction) =>
+const computePlayerClass = (player, direction) =>
   [
     "player",
-    `player--direction-${direction}`
+    `player--direction-${direction}`,
+    player.isHighlighted && "player--highlighted",
   ].join(" ");
 
 export default ({ player, kick, canKick, direction }) =>
-  <div className={computePlayerClass(direction)} >
+  <div className={computePlayerClass(player, direction)} >
     {canKick &&
       <button type="button" onClick={() => kick(player)}>
         kick

@@ -31,3 +31,7 @@
 .board__slot--no-card {
   border: 2px dotted #CCC;
 }
+
+.board__slot--highlighted {
+  border: 2px solid red;
+}

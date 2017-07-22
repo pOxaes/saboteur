@@ -16,7 +16,11 @@ const GAME_STATUS = {
 
 const attachLinkedToStart = (card, index, cards) => {
   card.isLinkedToStart = boardService.isLinkedToStart(card, cards);
-}
+};
+
+const unhilight = item => { 
+  item.isHighlighted = false;
+};
 
 export class Home extends Component {
   state = {
@@ -37,6 +41,10 @@ export class Home extends Component {
     // format current player cards
     const currentPlayerIndex = game.players.map(player => player.id).indexOf(this.state.user.id);
     game.players[currentPlayerIndex].cards.forEach(card => {
+      if (card.layout) {
+        card.canRotate = true;
+        card.isRotated = false;
+      }
       boardService.formatCardLayout(card);
       boardService.attachPlayability(card, slots, game.players);
     });
@@ -66,7 +74,30 @@ export class Home extends Component {
     if (!card.isPlayable) {
       return;
     }
-    console.log("let's play this card", card);
+
+    if (card == this.state.selectedCard) {
+      this.setState({
+        selectedCard: undefined,
+      });
+      this.state.slots.concat(this.state.players).forEach(item => {
+        item.isHighlighted = false;
+      });
+      return;
+    }
+
+    // TODO: maybe just change to 
+    // card.isSelected = true
+    this.setState({
+      selectedCard: card,
+    });
+
+    this.state.slots.forEach(slot => {
+      slot.isHighlighted = boardService.canPlayCardOnSlot(card, slot);
+    });
+
+    this.state.players.forEach(player => {
+      player.isHighlighted = boardService.canPlayCardOnPlayer(card, player);
+    });
   }
 
   renderLobby() {
@@ -78,7 +109,7 @@ export class Home extends Component {
   renderPlayingGame() {
     return (
       <div>
-        <Board slots={this.state.slots} />
+        <Board slots={this.state.slots} selectedCard={this.state.selectedCard} />
         <Deck count={this.state.game.deck} />
       </div>
     );
@@ -104,7 +135,12 @@ export class Home extends Component {
             onKickPlayer={this.kickPlayer}
             canKickPlayer={this.state.game._canKick}
           />}
-         {this.state.game && <CurrentPlayer player={this.state.currentPlayer} onCardPlay={this.onCardPlay} />} 
+        {this.state.game && 
+          <CurrentPlayer 
+            player={this.state.currentPlayer} 
+            onCardPlay={this.onCardPlay}
+            selectedCard={this.state.selectedCard}
+          />} 
         {this.state.game && this.renderByStatus()}
       </div>
     );

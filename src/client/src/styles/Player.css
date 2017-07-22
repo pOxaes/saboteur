@@ -5,6 +5,10 @@
   width: var(--player-width);
 }
 
+.player--highlighted {
+  border: 2px solid red;
+}
+
 .player--direction-right {
   flex-direction: row;
   transform: translateY(-50%);
