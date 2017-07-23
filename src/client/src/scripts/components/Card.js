@@ -1,6 +1,5 @@
 import React from "react";
 import CardLayout from "./CardLayout"
-import boardService from "../services/board";
 import "../../styles/Card.css";
 
 const computeCardClass = (card, modifiers = {}) =>
@@ -17,17 +16,17 @@ const computeCardClass = (card, modifiers = {}) =>
     modifiers.isSelected && 'card--selected',
   ].join(" ");
 
-export default ({ card, onPlay, modifiers }) =>
+export default ({ card, onPlay, modifiers, rotateLayout }) =>
   <div className={computeCardClass(card, modifiers)}>
+
+    {card.canRotate && 
+      <button className="card__rotate" type="button" onClick={() => {
+        rotateLayout && rotateLayout(card);
+      }}>rotate</button>}
 
     <div className="card__inner" onClick={() => {
       onPlay && onPlay(card);
     }}>
-
-      {card.canRotate && 
-      <button className="card__rotate" type="button" onClick={() => {
-        boardService.rotateCardLayout(card);
-      }}>rotate</button>}
 
       {card.item && <div className={`card__item card__item--${card.item}`} />}
       {card.subtype && card.subtype.length &&

@@ -65,7 +65,7 @@ export class Home extends Component {
     console.log("kick", player, this.state.id);
   }
 
-  onCardPlay = card => {
+  onCardPlay(card) {
     // TODO: on card play
     if (!card.isPlayable) {
       return;
@@ -87,6 +87,10 @@ export class Home extends Component {
       selectedCard: card,
     });
 
+    this.updateHighlights(card);
+  }
+
+  updateHighlights(card) {
     this.state.slots.forEach(slot => {
       slot.isHighlighted = boardService.canPlayCardOnSlot(card, slot);
     });
@@ -122,6 +126,14 @@ export class Home extends Component {
     }
   }
 
+  rotateCardLayout(card) {
+    boardService.rotateCardLayout(card);
+    if (this.state.selectedCard && card.id === this.state.selectedCard.id) {
+      this.updateHighlights(card);
+    }
+    this.forceUpdate();
+  }
+
   render() {
     return (
       <div>
@@ -134,8 +146,9 @@ export class Home extends Component {
         {this.state.game && 
           <CurrentPlayer 
             player={this.state.currentPlayer} 
-            onCardPlay={this.onCardPlay}
+            onCardPlay={this.onCardPlay.bind(this)}
             selectedCard={this.state.selectedCard}
+            rotateCardLayout={this.rotateCardLayout.bind(this)}
           />} 
         {this.state.game && this.renderByStatus()}
       </div>
