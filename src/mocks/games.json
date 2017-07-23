@@ -1,14 +1,23 @@
-[
-  {
-    "id": 0,
-    "name": "number 1",
-    "playersCount": 4,
-    "maxPlayers": 6
-  },
-  {
-    "id": 1,
-    "name": "number 2",
-    "playersCount": 3,
-    "maxPlayers": 5
-  }
-]
+{
+  "lobby": [
+    {
+      "id": 0,
+      "name": "number 1",
+      "playersCount": 4,
+      "maxPlayers": 6
+    },
+    {
+      "id": 1,
+      "name": "number 2",
+      "playersCount": 3,
+      "maxPlayers": 5
+    }
+  ],
+  "playing": [
+    {
+      "id": 2,
+      "name": "number 3",
+      "playersCount": 10
+    }
+  ]
+}

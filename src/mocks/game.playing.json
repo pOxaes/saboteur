@@ -217,66 +217,6 @@
         }
       ],
       "gold": [3]
-    },
-    {
-      "name": "Gab",
-      "id": 7,
-      "malus": [],
-      "cards": [
-        {
-          "type": "HIDDEN"
-        },
-        {
-          "type": "HIDDEN"
-        },
-        {
-          "type": "HIDDEN"
-        },
-        {
-          "type": "HIDDEN"
-        }
-      ],
-      "gold": [3]
-    },
-    {
-      "name": "Gab",
-      "id": 8,
-      "malus": [],
-      "cards": [
-        {
-          "type": "HIDDEN"
-        },
-        {
-          "type": "HIDDEN"
-        },
-        {
-          "type": "HIDDEN"
-        },
-        {
-          "type": "HIDDEN"
-        }
-      ],
-      "gold": [3]
-    },
-    {
-      "name": "Gab",
-      "id": 9,
-      "malus": [],
-      "cards": [
-        {
-          "type": "HIDDEN"
-        },
-        {
-          "type": "HIDDEN"
-        },
-        {
-          "type": "HIDDEN"
-        },
-        {
-          "type": "HIDDEN"
-        }
-      ],
-      "gold": [3]
     }
   ]
 }

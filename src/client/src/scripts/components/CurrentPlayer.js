@@ -11,9 +11,9 @@ const computeCurrentPlayerClass = selectedCard => [
 export default ({ player, onCardPlay, selectedCard, rotateCardLayout }) =>
   <div className={computeCurrentPlayerClass(selectedCard)}>
     <PlayerStatus player={player} direction="top"/>
-    <div className="current-player__hand">
-      {player.cards &&
-        player.cards.map((card, index) => (
+    {player.cards &&
+      <div className="current-player__hand">
+        {player.cards.map((card, index) => (
           <div className="current-player__hand__card-wrapper" key={index}>
             <Card 
               card={card} 
@@ -21,5 +21,5 @@ export default ({ player, onCardPlay, selectedCard, rotateCardLayout }) =>
               rotateLayout={rotateCardLayout}
               modifiers={{ isHand: true, isSelected: selectedCard && selectedCard.id === card.id}} />
           </div>))}
-    </div>
+      </div>}
   </div>

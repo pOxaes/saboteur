@@ -23,8 +23,13 @@ app.use(
 
 app
   .get("/games", mock("games"))
-  .get("/games/:id", mock("game.playing"))
-  .post("/login", mock("login"));
+  .post("/games", mock("game.lobby"))
+  .post("/games/:id/kick", mock("game.playing"))
+  .post("/games/:id/play", mock("game.playing"))
+  .post("/games/:id/start", mock("game.playing"))
+  .get("/games/1", mock("game.lobby"))
+  .get("/games/0", mock("game.playing"))
+  .post("/login", mock("login"))
 
 app.listen(3008, () => {
   console.log("Listening port 3008");

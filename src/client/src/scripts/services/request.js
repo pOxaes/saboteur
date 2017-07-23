@@ -16,7 +16,7 @@ const post = (url, data) =>
   new Promise((resolve, reject) => {
     fetch(url, {
       method: "POST",
-      body: data
+      body: data || {}
     }).then(onRes(resolve, reject));
   });
 

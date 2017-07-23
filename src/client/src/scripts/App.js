@@ -7,6 +7,7 @@ import "../styles/App.css";
 import HomeContainer from "./containers/Home";
 import LoginContainer from "./containers/Login";
 import GameContainer from "./containers/Game";
+import GameCreationContainer from "./containers/GameCreation";
 
 class App extends Component {
   render() {
@@ -15,6 +16,7 @@ class App extends Component {
         <Switch>
           <Route exact path="/" component={HomeContainer} />
           <Route path="/games/:gameId" component={GameContainer} />
+          <Route path="/game-creation" component={GameCreationContainer} />
           <Route path="/login" component={LoginContainer} />
         </Switch>
       </div>

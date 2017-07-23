@@ -1,16 +1,19 @@
 import React, { Component } from "react";
-import request from "../services/request";
+import actions from "../store/actions";
 import Games from "../components/Games";
 import userService from "../services/user";
 
 export default class Home extends Component {
   state = {
-    games: [],
+    games: {
+      lobby: [],
+      playing: [],
+    },
     user: userService.get()
   };
 
   componentWillMount() {
-    request.get("http://localhost:3008/games").then(games => {
+    actions.getGames().then(games => {
       this.setState({
         games
       });
@@ -28,10 +31,17 @@ export default class Home extends Component {
         <p>
           Welcome {this.state.user.name}
         </p>
+        <h3>Lobby</h3>
         <Games
-          games={this.state.games}
+          games={this.state.games.lobby}
           onSelectGame={this.onSelectGame.bind(this)}
         />
+        <h3>Your games</h3>
+        <Games
+          games={this.state.games.playing}
+          onSelectGame={this.onSelectGame.bind(this)}
+        />
+        <a href="/game-creation">Create</a>
       </div>
     );
   }

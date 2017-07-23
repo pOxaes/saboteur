@@ -2,13 +2,14 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Redirect } from "react-router-dom";
 import userService from "../services/user";
-import request from "../services/request";
 import boardService from "../services/board";
 import PlayersList from "../components/PlayersList";
 import CurrentPlayer from "../components/CurrentPlayer";
 import Board from "../components/Board";
 import Deck from "../components/Deck";
 import Discard from "../components/Discard";
+import actions from "../store/actions";
+import "../../styles/Game.css";
 
 const GAME_STATUS = {
   WAITING_FOR_PLAYERS: "WAITING_FOR_PLAYERS",
@@ -37,25 +38,32 @@ export class Home extends Component {
   };
 
   componentWillMount() {
-    request.get(`http://localhost:3008/games/${this.state.id}`).then(this.updateGame.bind(this));
+    actions.getGame(this.state.id)
+      .then(this.updateGame.bind(this));
   }
 
   updateGame(game) {
-    game.board.forEach(boardService.formatCardLayout);
-    game.board.forEach(attachLinkedToStart);
+    let slots = [];
+    console.log('updateGame', game);
 
-    const slots = boardService.createSlotsFromCards(game.board);
-
-    // format current player cards
     const currentPlayerIndex = game.players.map(player => player.id).indexOf(this.state.user.id);
-    game.players[currentPlayerIndex].cards.forEach(card => {
-      if (card.layout) {
-        card.canRotate = true;
-        card.isRotated = false;
-      }
-      boardService.formatCardLayout(card);
-      boardService.attachPlayability(card, slots, game.players);
-    });
+    
+    if (game.status === GAME_STATUS.PLAYING) {
+      game.board.forEach(boardService.formatCardLayout);
+      game.board.forEach(attachLinkedToStart);
+
+      slots = boardService.createSlotsFromCards(game.board);
+
+      // format current player cards
+      game.players[currentPlayerIndex].cards.forEach(card => {
+        if (card.layout) {
+          card.canRotate = true;
+          card.isRotated = false;
+        }
+        boardService.formatCardLayout(card);
+        boardService.attachPlayability(card, slots, game.players);
+      });
+    }
 
     this.setState({
       game,
@@ -64,17 +72,9 @@ export class Home extends Component {
       players: game.players.filter((player, index) => index !== currentPlayerIndex),
     });
   }
-
-  isLobby() {
-    return (
-      this.state.game &&
-      this.state.game.status === GAME_STATUS.WAITING_FOR_PLAYERS
-    );
-  }
-
+  
   kickPlayer = player => {
-    // TODO: kick player
-    console.log("kick", player, this.state.id);
+    actions.kick({ playerId: player.id, gameId: this.state.id });
   }
 
   onCardPlay(card) {
@@ -106,7 +106,26 @@ export class Home extends Component {
     if (!this.state.selectedCard || (type !== DESTINATION_TYPES.DISCARD && !destinationItem.isHighlighted)) {
       return;
     }
-    console.log('confirmSelectedCardDestination', type, destinationItem);
+
+    const destination = {
+      type,
+    };
+    
+    if (type === DESTINATION_TYPES.PLAYER) {
+      destination.id = destinationItem.id;
+    }
+    
+    if (type === DESTINATION_TYPES.SLOT) {
+      destination.x = destinationItem.x;
+      destination.y = destinationItem.y;
+    }
+
+    actions.playCard({
+      gameId: this.state.id,
+      cardId: this.state.selectedCard.id,
+      isRotated: this.state.selectedCard.isRotated,
+      destination,
+    });
   }
 
   updateHighlights(card) {
@@ -119,9 +138,20 @@ export class Home extends Component {
     });
   }
 
+  startGame() {
+    actions.startGame(this.state.game.id)
+      .then(this.updateGame.bind(this));
+  }
+
   renderLobby() {
     return (
-      <p>Lobby</p>
+      <div className="game__lobby-status">
+        <p className="game__players-count">{this.state.game.players.length} / {this.state.game.maxPlayers} players</p>
+        {this.state.game.players.length < 2 ?
+          <p>You need at least 2 players to start</p>
+          : <button type="button" onClick={this.startGame.bind(this)}>Start Game</button>
+        }
+      </div>
     );
   }
 
@@ -138,6 +168,7 @@ export class Home extends Component {
   }
 
   renderByStatus() {
+    console.log('renderByStatus', this.state.game.status);
     switch (this.state.game.status) {
       case GAME_STATUS.WAITING_FOR_PLAYERS:
         return this.renderLobby();
@@ -159,14 +190,14 @@ export class Home extends Component {
   render() {
     return (
       <div className={computeGameClass(this.state.selectedCard)}>
-        {this.state.game &&
+        {this.state.players &&
           <PlayersList
             players={this.state.players}
             onKickPlayer={this.kickPlayer}
             canKickPlayer={this.state.game._canKick}
             selectPlayer={this.confirmSelectedCardDestination.bind(this, DESTINATION_TYPES.PLAYER)}
           />}
-        {this.state.game && 
+        {this.state.currentPlayer && 
           <CurrentPlayer 
             player={this.state.currentPlayer} 
             onCardPlay={this.onCardPlay.bind(this)}
