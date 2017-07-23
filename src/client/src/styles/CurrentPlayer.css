@@ -24,3 +24,26 @@
 .current-player__hand__card-wrapper .card {
   max-width: none;
 }
+
+@media only screen and (max-width: 530px) {
+  .current-player--selected-card {
+    left: 10px;
+    transform: none;
+  }
+
+  .current-player--selected-card .player-status,
+  .current-player--selected-card .card:not(.card--selected) {
+    display: none;
+  }
+
+  .current-player--selected-card .card--selected {
+    left: 0;
+  }
+  
+  .current-player--selected-card .card--selected .card__rotate {
+    left: 100%;
+    bottom: 50%;
+    margin-left: 20px;
+    transform: none;
+  }
+}

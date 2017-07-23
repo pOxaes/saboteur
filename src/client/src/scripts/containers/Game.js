@@ -8,15 +8,27 @@ import PlayersList from "../components/PlayersList";
 import CurrentPlayer from "../components/CurrentPlayer";
 import Board from "../components/Board";
 import Deck from "../components/Deck";
+import Discard from "../components/Discard";
 
 const GAME_STATUS = {
   WAITING_FOR_PLAYERS: "WAITING_FOR_PLAYERS",
   PLAYING: "PLAYING"
 };
 
+const DESTINATION_TYPES = {
+  DISCARD: "DISCARD",
+  SLOT: "SLOT",
+  PLAYER: "PLAYER",
+};
+
 const attachLinkedToStart = (card, index, cards) => {
   card.isLinkedToStart = boardService.isLinkedToStart(card, cards);
 };
+
+const computeGameClass = selectedCard => [
+  "game",
+  selectedCard && "game--selected-card",
+].join(" ");
 
 export class Home extends Component {
   state = {
@@ -90,6 +102,13 @@ export class Home extends Component {
     this.updateHighlights(card);
   }
 
+  confirmSelectedCardDestination(type, destinationItem) {
+    if (!this.state.selectedCard || (type !== DESTINATION_TYPES.DISCARD && !destinationItem.isHighlighted)) {
+      return;
+    }
+    console.log('confirmSelectedCardDestination', type, destinationItem);
+  }
+
   updateHighlights(card) {
     this.state.slots.forEach(slot => {
       slot.isHighlighted = boardService.canPlayCardOnSlot(card, slot);
@@ -109,8 +128,11 @@ export class Home extends Component {
   renderPlayingGame() {
     return (
       <div>
-        <Board slots={this.state.slots} selectedCard={this.state.selectedCard} />
+        <Board 
+          slots={this.state.slots} 
+          selectSlot={this.confirmSelectedCardDestination.bind(this, DESTINATION_TYPES.SLOT)} />
         <Deck count={this.state.game.deck} />
+        <Discard onDiscard={this.confirmSelectedCardDestination.bind(this, DESTINATION_TYPES.DISCARD)} />
       </div>
     );
   }
@@ -136,12 +158,13 @@ export class Home extends Component {
 
   render() {
     return (
-      <div>
+      <div className={computeGameClass(this.state.selectedCard)}>
         {this.state.game &&
           <PlayersList
             players={this.state.players}
             onKickPlayer={this.kickPlayer}
             canKickPlayer={this.state.game._canKick}
+            selectPlayer={this.confirmSelectedCardDestination.bind(this, DESTINATION_TYPES.PLAYER)}
           />}
         {this.state.game && 
           <CurrentPlayer 

@@ -110,7 +110,11 @@ export default class Board extends Component {
         { this.state.innerWidth && 
           <div className="board__inner" style={computeInnerStyle(this.state)}>
             { this.state.cardStyle && this.props.slots && this.props.slots.map(slot =>
-            <BoardSlot slot={slot} key={slot.x + ':' + slot.y} cardStyle={this.state.cardStyle}/>
+            <BoardSlot 
+              onClick={this.props.selectSlot}
+              slot={slot} 
+              key={slot.x + ':' + slot.y} 
+              cardStyle={this.state.cardStyle}/>
           )}
         </div>
       }

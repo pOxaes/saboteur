@@ -10,13 +10,17 @@ const computePlayerClass = (player, direction) =>
     player.isHighlighted && "player--highlighted",
   ].join(" ");
 
-export default ({ player, kick, canKick, direction }) =>
+export default ({ player, kick, canKick, direction, onClick }) =>
   <div className={computePlayerClass(player, direction)} >
     {canKick &&
       <button type="button" onClick={() => kick(player)}>
         kick
       </button>}
-    <PlayerStatus player={player} direction={direction} />
+    <div onClick={() => {
+      onClick && onClick(player);
+    }}>
+      <PlayerStatus player={player} direction={direction} />
+    </div>
     { direction ?
       <div className="player__cards">
         {player.cards &&

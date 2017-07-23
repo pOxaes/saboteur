@@ -3,8 +3,13 @@ import Card from "./Card";
 import PlayerStatus from "./PlayerStatus";
 import "../../styles/CurrentPlayer.css";
 
+const computeCurrentPlayerClass = selectedCard => [
+  "current-player",
+  selectedCard && "current-player--selected-card",
+].join(" ");
+
 export default ({ player, onCardPlay, selectedCard, rotateCardLayout }) =>
-  <div className="current-player">
+  <div className={computeCurrentPlayerClass(selectedCard)}>
     <PlayerStatus player={player} direction="top"/>
     <div className="current-player__hand">
       {player.cards &&

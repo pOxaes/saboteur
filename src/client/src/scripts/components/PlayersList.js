@@ -158,6 +158,7 @@ export default class PlayersList extends Component {
                 style={this.getPlayerStyle(index)}>
                 <Player
                   player={player}
+                  onClick={this.props.selectPlayer}
                   canKick={this.props.canKickPlayer}
                   kick={this.props.onKickPlayer}
                   direction={this.state.positions && this.state.positions[index].direction}

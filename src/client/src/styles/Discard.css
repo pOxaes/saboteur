@@ -1,0 +1,20 @@
+.discard {
+  position: absolute;
+  z-index: var(--z-discard);
+  width: var(--card-width);
+  height: var(--card-height);
+  bottom: 30px;
+  right: 30px;
+  border: 2px dotted rgba(255, 0, 0, .3);
+  border-radius: var(--card-border-radius);
+}
+
+@media only screen and (max-width: 530px) {
+  .discard {
+    display: none;
+  }
+
+  .game--selected-card .discard {
+    display: block;
+  }
+}

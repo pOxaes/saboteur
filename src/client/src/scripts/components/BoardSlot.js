@@ -17,7 +17,12 @@ const computeSlotClass = slot =>
     slot.isHighlighted && "board__slot--highlighted",
   ].join(" ");
 
-export default ({ slot, cardStyle }) =>
-  <div className={computeSlotClass(slot)} style={computeStyle(slot, cardStyle)}>
+export default ({ slot, cardStyle, onClick }) =>
+  <div 
+    className={computeSlotClass(slot)} 
+    style={computeStyle(slot, cardStyle)}
+    onClick={() => {
+      onClick && onClick(slot);
+    }}>
     {slot.card && <Card card={slot.card} />}
   </div>
