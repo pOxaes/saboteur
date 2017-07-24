@@ -11,7 +11,7 @@ const mock = filePath => (req, res) => {
 };
 
 const fakeLatencyMiddleware = (req, res, next) => {
-  setTimeout(next, Math.random() * 1500);
+  setTimeout(next, Math.random() * 300);
 };
 
 app.use(
@@ -28,7 +28,7 @@ app
   .post("/games/:id/play", mock("game.playing"))
   .post("/games/:id/start", mock("game.playing"))
   .get("/games/1", mock("game.lobby"))
-  .get("/games/0", mock("game.playing"))
+  .get("/games/:id", mock("game.playing"))
   .post("/login", mock("login"))
 
 app.listen(3008, () => {

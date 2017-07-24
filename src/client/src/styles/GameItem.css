@@ -1,0 +1,26 @@
+.game-item {
+  display: flex;
+  justify-content: space-between;
+}
+
+.game-item__name {
+  display: block;
+  width: 200px;
+  text-align: left;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow-x: hidden;
+}
+
+.game-item__players-count {
+  width: 30px;
+  text-align: right;
+  margin-left: 15px;
+  text-align: left;
+}
+
+.game-item__players-count__max {
+  font-size: 8px;
+  margin-left: 4px;
+  color: #AAA;
+}

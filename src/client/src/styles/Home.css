@@ -1,0 +1,21 @@
+.home {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.home__welcome {
+  font-style: italic;
+}
+
+.home__title {
+  margin-top: 30px;
+  margin-bottom: 15px;
+}
+
+.home__game-creation-button {
+  margin-top: 50px;
+  margin-bottom: 50px;
+}

@@ -2,21 +2,27 @@
   "lobby": [
     {
       "id": 0,
-      "name": "number 1",
+      "name": "playing 1",
       "playersCount": 4,
       "maxPlayers": 6
     },
     {
       "id": 1,
-      "name": "number 2",
+      "name": "lobby 2",
       "playersCount": 3,
       "maxPlayers": 5
+    },
+    {
+      "id": 3,
+      "name": "playing 3 number 3 number 3 number 3 number 3 number 3",
+      "playersCount": 10,
+      "maxPlayers": 10
     }
   ],
   "playing": [
     {
       "id": 2,
-      "name": "number 3",
+      "name": "playing 3",
       "playersCount": 10
     }
   ]

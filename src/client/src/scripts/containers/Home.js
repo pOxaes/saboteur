@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import actions from "../store/actions";
 import Games from "../components/Games";
 import userService from "../services/user";
+import "../../styles/Home.css";
 
 export default class Home extends Component {
   state = {
@@ -26,22 +27,21 @@ export default class Home extends Component {
 
   render() {
     return (
-      <div>
-        <h2>Home</h2>
-        <p>
+      <div className="home">
+        <p className="home__welcome">
           Welcome {this.state.user.name}
         </p>
-        <h3>Lobby</h3>
+        <a href="/game-creation" className="home__game-creation-button">Create</a>
+        <h3 className="home__title">Lobby</h3>
         <Games
           games={this.state.games.lobby}
           onSelectGame={this.onSelectGame.bind(this)}
         />
-        <h3>Your games</h3>
+        <h3 className="home__title">Your games</h3>
         <Games
           games={this.state.games.playing}
           onSelectGame={this.onSelectGame.bind(this)}
         />
-        <a href="/game-creation">Create</a>
       </div>
     );
   }

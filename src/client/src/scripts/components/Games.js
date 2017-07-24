@@ -1,6 +1,6 @@
 import React from "react";
-
-import Game from "./Game";
+import GameItem from "./GameItem";
+import "../../styles/Games.css";
 
 export default ({ games, onSelectGame }) =>
   <div className="games">
@@ -8,10 +8,8 @@ export default ({ games, onSelectGame }) =>
       ? <p>Empty</p>
       : <ul className="games__list">
           {games.map(game =>
-            <li className="game-list__item" key={game.id}>
-              <Game game={game} onClick={onSelectGame} />
-              {game.playersCount}
-              {game.maxPlayers && `/ ${game.maxPlayers}`}
+            <li className="game__list__item" key={game.id}>
+              <GameItem game={game} onClick={onSelectGame} />
             </li>
           )}
         </ul>}
