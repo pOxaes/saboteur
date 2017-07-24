@@ -27,6 +27,7 @@ app
   .post("/games/:id/kick", mock("game.playing"))
   .post("/games/:id/play", mock("game.playing"))
   .post("/games/:id/start", mock("game.playing"))
+  .post("/games/:id/delete", mock("games"))
   .get("/games/1", mock("game.lobby"))
   .get("/games/:id", mock("game.playing"))
   .post("/login", mock("login"))

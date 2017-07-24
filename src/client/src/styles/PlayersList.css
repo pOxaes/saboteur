@@ -42,3 +42,21 @@
   text-overflow: ellipsis;
   overflow-x: hidden;
 }
+
+.game--status-WAITING_FOR_PLAYERS .players-list--display-inline {
+  flex-direction: column;
+  border: 1px solid red;
+}
+
+.game--status-WAITING_FOR_PLAYERS .players-list--display-inline .player {
+  flex-direction: row-reverse;
+}
+
+.game--status-WAITING_FOR_PLAYERS .players-list--display-inline .player-status__name {
+  max-width: none;
+  margin-right: 10px;
+}
+
+.game--status-WAITING_FOR_PLAYERS .players-list--display-inline .player-status {
+  border: none;
+}

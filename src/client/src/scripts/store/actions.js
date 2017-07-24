@@ -24,8 +24,11 @@ const createGame = ({ name, maxPlayers }) => request.post(`${baseUrl}/games`, { 
 
 const startGame = gameId => request.post(`${baseUrl}/games/${gameId}/start`);
 
+const deleteGame = gameId => request.post(`${baseUrl}/games/${gameId}/delete`);
+
 export default {
   createGame,
+  deleteGame,
   getGame,
   getGames,
   joinGame,

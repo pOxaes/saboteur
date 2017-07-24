@@ -1,6 +1,18 @@
 .game-item {
+  position: relative;
+}
+
+.game-item__link {
   display: flex;
   justify-content: space-between;
+}
+
+.game-item__remove-button {
+  position: absolute;
+  left: 100%;
+  margin-left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .game-item__name {

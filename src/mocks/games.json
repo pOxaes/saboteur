@@ -4,13 +4,15 @@
       "id": 0,
       "name": "playing 1",
       "playersCount": 4,
-      "maxPlayers": 6
+      "maxPlayers": 6,
+      "_canDelete": true
     },
     {
       "id": 1,
       "name": "lobby 2",
       "playersCount": 3,
-      "maxPlayers": 5
+      "maxPlayers": 5,
+      "_canDelete": true
     },
     {
       "id": 3,
@@ -23,7 +25,8 @@
     {
       "id": 2,
       "name": "playing 3",
-      "playersCount": 10
+      "playersCount": 10,
+      "_canDelete": true
     }
   ]
 }

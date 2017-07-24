@@ -26,12 +26,14 @@ const attachLinkedToStart = (card, index, cards) => {
   card.isLinkedToStart = boardService.isLinkedToStart(card, cards);
 };
 
-const computeGameClass = selectedCard => [
+const computeGameClass = (game, selectedCard) => [
   "game",
   selectedCard && "game--selected-card",
+  game && `game--status-${game.status}`,
+
 ].join(" ");
 
-export class Home extends Component {
+export class Game extends Component {
   state = {
     id: this.props.match.params.gameId,
     user: userService.get()
@@ -44,7 +46,6 @@ export class Home extends Component {
 
   updateGame(game) {
     let slots = [];
-    console.log('updateGame', game);
 
     const currentPlayerIndex = game.players.map(player => player.id).indexOf(this.state.user.id);
     
@@ -168,7 +169,6 @@ export class Home extends Component {
   }
 
   renderByStatus() {
-    console.log('renderByStatus', this.state.game.status);
     switch (this.state.game.status) {
       case GAME_STATUS.WAITING_FOR_PLAYERS:
         return this.renderLobby();
@@ -189,7 +189,7 @@ export class Home extends Component {
 
   render() {
     return (
-      <div className={computeGameClass(this.state.selectedCard)}>
+      <div className={computeGameClass(this.state.game, this.state.selectedCard)}>
         {this.state.players &&
           <PlayersList
             players={this.state.players}
@@ -210,8 +210,8 @@ export class Home extends Component {
   }
 }
 
-Home.propTypes = {
+Game.propTypes = {
   match: PropTypes.object.isRequired
 };
 
-export default Home;
+export default Game;

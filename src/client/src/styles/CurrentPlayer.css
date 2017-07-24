@@ -25,6 +25,10 @@
   max-width: none;
 }
 
+.game--status-WAITING_FOR_PLAYERS .current-player {
+  margin-bottom: 40px;
+}
+
 @media only screen and (max-width: 530px) {
   .current-player--selected-card {
     left: 10px;
