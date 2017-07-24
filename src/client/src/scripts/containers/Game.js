@@ -187,9 +187,33 @@ export class Game extends Component {
     this.forceUpdate();
   }
 
+  leave() {
+    const confirmationSentence = this.state.game.hostId === this.state.currentPlayer.id ? 
+        "Watchout, you'll be removed from this game and won't be its host anymore"
+      : "Watchout, you'll be removed from this game";
+
+    const shouldLeave = window.confirm(confirmationSentence);
+
+    if (!shouldLeave) {
+      return;
+    }
+
+    actions.leaveGame(this.state.game.id).then(() => {
+      this.props.history.replace("/");
+    });
+  }
+
   render() {
     return (
       <div className={computeGameClass(this.state.game, this.state.selectedCard)}>
+        <div className="game__nav">
+          {this.state.game && this.state.game.status === GAME_STATUS.WAITING_FOR_PLAYERS &&
+            <button type="button" className="game__nav__leave-button" onClick={() => {
+              this.leave();
+            }}>Leave</button>
+          }
+          <a className="game__nav__back-button" href="/">Home</a>
+        </div>
         {this.state.players &&
           <PlayersList
             players={this.state.players}

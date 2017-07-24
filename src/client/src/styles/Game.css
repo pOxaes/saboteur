@@ -5,3 +5,13 @@
   transform: translate(-50%, -50%);
   z-index: var(--z-lobbyStatus);
 }
+
+.game__nav {
+  position: absolute;
+  z-index: var(--z-gameBackButton);
+  top: 100px;
+  left: 30px;
+
+  display: flex;
+  flex-direction: column;
+}

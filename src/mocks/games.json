@@ -16,7 +16,7 @@
     },
     {
       "id": 3,
-      "name": "playing 3 number 3 number 3 number 3 number 3 number 3",
+      "name": "playing 3 with a very very very very long name",
       "playersCount": 10,
       "maxPlayers": 10
     }
@@ -24,9 +24,14 @@
   "playing": [
     {
       "id": 2,
-      "name": "playing 3",
+      "name": "playing 4",
       "playersCount": 10,
       "_canDelete": true
+    },
+    {
+      "id": 4,
+      "name": "playing 5",
+      "playersCount": 7
     }
   ]
 }

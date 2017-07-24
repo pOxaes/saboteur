@@ -1,6 +1,7 @@
 {
   "_canKick": true,
   "id": 1,
+  "hostId": 0,
   "status": "WAITING_FOR_PLAYERS",
   "maxPlayers": 9,
   "players": [

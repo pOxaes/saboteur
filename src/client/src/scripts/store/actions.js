@@ -26,6 +26,8 @@ const startGame = gameId => request.post(`${baseUrl}/games/${gameId}/start`);
 
 const deleteGame = gameId => request.post(`${baseUrl}/games/${gameId}/delete`);
 
+const leaveGame = gameId => request.post(`${baseUrl}/games/${gameId}/leave`)
+
 export default {
   createGame,
   deleteGame,
@@ -33,6 +35,7 @@ export default {
   getGames,
   joinGame,
   kick,
+  leaveGame,
   playCard,
   startGame,
 };
