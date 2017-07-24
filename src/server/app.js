@@ -1,8 +1,11 @@
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
+const config = require("./config");
 
 const app = express();
+
+app.use(config.server.routeBase, express.static(config.dist));
 
 const mock = filePath => (req, res) => {
   console.log(`request file ${filePath}`);
