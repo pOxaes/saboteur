@@ -26,7 +26,7 @@ export default ({ player, kick, canKick, direction, onClick }) =>
         {player.cards &&
           player.cards.map((card, index) => (
             <div className="player__cards__card-wrapper" key={index}>
-              <Card card={card}  modifiers={{ isPlayer: true }}/>
+              <Card card={card} modifiers={{ isPlayer: true }}/>
             </div>))}
       </div> : <div className="player__cards">{player.cards && player.cards.length}</div>
     }

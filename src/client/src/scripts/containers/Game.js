@@ -5,6 +5,7 @@ import userService from "../services/user";
 import boardService from "../services/board";
 import PlayersList from "../components/PlayersList";
 import CurrentPlayer from "../components/CurrentPlayer";
+import LeaderBoard from "../components/LeaderBoard";
 import Board from "../components/Board";
 import Deck from "../components/Deck";
 import Discard from "../components/Discard";
@@ -13,7 +14,8 @@ import "../../styles/Game.css";
 
 const GAME_STATUS = {
   WAITING_FOR_PLAYERS: "WAITING_FOR_PLAYERS",
-  PLAYING: "PLAYING"
+  PLAYING: "PLAYING",
+  COMPLETED: "COMPLETED",
 };
 
 const DESTINATION_TYPES = {
@@ -33,6 +35,27 @@ const computeGameClass = (game, selectedCard) => [
 
 ].join(" ");
 
+const goldToPoints = gold => gold.reduce((acc, goldValue) => acc + goldValue, 0);
+
+const getPlayersByRank = leaderBoard => {
+  leaderBoard
+    .sort((playerA, playerB) => goldToPoints(playerB.gold) - goldToPoints(playerA.gold))
+    .reduce((lastPlayer, player, index) => {
+      player.rank = index && goldToPoints(lastPlayer.gold) !==  goldToPoints(player.gold)? 
+          index
+        : lastPlayer.rank;  
+      return player;
+    }, { rank: 0 });
+
+  return leaderBoard.reduce((playersByRank, player) => {
+    if (!playersByRank[player.rank]) {
+      playersByRank[player.rank] = [];
+    }
+    playersByRank[player.rank].push(player);
+    return playersByRank;
+  }, []);
+};
+
 export class Game extends Component {
   state = {
     id: this.props.match.params.gameId,
@@ -45,6 +68,15 @@ export class Game extends Component {
   }
 
   updateGame(game) {
+    if (game.status === GAME_STATUS.COMPLETED) {
+      console.log(getPlayersByRank(game.leaderBoard));
+      this.setState({
+        game,
+        leaderBoard: getPlayersByRank(game.leaderBoard),
+      });
+      return;
+    }
+
     let slots = [];
 
     const currentPlayerIndex = game.players.map(player => player.id).indexOf(this.state.user.id);
@@ -168,12 +200,22 @@ export class Game extends Component {
     );
   }
 
+  renderCompletedGame() {
+    return (
+      <div>
+        <LeaderBoard leaderBoard={this.state.leaderBoard} />
+      </div>
+    )
+  }
+
   renderByStatus() {
     switch (this.state.game.status) {
       case GAME_STATUS.WAITING_FOR_PLAYERS:
         return this.renderLobby();
       case GAME_STATUS.PLAYING:
         return this.renderPlayingGame();
+      case GAME_STATUS.COMPLETED:
+        return this.renderCompletedGame();
       default:
         return <Redirect to="/" />;
     }

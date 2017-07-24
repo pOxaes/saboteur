@@ -1,5 +1,6 @@
 import React from "react";
 import CardLayout from "./CardLayout"
+import CardGold from "./CardGold"
 import "../../styles/Card.css";
 
 const computeCardClass = (card, modifiers = {}) =>
@@ -35,13 +36,16 @@ export default ({ card, onPlay, modifiers, rotateLayout }) =>
       )} 
       {card.layout && 
         <CardLayout layout={card.layout} item={card.item} />}
+      {card.count && 
+        <CardGold count={card.count} />}
     </div>
   </div>;
 
 // {
-//   type: ACTION | PATH | HIDDEN
+//   type: ACTION | PATH | HIDDEN | GOLD
 //   action: DESTROY | BLOCK | FREE, // for type === ACTION
 //   subtype: [ PICKAXE | LIGHT | CHARIOT ], // for action === BLOCK | FREE
 //   item: GOLD | ROCK | LADDER | EMPTY // for type === PATH
 //   layout: 1 | 0 {4}
+//   count: 1-3 // for type === GOLD
 // }
