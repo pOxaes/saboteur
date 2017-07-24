@@ -1,14 +1,12 @@
 import React, { Component } from "react";
 import Player from "./Player";
-import ReactResizeDetector from 'react-resize-detector';
+import ReactResizeDetector from "react-resize-detector";
 import "../../styles/PlayersList.css";
 
 const RESIZE_THROTTLE_TIME = 300;
 
-const computePlayersListClass = displayType => [
-  "players-list",
-  `players-list--display-${displayType}`,
-].join(" ");
+const computePlayersListClass = displayType =>
+  ["players-list", `players-list--display-${displayType}`].join(" ");
 
 // const drawCircle = (radius, x, y) => {
 //   const circle = document.createElement('div');
@@ -64,20 +62,22 @@ const getDirectionFromAngle = angle => {
   } else {
     return "left";
   }
-}
+};
 
 export default class PlayersList extends Component {
   state = {
     resizeTimeout: undefined,
     lastResizeDate: undefined,
-    positions: [],
+    positions: []
   };
 
   getPlayerStyle(playerIndex) {
-    return this.state.positions ? {
-      left: `${this.state.positions[playerIndex].x}px`,
-      top: `${this.state.positions[playerIndex].y}px`,
-    } : {};
+    return this.state.positions
+      ? {
+          left: `${this.state.positions[playerIndex].x}px`,
+          top: `${this.state.positions[playerIndex].y}px`
+        }
+      : {};
   }
 
   onResize() {
@@ -85,14 +85,20 @@ export default class PlayersList extends Component {
     if (this.state.resizeTimeout) {
       clearTimeout(this.state.resizeTimeout);
     }
-    if (!this.state.lastResizeDate || now - this.state.lastResizeDate > RESIZE_THROTTLE_TIME) {
+    if (
+      !this.state.lastResizeDate ||
+      now - this.state.lastResizeDate > RESIZE_THROTTLE_TIME
+    ) {
       this.setState({
-        lastResizeDate: now,
+        lastResizeDate: now
       });
       this.updatePositions();
     } else {
       this.setState({
-        resizeTimeout: setTimeout(this.onResize.bind(this), RESIZE_THROTTLE_TIME),
+        resizeTimeout: setTimeout(
+          this.onResize.bind(this),
+          RESIZE_THROTTLE_TIME
+        )
       });
     }
   }
@@ -108,15 +114,18 @@ export default class PlayersList extends Component {
       (bodyClientRect.width - 2 * circleXPadding) / 2,
       (bodyClientRect.height - 2 * circleYPadding) / 1.5
     );
-    
+
     const circleY = circleRadius + circleYPadding;
     const circleX = bodyClientRect.width / 2;
     // drawCircle(circleRadius, circleX, circleY);
     const angle = maxAngle / this.props.players.length;
     const angleOffset = angle / 2 - (maxAngle - 180) / 2;
 
-    for (let rotateVal = angleOffset; rotateVal < maxAngle + angleOffset; rotateVal += angle) {
-
+    for (
+      let rotateVal = angleOffset;
+      rotateVal < maxAngle + angleOffset;
+      rotateVal += angle
+    ) {
       let xFromCenter = circleRadius * Math.cos(degToRad(rotateVal));
       let yFromCenter = circleRadius * Math.sin(degToRad(rotateVal));
 
@@ -126,7 +135,7 @@ export default class PlayersList extends Component {
       positions.push({
         x,
         y,
-        direction: getDirectionFromAngle(rotateVal, x, y),
+        direction: getDirectionFromAngle(rotateVal, x, y)
       });
     }
 
@@ -137,8 +146,10 @@ export default class PlayersList extends Component {
     const bodyClientRect = document.body.getBoundingClientRect();
     const isDisplayInline = bodyClientRect.width < 750;
     this.setState({
-      positions: isDisplayInline ? undefined : this.getPositions(bodyClientRect),
-      displayType: isDisplayInline ? "inline" : "circle",
+      positions: isDisplayInline
+        ? undefined
+        : this.getPositions(bodyClientRect),
+      displayType: isDisplayInline ? "inline" : "circle"
     });
   }
 
@@ -149,19 +160,28 @@ export default class PlayersList extends Component {
   render() {
     return (
       <div className={computePlayersListClass(this.state.displayType)}>
-        <ReactResizeDetector handleWidth handleHeight onResize={this.onResize.bind(this)} />
+        <ReactResizeDetector
+          handleWidth
+          handleHeight
+          onResize={this.onResize.bind(this)}
+        />
         {this.props.players.length === 0
           ? <p>No players</p>
           : this.props.players.map((player, index) =>
-              <li className="player-list__item" 
+              <li
+                className="player-list__item"
                 key={player.id}
-                style={this.getPlayerStyle(index)}>
+                style={this.getPlayerStyle(index)}
+              >
                 <Player
                   player={player}
                   onClick={this.props.selectPlayer}
                   canKick={this.props.canKickPlayer}
                   kick={this.props.onKickPlayer}
-                  direction={this.state.positions && this.state.positions[index].direction}
+                  direction={
+                    this.state.positions &&
+                    this.state.positions[index].direction
+                  }
                 />
               </li>
             )}

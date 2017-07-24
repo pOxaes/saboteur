@@ -32,7 +32,7 @@ app
   .get("/games/1", mock("game.lobby"))
   .get("/games/2", mock("game.completed"))
   .get("/games/:id", mock("game.playing"))
-  .post("/login", mock("login"))
+  .post("/login", mock("login"));
 
 app.listen(3008, () => {
   console.log("Listening port 3008");

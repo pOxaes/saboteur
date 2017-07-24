@@ -8,7 +8,7 @@ export default class Home extends Component {
   state = {
     games: {
       lobby: [],
-      playing: [],
+      playing: []
     },
     user: userService.get()
   };
@@ -35,7 +35,9 @@ export default class Home extends Component {
         <p className="home__welcome">
           Welcome {this.state.user.name}
         </p>
-        <a href="/game-creation" className="home__game-creation-button">Create</a>
+        <a href="/game-creation" className="home__game-creation-button">
+          Create
+        </a>
         <h3 className="home__title">Lobby</h3>
         <Games
           games={this.state.games.lobby}

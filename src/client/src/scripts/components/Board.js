@@ -1,43 +1,47 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import BoardSlot from "./BoardSlot";
-import ReactResizeDetector from 'react-resize-detector';
+import ReactResizeDetector from "react-resize-detector";
 import "../../styles/Board.css";
 
 const RESIZE_THROTTLE_TIME = 300;
 
 const CARD_SIZE = {
   width: 63,
-  height: 88,
+  height: 88
 };
 
-const getLimitsFromSlots = slots => slots.reduce((limits, slot) => {
-  Object.keys(limits).forEach(axis => {
-    limits[axis].max = Math.max(slot[axis], limits[axis].max);
-    limits[axis].min = Math.min(slot[axis], limits[axis].min);
-  });
-  return limits;
-}, {
-  x: {
-    min: Infinity,
-    max: -Infinity
-  },
-  y: {
-    min: Infinity,
-    max: -Infinity
-  }
-});
+const getLimitsFromSlots = slots =>
+  slots.reduce(
+    (limits, slot) => {
+      Object.keys(limits).forEach(axis => {
+        limits[axis].max = Math.max(slot[axis], limits[axis].max);
+        limits[axis].min = Math.min(slot[axis], limits[axis].min);
+      });
+      return limits;
+    },
+    {
+      x: {
+        min: Infinity,
+        max: -Infinity
+      },
+      y: {
+        min: Infinity,
+        max: -Infinity
+      }
+    }
+  );
 
 const getCardsCountPerAxisFromSlots = (slots, limits) => {
   return Object.keys(limits).reduce((size, axis) => {
     size[axis] = Math.abs(limits[axis].min) + Math.abs(limits[axis].max) + 1;
     return size;
   }, {});
-}
+};
 
 const computeInnerStyle = ({ innerHeight, innerWidth }) => ({
   width: innerWidth,
-  height: innerHeight,
+  height: innerHeight
 });
 
 export default class Board extends Component {
@@ -46,7 +50,7 @@ export default class Board extends Component {
     lastResizeDate: undefined,
     cardStyle: undefined,
     innerWidth: undefined,
-    innerHeight: undefined,
+    innerHeight: undefined
   };
 
   onResize() {
@@ -55,14 +59,20 @@ export default class Board extends Component {
       clearTimeout(this.state.resizeTimeout);
     }
 
-    if (!this.state.lastResizeDate || now - this.state.lastResizeDate > RESIZE_THROTTLE_TIME) {
+    if (
+      !this.state.lastResizeDate ||
+      now - this.state.lastResizeDate > RESIZE_THROTTLE_TIME
+    ) {
       this.setState({
-        lastResizeDate: now,
+        lastResizeDate: now
       });
       this.updateSize();
     } else {
       this.setState({
-        resizeTimeout: setTimeout(this.onResize.bind(this), RESIZE_THROTTLE_TIME),
+        resizeTimeout: setTimeout(
+          this.onResize.bind(this),
+          RESIZE_THROTTLE_TIME
+        )
       });
     }
   }
@@ -72,7 +82,10 @@ export default class Board extends Component {
     const rootElBoundingRect = rootEl.getBoundingClientRect();
     const limits = getLimitsFromSlots(this.props.slots);
 
-    const cardsPerAxis = getCardsCountPerAxisFromSlots(this.state.slots, limits);
+    const cardsPerAxis = getCardsCountPerAxisFromSlots(
+      this.state.slots,
+      limits
+    );
     const cardWidth = rootElBoundingRect.width / cardsPerAxis.x;
     const cardHeight = rootElBoundingRect.height / cardsPerAxis.y;
     const ratioPerAxis = {
@@ -85,13 +98,13 @@ export default class Board extends Component {
       width: CARD_SIZE.width * minRatio,
       height: CARD_SIZE.height * minRatio,
       offsetX: -limits.x.min,
-      offsetY: -limits.y.min,
+      offsetY: -limits.y.min
     };
-    
+
     this.setState({
       cardStyle,
       innerWidth: cardsPerAxis.x * CARD_SIZE.width * minRatio,
-      innerHeight: cardsPerAxis.y * CARD_SIZE.height * minRatio,
+      innerHeight: cardsPerAxis.y * CARD_SIZE.height * minRatio
     });
   }
 
@@ -106,18 +119,24 @@ export default class Board extends Component {
   render() {
     return (
       <div className="board">
-        <ReactResizeDetector handleWidth handleHeight onResize={this.onResize.bind(this)} />
-        { this.state.innerWidth && 
+        <ReactResizeDetector
+          handleWidth
+          handleHeight
+          onResize={this.onResize.bind(this)}
+        />
+        {this.state.innerWidth &&
           <div className="board__inner" style={computeInnerStyle(this.state)}>
-            { this.state.cardStyle && this.props.slots && this.props.slots.map(slot =>
-            <BoardSlot 
-              onClick={this.props.selectSlot}
-              slot={slot} 
-              key={slot.x + ':' + slot.y} 
-              cardStyle={this.state.cardStyle}/>
-          )}
-        </div>
-      }
+            {this.state.cardStyle &&
+              this.props.slots &&
+              this.props.slots.map(slot =>
+                <BoardSlot
+                  onClick={this.props.selectSlot}
+                  slot={slot}
+                  key={slot.x + ":" + slot.y}
+                  cardStyle={this.state.cardStyle}
+                />
+              )}
+          </div>}
       </div>
     );
   }

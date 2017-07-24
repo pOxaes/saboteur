@@ -16,9 +16,14 @@ export default ({ game, onDeleteClick }) =>
         </span>
       </div>
     </a>
-    { game._canDelete &&
-      <button type="button" className="game-item__remove-button" onClick={() => {
-        onDeleteClick && onDeleteClick(game.id);
-      }} > Remove </button>
-    }
-  </div>
+    {game._canDelete &&
+      <button
+        type="button"
+        className="game-item__remove-button"
+        onClick={() => {
+          onDeleteClick && onDeleteClick(game.id);
+        }}
+      >
+        {" "}Remove{" "}
+      </button>}
+  </div>;

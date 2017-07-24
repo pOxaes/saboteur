@@ -6,7 +6,7 @@ import userService from "../services/user";
 export default class GameCreation extends Component {
   state = {
     name: "My Super Game",
-    maxPlayers: "5",
+    maxPlayers: "5"
   };
 
   handleChange(event) {
@@ -15,7 +15,8 @@ export default class GameCreation extends Component {
 
   submit(event) {
     event.preventDefault();
-    actions.createGame({ name: this.state.name, maxPlayers: this.state.maxPlayers })
+    actions
+      .createGame({ name: this.state.name, maxPlayers: this.state.maxPlayers })
       .then(game => {
         this.props.history.replace(`games/${game.id}`);
       });

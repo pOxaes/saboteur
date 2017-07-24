@@ -1,23 +1,29 @@
 // CARDS
 
 const getLinkedSiblings = (cards, sourceCard) => {
-  return cards.filter(card => 
-    card.item !== "ROCK"
-    && isPathOpen(sourceCard, card)
+  return cards.filter(
+    card => card.item !== "ROCK" && isPathOpen(sourceCard, card)
   );
-}
+};
 
 const isPathOpen = (sourceCard, card) =>
-     (card.y === sourceCard.y && sourceCard.x === card.x + 1 && card.layout.right)
-  || (card.y === sourceCard.y && sourceCard.x === card.x - 1 && card.layout.left)
-  || (card.x === sourceCard.x && sourceCard.y === card.y + 1 && card.layout.top)
-  || (card.x === sourceCard.x && sourceCard.y === card.y - 1 && card.layout.bottom);
+  (card.y === sourceCard.y &&
+    sourceCard.x === card.x + 1 &&
+    card.layout.right) ||
+  (card.y === sourceCard.y &&
+    sourceCard.x === card.x - 1 &&
+    card.layout.left) ||
+  (card.x === sourceCard.x && sourceCard.y === card.y + 1 && card.layout.top) ||
+  (card.x === sourceCard.x &&
+    sourceCard.y === card.y - 1 &&
+    card.layout.bottom);
 
 const getCardByCoord = (cards, { x, y }) => {
   return cards.find(card => card.x === x && card.y === y);
-}
+};
 
-const containsSlot = (cards, { x, y }) => cards.some(card => card.y === y && card.x === x);
+const containsSlot = (cards, { x, y }) =>
+  cards.some(card => card.y === y && card.x === x);
 
 const slotToCoords = ({ x, y }) => ({ x, y });
 
@@ -28,7 +34,7 @@ const getSiblingsFromMultipleCards = (sourceCards, forbiddenCoords, cards) => {
     .filter(card => {
       return !containsSlot(forbiddenCoords, card);
     });
-}
+};
 
 const isLinkedToStart = (card, cards) => {
   let loop = 0;
@@ -36,30 +42,35 @@ const isLinkedToStart = (card, cards) => {
     return true;
   }
 
-  if (card.item === 'ROCK') {
+  if (card.item === "ROCK") {
     return false;
   }
 
   let siblings = getLinkedSiblings(cards, card);
   let siblingsCache = siblings.map(slotToCoords).concat(slotToCoords(card));
 
-  while (!containsSlot(siblings, {x: 0, y: 0}) && siblings.length && loop < 100) {
+  while (
+    !containsSlot(siblings, { x: 0, y: 0 }) &&
+    siblings.length &&
+    loop < 100
+  ) {
     loop++;
     siblings = getSiblingsFromMultipleCards(siblings, siblingsCache, cards);
   }
 
   return siblings.length;
-}
+};
 
 // SLOTS
 
 const boardItemToCard = ({ layout, item }) => ({
   layout,
   item,
-  type: "PATH",
+  type: "PATH"
 });
 
-const findSlot = (slots, x, y) => slots.find(slot => slot.x === x && slot.y === y);
+const findSlot = (slots, x, y) =>
+  slots.find(slot => slot.x === x && slot.y === y);
 
 const updateSlot = (slots, x, y, card, shouldForce) => {
   const existingSlot = findSlot(slots, x, y);
@@ -69,11 +80,11 @@ const updateSlot = (slots, x, y, card, shouldForce) => {
     const newSlot = {
       x,
       y,
-      card,
+      card
     };
     slots.push(newSlot);
-  }  
-}
+  }
+};
 
 const createSlotsFromCards = cards => {
   // Create card slots + empty slot
@@ -97,56 +108,56 @@ const createSlotsFromCards = cards => {
   }, []);
 
   // Attach authorized layout for each empty slot
-  slots
-    .filter(slot => !slot.card)
-    .forEach(slot => {
-      const siblingsCoords = {
-        top: {
-          x: slot.x,
-          y: slot.y - 1,
-        },
-        right: {
-          x: slot.x + 1,
-          y: slot.y,
-        },
-        bottom: {
-          x: slot.x,
-          y: slot.y + 1,
-        },
-        left: {
-          x: slot.x - 1,
-          y: slot.y,
-        }
-      };
+  slots.filter(slot => !slot.card).forEach(slot => {
+    const siblingsCoords = {
+      top: {
+        x: slot.x,
+        y: slot.y - 1
+      },
+      right: {
+        x: slot.x + 1,
+        y: slot.y
+      },
+      bottom: {
+        x: slot.x,
+        y: slot.y + 1
+      },
+      left: {
+        x: slot.x - 1,
+        y: slot.y
+      }
+    };
 
-      slot.authorizedLayout = Object.keys(siblingsCoords).reduce((acc, side) => {
-        const sideCard = getCardByCoord(cards, siblingsCoords[side]);
-        if (sideCard) {
-          acc[side] = isPathOpen(slot, sideCard);
-        }
-        return acc;
-      }, {});
-    });
+    slot.authorizedLayout = Object.keys(siblingsCoords).reduce((acc, side) => {
+      const sideCard = getCardByCoord(cards, siblingsCoords[side]);
+      if (sideCard) {
+        acc[side] = isPathOpen(slot, sideCard);
+      }
+      return acc;
+    }, {});
+  });
 
   return slots;
 };
 
-const compareLayouts = (authLayout, checkedLayout) => Object.keys(authLayout)
-  .every(side => authLayout[side] === checkedLayout[side]);
+const compareLayouts = (authLayout, checkedLayout) =>
+  Object.keys(authLayout).every(
+    side => authLayout[side] === checkedLayout[side]
+  );
 
 const rotateLayout = ({ top, right, bottom, left }) => ({
   top: bottom,
   right: left,
   bottom: top,
-  left: right,
+  left: right
 });
 
 const checkCardCompatibility = (card, slot, shouldCompareRotation = true) => {
-  return compareLayouts(slot.authorizedLayout, card.layout)
-    || (
-      shouldCompareRotation
-      && compareLayouts(slot.authorizedLayout, rotateLayout(card.layout))
-    );
+  return (
+    compareLayouts(slot.authorizedLayout, card.layout) ||
+    (shouldCompareRotation &&
+      compareLayouts(slot.authorizedLayout, rotateLayout(card.layout)))
+  );
 };
 
 const formatCardLayout = card => {
@@ -155,11 +166,11 @@ const formatCardLayout = card => {
       top: card.layout[0] === "1",
       right: card.layout[1] === "1",
       bottom: card.layout[2] === "1",
-      left: card.layout[3] === "1",
+      left: card.layout[3] === "1"
     };
   }
 };
-  
+
 const attachPlayability = (card, slots, players) => {
   if (card.type === "HIDDEN") {
     return;
@@ -167,57 +178,46 @@ const attachPlayability = (card, slots, players) => {
 
   // Can destroy if a card, different from the origin, exists
   if (card.action === "DESTROY") {
-    card.isPlayable = slots.some(slot => slot.card && slot.card.layout && (slot.x !== 0 || slot.y !== 0));
+    card.isPlayable = slots.some(
+      slot => slot.card && slot.card.layout && (slot.x !== 0 || slot.y !== 0)
+    );
     return;
   }
 
   if (card.action === "BLOCK") {
-    card.isPlayable = players.some(player => !player.malus || player.malus.length === 0);
+    card.isPlayable = players.some(
+      player => !player.malus || player.malus.length === 0
+    );
     return;
   }
 
   if (card.action === "FREE") {
-    card.isPlayable = players.some(player =>
-      player.malus && player.malus.some(malus => card.subtype.indexOf(malus) !== -1)
+    card.isPlayable = players.some(
+      player =>
+        player.malus &&
+        player.malus.some(malus => card.subtype.indexOf(malus) !== -1)
     );
     return;
   }
 
   if (card.type === "PATH") {
-    card.isPlayable = slots.some(slot => !slot.card && checkCardCompatibility(card, slot));
+    card.isPlayable = slots.some(
+      slot => !slot.card && checkCardCompatibility(card, slot)
+    );
   }
-}
+};
 
-const canPlayCardOnPlayer = (card, player) => 
-  (
-    card.action === "BLOCK"
-    && (!player.malus || !player.malus.length)
-  )
-  ||
-  (
-    card.action === "FREE"
-    && (
-      player.malus
-      && player.malus.some(malus => card.subtype.indexOf(malus) !== -1)
-    )
-  );
+const canPlayCardOnPlayer = (card, player) =>
+  (card.action === "BLOCK" && (!player.malus || !player.malus.length)) ||
+  (card.action === "FREE" &&
+    (player.malus &&
+      player.malus.some(malus => card.subtype.indexOf(malus) !== -1)));
 
-const canPlayCardOnSlot = (card, slot) => 
-  (
-    card.action === "DESTROY"
-    && (
-      slot.card 
-      && slot.card.layout 
-      && (slot.x !== 0 || slot.y !== 0)
-    )
-  )
-  ||
-  (
-    card.type === "PATH"
-    && (
-      slot.authorizedLayout && checkCardCompatibility(card, slot, false)
-    )
-  );
+const canPlayCardOnSlot = (card, slot) =>
+  (card.action === "DESTROY" &&
+    (slot.card && slot.card.layout && (slot.x !== 0 || slot.y !== 0))) ||
+  (card.type === "PATH" &&
+    (slot.authorizedLayout && checkCardCompatibility(card, slot, false)));
 
 const rotateCardLayout = card => {
   card.layout = rotateLayout(card.layout);
@@ -232,5 +232,5 @@ export default {
   isLinkedToStart,
   rotateCardLayout,
   canPlayCardOnPlayer,
-  canPlayCardOnSlot,
+  canPlayCardOnSlot
 };
