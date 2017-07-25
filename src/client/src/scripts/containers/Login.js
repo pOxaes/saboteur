@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import request from "../services/request";
+import actions from "../store/actions";
 import userService from "../services/user";
 
 export default class Register extends Component {
@@ -14,7 +14,7 @@ export default class Register extends Component {
 
   submit(event) {
     event.preventDefault();
-    request.post(`http://localhost:3008/login`, this.state).then(user => {
+    actions.login(this.state).then(user => {
       userService.set(user);
       this.props.history.push("/");
     });

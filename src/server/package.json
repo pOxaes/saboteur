@@ -4,14 +4,19 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js --watch *",
+    "start": "nodemon ./app.js --watch app.js --watch ./app/ --watch ./config.js --env=development",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.17.2",
+    "cookie-parser": "^1.4.3",
     "cors": "^2.8.3",
     "express": "^4.15.3",
+    "nocache": "^2.0.0",
+    "socket.io": "^2.0.3",
+    "winston-request-logger": "^1.0.7",
     "yargs": "^8.0.2"
   },
   "devDependencies": {

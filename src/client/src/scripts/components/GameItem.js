@@ -1,9 +1,10 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "../../styles/GameItem.css";
 
 export default ({ game, onDeleteClick }) =>
   <div className="game-item">
-    <a className="game-item__link" href={`/games/${game.id}`}>
+    <Link className="game-item__link" to={`/games/${game.id}`}>
       <span className="game-item__name">
         {game.name}
       </span>
@@ -15,7 +16,7 @@ export default ({ game, onDeleteClick }) =>
           {game.maxPlayers && `/${game.maxPlayers}`}
         </span>
       </div>
-    </a>
+    </Link>
     {game._canDelete &&
       <button
         type="button"

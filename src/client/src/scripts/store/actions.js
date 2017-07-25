@@ -1,6 +1,6 @@
 import request from "../services/request";
 
-const baseUrl = "http://localhost:3008";
+const baseUrl = "http://localhost:3008/api";
 
 const kick = ({ gameId, playerId }) =>
   request.post(`${baseUrl}/games/${gameId}/kick`, { playerId }).then(() => {
@@ -29,6 +29,8 @@ const deleteGame = gameId => request.post(`${baseUrl}/games/${gameId}/delete`);
 
 const leaveGame = gameId => request.post(`${baseUrl}/games/${gameId}/leave`);
 
+const login = credentials => request.post(`${baseUrl}/login`, credentials);
+
 export default {
   createGame,
   deleteGame,
@@ -37,6 +39,7 @@ export default {
   joinGame,
   kick,
   leaveGame,
+  login,
   playCard,
   startGame
 };

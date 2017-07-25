@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Redirect } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 import userService from "../services/user";
 import boardService from "../services/board";
 import PlayersList from "../components/PlayersList";
@@ -284,9 +284,9 @@ export class Game extends Component {
             >
               Leave
             </button>}
-          <a className="game__nav__back-button" href="/">
+          <Link className="game__nav__back-button" to="/">
             Home
-          </a>
+          </Link>
         </div>
         {this.state.players &&
           <PlayersList

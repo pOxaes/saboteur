@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import actions from "../store/actions";
 import Games from "../components/Games";
 import userService from "../services/user";
@@ -35,9 +36,9 @@ export default class Home extends Component {
         <p className="home__welcome">
           Welcome {this.state.user.name}
         </p>
-        <a href="/game-creation" className="home__game-creation-button">
+        <Link to="/game-creation" className="home__game-creation-button">
           Create
-        </a>
+        </Link>
         <h3 className="home__title">Lobby</h3>
         <Games
           games={this.state.games.lobby}

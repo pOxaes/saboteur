@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 import actions from "../store/actions";
-import Games from "../components/Games";
-import userService from "../services/user";
 
 export default class GameCreation extends Component {
   state = {

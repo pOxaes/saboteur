@@ -1,5 +1,8 @@
 // Place your settings in this file to overwrite default and user settings.
 {
   "editor.formatOnSave": false,
-  "eslint.autoFixOnSave": true
+  "eslint.autoFixOnSave": true,
+  "files.exclude": {
+    "src/client/build/": true
+  }
 }
