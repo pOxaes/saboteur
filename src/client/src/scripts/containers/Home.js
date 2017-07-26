@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import actions from "../store/actions";
 import Games from "../components/Games";
-import userService from "../services/user";
+import authenticationService from "../services/authentication";
 import "../../styles/Home.css";
 
 export default class Home extends Component {
@@ -11,7 +11,7 @@ export default class Home extends Component {
       lobby: [],
       playing: []
     },
-    user: userService.get()
+    user: authenticationService.getUser()
   };
 
   componentWillMount() {

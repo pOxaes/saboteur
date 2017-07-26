@@ -1,6 +1,5 @@
 const http = require("http");
 const io = require("socket.io");
-const config = require("../config");
 const logger = require("./logger");
 // const websocketService = require('./services/websocket.service');
 // const authorizationService = require('./services/authorization.service');
@@ -24,8 +23,9 @@ const init = app => {
     //   ws.disconnect('unauthorized');
     // });
   });
-  server.listen(config.server.port);
-  logger.info(`Server running on port ${config.server.port}`);
+  const port = parseInt(process.env.API_PORT, 10);
+  server.listen(port);
+  logger.info(`API Server running at http://localhost:${port}`);
 };
 
 module.exports = {

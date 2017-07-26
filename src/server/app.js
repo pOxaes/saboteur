@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
@@ -7,14 +9,13 @@ const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 
 const websocketServer = require("./app/websocketServer");
-const config = require("./config");
 const routes = require("./app/routes");
 const logger = require("./app/logger");
 
 const app = express();
 
-app.use(config.server.routeBase, express.static(config.dist));
-app.use("/", express.static(config.dist));
+app.use(process.env.ROUTE_BASE, express.static(process.env.DIST_PATH));
+app.use("/", express.static(process.env.DIST_PATH));
 
 // const mock = filePath => (req, res) => {
 //   console.log(`request file ${filePath}`);
@@ -42,7 +43,7 @@ app.use(
 app.use(bodyParser.json());
 
 app.use(
-  path.join(config.server.routeBase, "/api"),
+  path.join(process.env.ROUTE_BASE, "/api"),
   noCache(),
   cors({
     credentials: true,

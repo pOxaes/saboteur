@@ -29,7 +29,8 @@ const deleteGame = gameId => request.post(`${baseUrl}/games/${gameId}/delete`);
 
 const leaveGame = gameId => request.post(`${baseUrl}/games/${gameId}/leave`);
 
-const login = credentials => request.post(`${baseUrl}/login`, credentials);
+const login = googleAuthorizationCode =>
+  request.post(`${baseUrl}/login`, googleAuthorizationCode);
 
 export default {
   createGame,

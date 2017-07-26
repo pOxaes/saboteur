@@ -1,9 +1,8 @@
 import React from "react";
 import { Redirect, Route } from "react-router-dom";
+import authenticationService from "./services/authentication";
 
-import userService from "./services/user";
-
-const isAuthenticated = () => !!userService.get();
+const isAuthenticated = () => !!authenticationService.isAuthenticated();
 
 const PUBLIC_ROOT = "/login";
 

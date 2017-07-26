@@ -1,5 +1,4 @@
 import Promise from "bluebird";
-import { browserHistory } from "react-router";
 
 const onRes = (resolve, reject) => res => {
   if (!res.ok) {

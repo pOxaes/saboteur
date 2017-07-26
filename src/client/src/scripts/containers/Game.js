@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Redirect, Link } from "react-router-dom";
-import userService from "../services/user";
+import authenticationService from "../services/authentication";
 import boardService from "../services/board";
 import PlayersList from "../components/PlayersList";
 import CurrentPlayer from "../components/CurrentPlayer";
@@ -66,7 +66,7 @@ const getPlayersByRank = leaderBoard => {
 export class Game extends Component {
   state = {
     id: this.props.match.params.gameId,
-    user: userService.get()
+    user: authenticationService.getUser()
   };
 
   componentWillMount() {
