@@ -23,7 +23,7 @@ async function createUser(profile) {
 }
 
 async function createToken(user, roles) {
-  return jwtSign({ userId: user.id, roles }, JWT_SECRET, {
+  return jwtSign({ email: user.email, roles }, JWT_SECRET, {
     algorithm: JWT_ALGORITHM
   });
 }

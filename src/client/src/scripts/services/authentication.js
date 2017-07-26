@@ -56,7 +56,7 @@ function removeChangeListener(fn) {
   listeners.delete(fn);
 }
 
-async function getUser() {
+function getUser() {
   if (!inMemoryUser) {
     inMemoryUser = {};
   }
