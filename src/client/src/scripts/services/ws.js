@@ -8,7 +8,9 @@ let connected = false;
 const isConnected = () => !!connected;
 
 const disconnect = () => {
-  socket.disconnect();
+  if (socket) {
+    socket.disconnect();
+  }
 };
 
 const trigger = (type, payload) =>

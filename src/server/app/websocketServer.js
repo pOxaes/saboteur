@@ -9,7 +9,6 @@ const init = app => {
   const server = http.createServer(app);
   const wss = io(server);
   wss.on("connection", ws => {
-    console.log("connection", ws.handshake.query.token);
     userService.getTokenPayload(ws.handshake.query.token).then(({ email }) => {
       logger.info(`${email} is connected to ws`);
       ws.emit("CONNECTED");

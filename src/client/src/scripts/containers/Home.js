@@ -14,7 +14,7 @@ export default class Home extends Component {
     user: authenticationService.getUser()
   };
 
-  componentWillMount() {
+  componentDidMount() {
     actions.getGames().then(games => {
       this.setState({
         games

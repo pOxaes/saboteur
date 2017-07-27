@@ -1,24 +1,17 @@
-import Promise from "bluebird";
-
-const onRes = (resolve, reject) => res => {
+const onRes = res => {
   if (!res.ok) {
-    reject(res);
+    throw res;
   }
-  resolve(res.json());
+  return res.json();
 };
 
-const get = url =>
-  new Promise((resolve, reject) => {
-    fetch(url).then(onRes(resolve, reject));
-  });
+const get = url => fetch(url).then(onRes);
 
 const post = (url, data) =>
-  new Promise((resolve, reject) => {
-    fetch(url, {
-      method: "POST",
-      body: data || {}
-    }).then(onRes(resolve, reject));
-  });
+  fetch(url, {
+    method: "POST",
+    body: data || {}
+  }).then(onRes);
 
 export default {
   get,

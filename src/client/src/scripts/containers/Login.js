@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import GoogleLogin from "react-google-login";
 import authenticationService from "../services/authentication";
+import wsService from "../services/ws";
 
 export default class Register extends Component {
   state = {
@@ -17,6 +18,11 @@ export default class Register extends Component {
       .catch(e => {
         console.error("Failed to login", e);
       });
+  }
+
+  componentWillMount() {
+    authenticationService.logout();
+    wsService.disconnect();
   }
 
   render() {

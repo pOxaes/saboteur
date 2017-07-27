@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, withRouter } from "react-router-dom";
 import authenticationService from "./services/authentication";
 import wsService from "./services/ws";
 import "../styles/variables.css";
@@ -13,18 +13,32 @@ import GameContainer from "./containers/Game";
 import GameCreationContainer from "./containers/GameCreation";
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.props.history.listen((location, action) => {
+      this.checkLogin();
+    });
+  }
+
   state = {
     wsConnected: false
   };
 
-  componentWillMount() {
-    if (authenticationService.isAuthenticated()) {
-      wsService.connect(authenticationService.getToken()).then(() => {
-        this.setState({
-          wsConnected: true
-        });
-      });
+  checkLogin() {
+    if (!authenticationService.isAuthenticated()) {
+      return;
     }
+    wsService.connect(authenticationService.getToken()).then(() => {
+      console.log("App did mount - ws connected");
+      this.setState({
+        wsConnected: true
+      });
+    });
+  }
+
+  componentDidMount() {
+    this.checkLogin();
   }
 
   render() {
@@ -33,18 +47,24 @@ class App extends Component {
         <Switch>
           <PrivateRoute
             path="/games/:gameId"
-            wsConnected={this.statewsConnected}
+            wsConnected={this.state.wsConnected}
             component={GameContainer}
           />
           <PrivateRoute
             path="/game-creation"
-            wsConnected={this.statewsConnected}
+            wsConnected={this.state.wsConnected}
             component={GameCreationContainer}
           />
-          <Route path="/login" component={LoginContainer} />
+          <Route
+            path="/login"
+            component={LoginContainer}
+            onChange={() => {
+              console.log("changed");
+            }}
+          />
           <PrivateRoute
             path="/"
-            wsConnected={this.statewsConnected}
+            wsConnected={this.state.wsConnected}
             component={HomeContainer}
           />
         </Switch>
@@ -53,4 +73,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default withRouter(App);
