@@ -44,6 +44,7 @@ module.exports = {
     }
 
     const usersDictionnary = await userService.getAllAsDictionnary();
+
     return gamesService.withUsers(
       gamesService.format(game, ws.userId),
       usersDictionnary

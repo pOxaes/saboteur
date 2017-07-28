@@ -92,8 +92,6 @@ export class Game extends Component {
 
       slots = boardService.createSlotsFromCards(game.board);
 
-      console.log(slots);
-
       // format current player cards
       game.players[currentPlayerIndex].cards.forEach(card => {
         if (card.layout) {
@@ -120,7 +118,10 @@ export class Game extends Component {
   };
 
   onCardPlay(card) {
-    if (!card.isPlayable) {
+    if (
+      !card.isPlayable ||
+      this.state.game.currentPlayerId !== this.props.user.id
+    ) {
       return;
     }
 
@@ -295,6 +296,7 @@ export class Game extends Component {
             players={this.state.players}
             onKickPlayer={this.kickPlayer}
             canKickPlayer={this.state.game._canKick}
+            playingId={this.state.game.currentPlayerId}
             selectPlayer={this.confirmSelectedCardDestination.bind(
               this,
               DESTINATION_TYPES.PLAYER
@@ -305,6 +307,7 @@ export class Game extends Component {
             player={this.state.currentPlayer}
             onCardPlay={this.onCardPlay.bind(this)}
             selectedCard={this.state.selectedCard}
+            isPlaying={this.state.game.currentPlayerId === this.props.user.id}
             rotateCardLayout={this.rotateCardLayout.bind(this)}
           />}
         {this.state.game && this.renderByStatus()}

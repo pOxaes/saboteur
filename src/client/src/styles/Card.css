@@ -72,6 +72,11 @@
   background-color: grey;
 }
 
+.card--action-MAP .card__inner::after {
+  border-color: yellowgreen;
+  background-color: yellowgreen;
+}
+
 .card__subtype {
   font-size: 10px;
   text-align: center;

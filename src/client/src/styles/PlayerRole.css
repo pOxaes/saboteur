@@ -1,0 +1,16 @@
+.player-role {
+  transition: transform .3s ease-out;
+  position: fixed;
+  bottom: 0;
+  right: 100%;
+  transform: translateY(80%); 
+  padding: 10px;
+  font-size: 12px;
+  text-transform: lowercase;
+  background: white;
+  border: 2px solid #CCC;
+}
+
+.player-role:hover {
+  transform: translateY(0);
+}

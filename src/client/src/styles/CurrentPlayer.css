@@ -10,6 +10,10 @@
   align-items: center;
 }
 
+.current-player--playing {
+  background: rgb(100, 220, 150);
+}
+
 .current-player__hand {
   margin-top: 20px;
   margin-bottom: -30px;

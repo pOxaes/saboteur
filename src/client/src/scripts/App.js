@@ -57,13 +57,7 @@ class App extends Component {
             user={this.state.user}
             Component={GameCreationContainer}
           />
-          <Route
-            path="/login"
-            component={LoginContainer}
-            onChange={() => {
-              console.log("changed");
-            }}
-          />
+          <Route path="/login" component={LoginContainer} />
           <PrivateRoute
             exact
             path="/"

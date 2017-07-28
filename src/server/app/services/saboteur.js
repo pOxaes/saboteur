@@ -38,6 +38,9 @@ const buildDeck = () => {
     }
     return acc;
   }, []);
+  computedDeck.forEach((card, index) => {
+    card.id = index;
+  });
   return utils.shuffle(computedDeck);
 };
 
@@ -77,6 +80,11 @@ const distributeCards = ({ players, deck, currentPlayerId }) => {
 
 const distributeRoles = players => {
   let destroyersCount;
+
+  // 3 to 4 players, 1 destroyer
+  // 5 to 6 players, 2 destroyer
+  // 7 to 9 players, 3 destroyer
+  // 10 players, 4 destroyer
   if (players.length <= 4) {
     destroyersCount = 1;
   } else if (players.length <= 6) {

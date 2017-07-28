@@ -80,6 +80,18 @@ export default class PlayersList extends Component {
       : {};
   }
 
+  getPlayerItemClass(playerId) {
+    console.log(
+      this.props.playingId,
+      playerId,
+      this.props.playingId == playerId
+    );
+    return [
+      "player-list__item",
+      this.props.playingId === playerId && "player-list__item--playing"
+    ].join(" ");
+  }
+
   onResize() {
     const now = new Date().getTime();
     if (this.state.resizeTimeout) {
@@ -169,7 +181,7 @@ export default class PlayersList extends Component {
           ? <p>No players</p>
           : this.props.players.map((player, index) =>
               <li
-                className="player-list__item"
+                className={this.getPlayerItemClass(player.id)}
                 key={player.id}
                 style={this.getPlayerStyle(index)}
               >
