@@ -37,7 +37,7 @@ module.exports = {
       if (game.status !== gamesService.STATUSES.WAITING_FOR_PLAYERS) {
         // TODO: return an error & reject
         console.log("FORBIDDEN");
-        return undefined;
+        return;
       }
       // or make him join
       gamesService.addPlayer(game, ws.userId);
@@ -58,12 +58,31 @@ module.exports = {
     return;
   },
 
+  [events.KICK_PLAYER]: async ({ ws }, { gameId, playerId }) => {
+    const game = gamesService.getById(gameId);
+    if (!gamesService.canKick(game, playerId, ws.userId)) {
+      // TODO: reject
+      return;
+    }
+    gamesService.removePlayer(gameId, playerId);
+    return game;
+  },
+
   [events.DELETE_GAME]: async ({ ws }, gameId) => {
     const game = gamesService.getById(gameId);
     if (game.creator === ws.userId) {
       gamesService.remove(gameId);
     }
     return;
+  },
+
+  [events.START_GAME]: ({ ws }, gameId) => {
+    const game = gamesService.getById(gameId);
+    if (!gamesService.canStart(game, ws.userId)) {
+      // TODO: reject
+      return;
+    }
+    gamesService.start(game);
   },
 
   [events.JOIN_GAME]: async ({ ws }, gameId) =>

@@ -1,5 +1,8 @@
 const uuid = require("node-uuid");
 const userService = require("./user");
+const saboteurService = require("./saboteur");
+const utils = require("./utils");
+const clone = require("clone");
 
 const games = {};
 
@@ -7,12 +10,19 @@ const games = {};
 
 games["e6f00b55-c1f2-46d7-9057-e5a0c0b55ce9"] = {
   name: "My Super Game",
-  maxPlayers: "5",
+  maxPlayers: 7,
   id: "e6f00b55-c1f2-46d7-9057-e5a0c0b55ce9",
   status: "WAITING_FOR_PLAYERS",
   creator: "bdebad6b-1931-4ad1-80e2-5cc765158b7f",
   creationDate: new Date(),
-  players: [{ id: "bdebad6b-1931-4ad1-80e2-5cc765158b7f" }]
+  players: [
+    { id: "bdebad6b-1931-4ad1-80e2-5cc765158b7f" },
+    { id: "c8b3b775-57c5-441a-b541-3e25587e144d" },
+    { id: "c0d81586-c458-4a86-b2c5-8772ff6ed3b5" },
+    { id: "c3550888-b39c-4427-b83a-d5260a598c80" },
+    { id: "db610c6d-b72a-4f0c-903b-142030db8520" },
+    { id: "564857c4-ab96-47a9-aa0f-44306e414138" }
+  ]
 };
 
 const STATUSES = {
@@ -47,13 +57,40 @@ const insert = (game, userId) => {
 
 const getById = id => games[id];
 
-const format = (game, userId) => {
+const removeSecretData = (game, userId) => {
+  if (game.status === STATUSES.PLAYING) {
+    game.deck = game.deck.length;
+    game.board.forEach(card => {
+      if (card.hidden) {
+        delete card.layout;
+        delete card.item;
+      }
+    });
+    game.players.forEach(player => {
+      if (player.id !== userId) {
+        delete player.role;
+        player.cards = player.cards.map(card => ({
+          type: "HIDDEN"
+        }));
+      }
+    });
+  }
+};
+
+const attachAuth = (game, userId) => {
+  const isCreator = userId === game.creator;
   return Object.assign({}, game, {
-    _canKick:
-      game.status === STATUSES.WAITING_FOR_PLAYERS && userId === game.creator,
-    _canDelete: userId === game.creator,
-    _hasJoined: containsPlayer(game, userId)
+    _canKick: canKick(game, userId),
+    _canDelete: isCreator,
+    _hasJoined: containsPlayer(game, userId),
+    _canStart: canStart(game, userId)
   });
+};
+
+const format = (game, userId) => {
+  game = clone(game);
+  removeSecretData(game, userId);
+  return attachAuth(game, userId);
 };
 
 const withUsers = (game, usersDictionnary) => {
@@ -90,9 +127,37 @@ const addPlayer = (game, playerId) => {
   });
 };
 
+const canKick = (game, userId, kickedPlayerId) =>
+  game.creator === userId &&
+  game.status === STATUSES.WAITING_FOR_PLAYERS &&
+  (typeof kickedPlayerId === "undefined" ||
+    containsPlayer(game, kickedPlayerId));
+
+const canStart = (game, userId) =>
+  game.creator === userId &&
+  game.status === STATUSES.WAITING_FOR_PLAYERS &&
+  game.players.length > 2;
+
+const start = game => {
+  game.status = STATUSES.PLAYING;
+  Object.assign(game, {
+    status: STATUSES.PLAYING,
+    deck: saboteurService.buildDeck(),
+    currentPlayerId: utils.randomPick(game.players).id, // TODO: random please
+    board: saboteurService.computeInitialBoard(),
+    players: saboteurService.distributeRoles(
+      game.players.map(saboteurService.formatPlayer)
+    )
+  });
+  saboteurService.distributeCards(game);
+  return game;
+};
+
 module.exports = {
   STATUSES,
   addPlayer,
+  canKick,
+  canStart,
   format,
   getForUser,
   getById,
@@ -100,5 +165,6 @@ module.exports = {
   removePlayer,
   containsPlayer,
   remove,
+  start,
   withUsers
 };

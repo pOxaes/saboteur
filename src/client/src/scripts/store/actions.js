@@ -5,9 +5,7 @@ import events from "./events";
 const baseUrl = "http://localhost:3008/api";
 
 const kick = ({ gameId, playerId }) =>
-  request.post(`${baseUrl}/games/${gameId}/kick`, { playerId }).then(() => {
-    console.log(`${playerId} kicked from game ${gameId}`);
-  });
+  wsService.emitPromise(events.KICK_PLAYER, { gameId, playerId });
 
 const playCard = ({ gameId, cardId, isRotated, destination }) =>
   request
@@ -25,7 +23,7 @@ const joinGame = gameId => wsService.emitPromise(events.JOIN_GAME, gameId);
 const createGame = ({ name, maxPlayers }) =>
   wsService.emitPromise(events.CREATE_GAME, { name, maxPlayers });
 
-const startGame = gameId => request.post(`${baseUrl}/games/${gameId}/start`);
+const startGame = gameId => wsService.emitPromise(events.START_GAME, gameId);
 
 const deleteGame = gameId => wsService.emitPromise(events.DELETE_GAME, gameId);
 

@@ -54,7 +54,6 @@ const listenEmittedEvent = ws => {
       }
       action
         .then(data => {
-          console.log("data", data);
           setValueResult({
             success: true,
             data

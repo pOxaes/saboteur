@@ -16,9 +16,6 @@ const init = app => {
         ws.userId = id;
         ws.emit("CONNECTED", { email, name, id });
         wsService.listenEmittedEvent(ws);
-        ws.on("message", payload => {
-          console.log("message", payload);
-        });
       })
       .catch(() => {
         ws.disconnect("unauthorized");

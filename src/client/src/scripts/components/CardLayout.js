@@ -34,30 +34,35 @@ export default ({ item, layout }) =>
       />}
     {layout.top &&
       layout.right &&
+      item !== "ROCK" &&
       <path
         className="svg-card-path__path--top svg-card-path__path--right"
         d="M39.3,44.3c0,56.3,11,67.3,67.3,67.3V64.3c-13.5,0-20-8.2-20-20H39.3z"
       />}
     {layout.bottom &&
       layout.right &&
+      item !== "ROCK" &&
       <path
         className="svg-card-path__path--bottom svg-card-path__path--right"
         d="M106.7,64.3c-56.3,0-67.3,11-67.3,67.3h47.3c0-13.5,8.2-20,20-20V64.3z"
       />}
     {layout.top &&
       layout.left &&
+      item !== "ROCK" &&
       <path
         className="svg-card-path__path--top svg-card-path__path--left"
         d="M19.3,111.7c56.3,0,67.3-11,67.3-67.3H39.3c0,13.5-8.2,20-20,20V111.7z"
       />}
     {layout.bottom &&
       layout.left &&
+      item !== "ROCK" &&
       <path
         className="svg-card-path__path--bottom svg-card-path__path--left"
         d="M86.7,131.7c0-56.3-11-67.3-67.3-67.3v47.3c13.5,0,20,8.2,20,20H86.7z"
       />}
     {layout.top &&
       layout.bottom &&
+      item !== "ROCK" &&
       <rect
         className="svg-card-path__path--top svg-card-path__path--bottom"
         x="39.3"
@@ -67,6 +72,7 @@ export default ({ item, layout }) =>
       />}
     {layout.right &&
       layout.left &&
+      item !== "ROCK" &&
       <rect
         className="svg-card-path__path--left svg-card-path__path--right"
         x="19.3"
@@ -79,12 +85,12 @@ export default ({ item, layout }) =>
       <g className="svg-card-path__item--rock">
         <path
           className="rock-color-1"
-          d="M73.3,36.8c10,2.3,31,25.3,12.8,56.5s-58.4,25.8-65.4,17.2s-8.4-22.7,7-42S66.6,35.3,73.3,36.8z"
+          d="M63.3,62.7c4.2,1,13.1,10.7,5.4,23.8s-24.6,10.9-27.5,7.2c-2.9-3.6-3.5-9.6,2.9-17.7S60.5,62.1,63.3,62.7z"
         />
         <path
           className="rock-color-2"
-          d="M80.1,79.6c7.7,0.9,17.6,11.3,16.2,28.8c-1.3,17.5-20,19.2-30,17.3s-23.8-3.9-23.1-10.7
-            c0.6-6.8,6.9-21.5,16.4-27.1S71.8,78.6,80.1,79.6z"
+          d="M66.2,80.7c3.2,0.4,7.4,4.8,6.8,12.1c-0.5,7.4-8.4,8.1-12.6,7.3c-4.2-0.8-10-1.6-9.7-4.5
+		c0.3-2.9,2.9-9.1,6.9-11.4S62.7,80.3,66.2,80.7z"
         />
       </g>}
 

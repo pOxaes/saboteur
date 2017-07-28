@@ -72,7 +72,6 @@ export class Game extends Component {
   }
 
   updateGame(game) {
-    console.log("updateGame", JSON.stringify(game, null, 2));
     if (game.status === GAME_STATUS.COMPLETED) {
       this.setState({
         game,
@@ -92,6 +91,8 @@ export class Game extends Component {
       game.board.forEach(attachLinkedToStart);
 
       slots = boardService.createSlotsFromCards(game.board);
+
+      console.log(slots);
 
       // format current player cards
       game.players[currentPlayerIndex].cards.forEach(card => {
@@ -141,6 +142,7 @@ export class Game extends Component {
   }
 
   confirmSelectedCardDestination(type, destinationItem) {
+    // TODO: handle destruction & reveal cards
     if (
       !this.state.selectedCard ||
       (type !== DESTINATION_TYPES.DISCARD && !destinationItem.isHighlighted)
@@ -190,11 +192,12 @@ export class Game extends Component {
           {this.state.game.players.length} / {this.state.game.maxPlayers}{" "}
           players
         </p>
-        {this.state.game.players.length < 2
-          ? <p>You need at least 2 players to start</p>
-          : <button type="button" onClick={this.startGame.bind(this)}>
-              Start Game
-            </button>}
+        {this.state.game.players.length < 2 &&
+          <p>You need at least 2 players to start</p>}
+        {this.state.game._canStart &&
+          <button type="button" onClick={this.startGame.bind(this)}>
+            Start Game
+          </button>}
       </div>
     );
   }
