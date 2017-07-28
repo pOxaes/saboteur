@@ -24,7 +24,13 @@ async function getAll(table) {
   return items;
 }
 
+async function find(table, findFoo) {
+  const items = await getAll(table);
+  return items.find(findFoo);
+}
+
 module.exports = {
+  find,
   get,
   getAll,
   insert,

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Redirect, Link } from "react-router-dom";
-import authenticationService from "../services/authentication";
 import boardService from "../services/board";
 import PlayersList from "../components/PlayersList";
 import CurrentPlayer from "../components/CurrentPlayer";
@@ -65,15 +64,15 @@ const getPlayersByRank = leaderBoard => {
 
 export class Game extends Component {
   state = {
-    id: this.props.match.params.gameId,
-    user: authenticationService.getUser()
+    id: this.props.match.params.id
   };
 
-  componentWillMount() {
+  componentDidMount() {
     actions.getGame(this.state.id).then(this.updateGame.bind(this));
   }
 
   updateGame(game) {
+    console.log("updateGame", JSON.stringify(game, null, 2));
     if (game.status === GAME_STATUS.COMPLETED) {
       this.setState({
         game,
@@ -86,7 +85,7 @@ export class Game extends Component {
 
     const currentPlayerIndex = game.players
       .map(player => player.id)
-      .indexOf(this.state.user.id);
+      .indexOf(this.props.user.id);
 
     if (game.status === GAME_STATUS.PLAYING) {
       game.board.forEach(boardService.formatCardLayout);

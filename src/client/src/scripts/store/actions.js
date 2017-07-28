@@ -1,4 +1,6 @@
 import request from "../services/request";
+import wsService from "../services/ws";
+import events from "./events";
 
 const baseUrl = "http://localhost:3008/api";
 
@@ -14,20 +16,20 @@ const playCard = ({ gameId, cardId, isRotated, destination }) =>
       console.log(`played card ${cardId} on ${destination.type}`);
     });
 
-const getGame = gameId => request.get(`${baseUrl}/games/${gameId}`);
+const getGame = gameId => wsService.emitPromise(events.GET_GAME, gameId);
 
-const getGames = () => request.get(`${baseUrl}/games`);
+const getGames = () => wsService.emitPromise(events.GET_GAMES);
 
-const joinGame = gameId => request.post(`${baseUrl}/games/${gameId}/join`);
+const joinGame = gameId => wsService.emitPromise(events.JOIN_GAME, gameId);
 
 const createGame = ({ name, maxPlayers }) =>
-  request.post(`${baseUrl}/games`, { name, maxPlayers });
+  wsService.emitPromise(events.CREATE_GAME, { name, maxPlayers });
 
 const startGame = gameId => request.post(`${baseUrl}/games/${gameId}/start`);
 
-const deleteGame = gameId => request.post(`${baseUrl}/games/${gameId}/delete`);
+const deleteGame = gameId => wsService.emitPromise(events.DELETE_GAME, gameId);
 
-const leaveGame = gameId => request.post(`${baseUrl}/games/${gameId}/leave`);
+const leaveGame = gameId => wsService.emitPromise(events.LEAVE_GAME, gameId);
 
 const login = googleAuthorizationCode =>
   request.post(`${baseUrl}/login`, googleAuthorizationCode);

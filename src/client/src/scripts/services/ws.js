@@ -62,6 +62,7 @@ const emitPromise = (command, data) =>
     }, TIMEOUT_DURATION);
   });
 
+// TODO: handle unauthorized
 const connect = token =>
   new Promise((resolve, reject) => {
     connected = false;
@@ -72,10 +73,9 @@ const connect = token =>
       }
       reject();
     });
-    socket.on("CONNECTED", () => {
-      console.log("socket connected");
+    socket.on("CONNECTED", user => {
       connected = true;
-      resolve();
+      resolve(user);
       attachDispatcher(socket);
     });
   });

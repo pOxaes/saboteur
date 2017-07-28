@@ -7,6 +7,7 @@ export default ({ game, onDeleteClick }) =>
     <Link className="game-item__link" to={`/games/${game.id}`}>
       <span className="game-item__name">
         {game.name}
+        {game._hasJoined && " (joined)"}
       </span>
       <div className="game-item__players-count">
         <span className="game-item__players-count__playing">

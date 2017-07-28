@@ -4,13 +4,9 @@ const GOOGLE_CLIENT_ID =
   "262090290445-aa1mmt5fpg34dcfkcb1ful7us6fqtjhk.apps.googleusercontent.com";
 const TOKEN_STORAGE_KEY = "token";
 
-// TODO: remove once websockets
-let inMemoryUser;
-
 function login(googleAuthorizationCode) {
-  return actions.login(googleAuthorizationCode).then(({ token, user }) => {
+  return actions.login(googleAuthorizationCode).then(({ token }) => {
     localStorage.setItem(TOKEN_STORAGE_KEY, token);
-    inMemoryUser = user;
     notifyListeners(true);
     return token;
   });
@@ -56,20 +52,12 @@ function removeChangeListener(fn) {
   listeners.delete(fn);
 }
 
-function getUser() {
-  if (!inMemoryUser) {
-    inMemoryUser = {};
-  }
-  return inMemoryUser;
-}
-
 export default {
   GOOGLE_CLIENT_ID,
   login,
   logout,
   isAuthenticated,
   getToken,
-  getUser,
 
   addChangeListener,
   removeChangeListener

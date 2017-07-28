@@ -6,7 +6,7 @@ import "../styles/variables.css";
 import "../../node_modules/reset-css/reset.css";
 import "../styles/App.css";
 
-import PrivateRoute from "./AuthRoute";
+import PrivateRoute from "./components/PrivateRoute";
 import HomeContainer from "./containers/Home";
 import LoginContainer from "./containers/Login";
 import GameContainer from "./containers/Game";
@@ -29,15 +29,15 @@ class App extends Component {
     if (!authenticationService.isAuthenticated()) {
       return;
     }
-    wsService.connect(authenticationService.getToken()).then(() => {
-      console.log("App did mount - ws connected");
+    wsService.connect(authenticationService.getToken()).then(user => {
       this.setState({
-        wsConnected: true
+        wsConnected: true,
+        user
       });
     });
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this.checkLogin();
   }
 
@@ -46,14 +46,16 @@ class App extends Component {
       <div className="App">
         <Switch>
           <PrivateRoute
-            path="/games/:gameId"
+            path="/games/:id"
             wsConnected={this.state.wsConnected}
-            component={GameContainer}
+            user={this.state.user}
+            Component={GameContainer}
           />
           <PrivateRoute
             path="/game-creation"
             wsConnected={this.state.wsConnected}
-            component={GameCreationContainer}
+            user={this.state.user}
+            Component={GameCreationContainer}
           />
           <Route
             path="/login"
@@ -63,9 +65,11 @@ class App extends Component {
             }}
           />
           <PrivateRoute
+            exact
             path="/"
             wsConnected={this.state.wsConnected}
-            component={HomeContainer}
+            user={this.state.user}
+            Component={HomeContainer}
           />
         </Switch>
       </div>
