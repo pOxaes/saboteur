@@ -17,10 +17,6 @@ games["e6f00b55-c1f2-46d7-9057-e5a0c0b55ce9"] = {
   creationDate: new Date(),
   players: [
     { id: "bdebad6b-1931-4ad1-80e2-5cc765158b7f" },
-    { id: "c8b3b775-57c5-441a-b541-3e25587e144d" },
-    { id: "c0d81586-c458-4a86-b2c5-8772ff6ed3b5" },
-    { id: "c3550888-b39c-4427-b83a-d5260a598c80" },
-    { id: "db610c6d-b72a-4f0c-903b-142030db8520" },
     { id: "564857c4-ab96-47a9-aa0f-44306e414138" }
   ]
 };
@@ -136,7 +132,7 @@ const canKick = (game, userId, kickedPlayerId) =>
 const canStart = (game, userId) =>
   game.creator === userId &&
   game.status === STATUSES.WAITING_FOR_PLAYERS &&
-  game.players.length > 2;
+  game.players.length > saboteurService.MIN_PLAYERS_COUNT;
 
 const start = game => {
   game.status = STATUSES.PLAYING;

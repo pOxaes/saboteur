@@ -81,11 +81,6 @@ export default class PlayersList extends Component {
   }
 
   getPlayerItemClass(playerId) {
-    console.log(
-      this.props.playingId,
-      playerId,
-      this.props.playingId == playerId
-    );
     return [
       "player-list__item",
       this.props.playingId === playerId && "player-list__item--playing"

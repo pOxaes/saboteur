@@ -3,6 +3,8 @@ const deck = require("./deck");
 
 const INITIAL_DECK_COUNT = 30;
 
+const MIN_PLAYERS_COUNT = 2;
+
 const ROLES = {
   BUILDER: "BUILDER",
   DESTROYER: "DESTROYER"
@@ -169,6 +171,7 @@ const computeInitialBoard = () => {
 
 module.exports = {
   INITIAL_DECK_COUNT,
+  MIN_PLAYERS_COUNT,
   buildDeck,
   computeInitialBoard,
   distributeCards,
