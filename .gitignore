@@ -58,5 +58,5 @@ typings/
 .env
 
 .DS_Store
-src/client/build/
-src/server/config.js
+build/
+.node-persist/

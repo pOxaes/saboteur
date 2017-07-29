@@ -1,0 +1,25 @@
+{
+  "name": "saboteur-client",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "saboteur-shared": "1.0.0",
+    "bluebird": "^3.5.0",
+    "prop-types": "15.5.10",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "react-google-login": "^2.9.2",
+    "react-resize-detector": "^0.5.0",
+    "react-router-dom": "^4.1.1",
+    "react-scripts": "1.0.10",
+    "reset-css": "^2.2.0",
+    "socket.io-client": "^2.0.3"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "devDependencies": {}
+}

@@ -1,8 +1,0 @@
-env:
-  browser: true
-parserOptions:
-  sourceType: "module"
-  ecmaFeatures:
-    jsx: true
-rules:
-  'react/jsx-filename-extension': 0
