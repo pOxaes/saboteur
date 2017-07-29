@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Redirect, Link } from "react-router-dom";
-import boardService from "../services/board";
+// import boardService from "../services/board";
+import boardService from "../../../shared/board";
 import PlayersList from "../components/PlayersList";
 import CurrentPlayer from "../components/CurrentPlayer";
 import LeaderBoard from "../components/LeaderBoard";
