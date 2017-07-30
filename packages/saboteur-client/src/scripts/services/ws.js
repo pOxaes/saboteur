@@ -1,4 +1,5 @@
 import io from "socket.io-client";
+import events from "saboteur-shared/events";
 
 const TIMEOUT_DURATION = 3000;
 
@@ -20,12 +21,12 @@ const trigger = (type, payload) =>
   });
 
 const attachDispatcher = (ws, store) => {
-  // Object.keys(types).forEach(typeKey => {
-  //   ws.on(types[typeKey], payload => {
-  //     console.log("message received", typeKey);
-  //     // store.commit(types[typeKey], payload);
-  //   });
-  // });
+  Object.values(events).forEach(event => {
+    ws.on(event, payload => {
+      console.log("message received", event, payload);
+      // store.commit(types[typeKey], payload);
+    });
+  });
 };
 
 const emit = (command, data) => {

@@ -2,6 +2,7 @@ const Promise = require("bluebird");
 const events = require("saboteur-shared/events");
 const gameRules = require("saboteur-shared/game");
 const gamesService = require("./services/games");
+const { playCard } = require("./services/cardPlayHandler");
 const userService = require("./services/user");
 
 module.exports = {
@@ -94,5 +95,5 @@ module.exports = {
   [events.PLAY_CARD]: async (
     { ws },
     { gameId, cardId, isRotated, destination }
-  ) => gamesService.playCard(ws.userId, gameId, cardId, isRotated, destination)
+  ) => playCard(ws.userId, gameId, cardId, isRotated, destination)
 };
