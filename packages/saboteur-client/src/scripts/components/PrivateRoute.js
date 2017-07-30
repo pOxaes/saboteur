@@ -7,13 +7,14 @@ const PrivateRoute = ({
   authenticated,
   user,
   wsConnected,
+  ws,
   ...rest
 }) =>
   <Route
     {...rest}
     render={props => {
       return authenticated
-        ? <Component {...props} user={user} wsConnected={wsConnected} />
+        ? <Component {...props} user={user} wsConnected={wsConnected} ws={ws} />
         : <Redirect
             to={{
               pathname: "/login",

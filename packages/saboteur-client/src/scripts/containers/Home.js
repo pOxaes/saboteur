@@ -6,20 +6,58 @@ import "../../styles/Home.css";
 
 export default class Home extends Component {
   state = {
+    eventsInitialized: false,
     games: {
       lobby: [],
       playing: []
     }
   };
 
-  componentWillReceiveProps() {
-    if (this.state.games) {
-      actions.getGames().then(games => {
-        this.setState({
-          games
-        });
-      });
+  componentDidMount() {
+    if (!this.state.games.length) {
+      this.getGames();
     }
+    this.initEvents(this.props.ws);
+  }
+
+  componentWillReceiveProps({ ws }) {
+    console.log("here", ws);
+    if (this.state.games) {
+      this.getGames();
+    }
+    this.initEvents(ws);
+  }
+
+  initEvents(ws) {
+    if (!ws || this.state.eventsInitialized) {
+      return;
+    }
+    this.setState({
+      eventsInitialized: true
+    });
+    // TODO: kill event when container killed
+    ws.on("CREATE_GAME", this.addGame.bind(this));
+  }
+
+  addGame(newGame) {
+    console.log("new game");
+    this.state.games.lobby.push(newGame);
+    this.setState({
+      games: this.state.games
+    });
+    console.log("from container", newGame);
+  }
+
+  componentWillUnmount() {
+    this.props.ws.removeListener("CREATE_GAME");
+  }
+
+  getGames() {
+    actions.getGames().then(games => {
+      this.setState({
+        games
+      });
+    });
   }
 
   onSelectGame(game) {

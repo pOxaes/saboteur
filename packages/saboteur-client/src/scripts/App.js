@@ -26,15 +26,16 @@ class App extends Component {
   };
 
   checkLogin() {
-    if (!authenticationService.isAuthenticated()) {
+    if (!authenticationService.isAuthenticated() || this.state.wsConnected) {
       return;
     }
     wsService
       .connect(authenticationService.getToken())
-      .then(user => {
+      .then(({ user, ws }) => {
         this.setState({
           wsConnected: true,
-          user
+          user,
+          ws
         });
       })
       .catch(reachedServer => {
@@ -69,6 +70,7 @@ class App extends Component {
             exact
             path="/"
             wsConnected={this.state.wsConnected}
+            ws={this.state.ws}
             user={this.state.user}
             Component={HomeContainer}
           />

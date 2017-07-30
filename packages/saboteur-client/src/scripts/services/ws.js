@@ -22,10 +22,10 @@ const trigger = (type, payload) =>
 
 const attachDispatcher = (ws, store) => {
   Object.values(events).forEach(event => {
-    ws.on(event, payload => {
-      console.log("message received", event, payload);
-      // store.commit(types[typeKey], payload);
-    });
+    // ws.on(event, payload => {
+    // console.log("message received", event, payload);
+    // store.commit(types[typeKey], payload);
+    // });
   });
 };
 
@@ -59,15 +59,15 @@ const connect = token =>
   new Promise((resolve, reject) => {
     connected = false;
     socket = io(`ws://localhost:3008?token=${token}`);
-    socket.on("disconnect", a => {
+    socket.on("disconnect", message => {
       if (connected) {
         return;
       }
-      reject(!!a);
+      reject(!!message);
     });
     socket.on("CONNECTED", user => {
       connected = true;
-      resolve(user);
+      resolve({ user, ws: socket });
       attachDispatcher(socket);
     });
   });
