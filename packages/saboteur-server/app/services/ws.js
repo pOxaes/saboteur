@@ -1,6 +1,6 @@
 const Promise = require("bluebird");
+const utils = require("saboteur-shared/utils");
 const logger = require("../logger");
-const utils = require("./utils");
 
 const events = require("saboteur-shared/events");
 const actions = require("../actions");
@@ -15,34 +15,6 @@ const throwError = message => {
   error.message = message;
   return error;
 };
-
-// const emitPromise = (command, filters, data) =>
-//   new Promise((resolve, reject) => {
-//     const client = getClient(filters);
-//     if (!client) {
-//       return reject();
-//     }
-
-//     client.ws.emit(command, data || {}, response => {
-//       if (typeof response === "object") {
-//         if (response.success) {
-//           resolve(response.data);
-//         } else {
-//           const message =
-//             typeof response.message === "string"
-//               ? response.message
-//               : "The request was not successful.";
-//           reject(throwError(message));
-//         }
-//       } else {
-//         reject(throwError("The response to your request could not be parsed."));
-//       }
-//     });
-
-//     return setTimeout(() => {
-//       reject(throwError("The request took too long to respond."));
-//     }, 3000);
-//   });
 
 const listenEmittedEvent = ws => {
   Object.values(events).forEach(event => {
@@ -60,6 +32,14 @@ const listenEmittedEvent = ws => {
           });
         })
         .catch(message => {
+          logger.error(
+            JSON.stringify({
+              userId: ws.userId,
+              event,
+              payload,
+              message
+            })
+          );
           setValueResult({
             success: false,
             message

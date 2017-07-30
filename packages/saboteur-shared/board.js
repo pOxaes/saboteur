@@ -72,9 +72,10 @@ const attachLinkedToStart = (card, index, cards) => {
 
 // SLOTS
 
-const boardItemToCard = ({ layout, item }) => ({
+const boardItemToCard = ({ layout, item, hidden }) => ({
   layout,
   item,
+  hidden,
   type: "PATH"
 });
 
@@ -96,8 +97,6 @@ const updateSlot = (slots, x, y, card, shouldForce) => {
 };
 
 const createSlotsFromCards = cards => {
-  // TODO: merge existing slot authorizedLayout with new one
-
   // Create card slots + empty slot
   const slots = cards.reduce((acc, card) => {
     updateSlot(acc, card.x, card.y, boardItemToCard(card));
@@ -163,6 +162,10 @@ const rotateLayout = ({ top, right, bottom, left }) => ({
   left: right
 });
 
+const rotateStringLayout = layout => {
+  return layout.slice(-2) + layout.slice(0, 2);
+};
+
 const checkCardCompatibility = (card, slot, shouldCompareRotation = true) => {
   return (
     compareLayouts(slot.authorizedLayout, card.layout) ||
@@ -192,6 +195,12 @@ const formatLayoutToString = layout =>
 
 const attachPlayability = (card, slots, players) => {
   if (card.type === "HIDDEN") {
+    return;
+  }
+  if (card.action === "REVEAL") {
+    card.isPlayable = slots.some(
+      slot => slot.card && slot.card.type === "PATH" && slot.card.hidden
+    );
     return;
   }
 
@@ -233,6 +242,8 @@ const canPlayCardOnPlayer = (card, player) =>
       player.malus.some(malus => card.subtype.indexOf(malus) !== -1)));
 
 const canPlayCardOnSlot = (card, slot) =>
+  (card.action === "REVEAL" &&
+    (slot.card && slot.card.type === "PATH" && slot.card.hidden)) ||
   (card.action === "DESTROY" &&
     (slot.card && slot.card.layout && (slot.x !== 0 || slot.y !== 0))) ||
   (card.type === "PATH" &&
@@ -251,6 +262,7 @@ module.exports = {
   formatLayoutToString,
   attachLinkedToStart,
   rotateCardLayout,
+  rotateStringLayout,
   canPlayCardOnPlayer,
   canPlayCardOnSlot,
   getLinkedSiblings

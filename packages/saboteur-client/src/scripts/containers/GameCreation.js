@@ -17,8 +17,7 @@ export default class GameCreation extends Component {
     actions
       .createGame({ name: this.state.name, maxPlayers: this.state.maxPlayers })
       .then(game => {
-        // TODO: redirect to game
-        self.props.history.replace("/");
+        self.props.history.replace(`/games/${game.id}`);
       });
   }
 

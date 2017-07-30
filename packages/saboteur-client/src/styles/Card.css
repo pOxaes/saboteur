@@ -72,7 +72,7 @@
   background-color: grey;
 }
 
-.card--action-MAP .card__inner::after {
+.card--action-REVEAL .card__inner::after {
   border-color: yellowgreen;
   background-color: yellowgreen;
 }

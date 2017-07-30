@@ -1,15 +1,21 @@
-const utils = require("./utils");
-const deck = require("./deck");
+const utils = require("saboteur-shared/utils");
 const gameRules = require("saboteur-shared/game");
+const boardRules = require("saboteur-shared/board");
+const deck = require("./deck");
+
+const REVEAL_DURATION = 5000;
+
+const MAX_ROUNDS = 3;
 
 // 44 path cards (40 distribuables, 4 sur le board)
 
 const stackItemToCard = stack => {
   if (stack.layout) {
-    // TODO: randomly rotate layout
     return {
       type: "PATH",
-      layout: stack.layout,
+      layout: utils.randomPick([true, false])
+        ? boardRules.rotateStringLayout(stack.layout)
+        : stack.layout,
       item: stack.item || "EMPTY"
     };
   } else if (stack.subtype) {
@@ -105,8 +111,7 @@ const formatPlayer = player =>
   Object.assign({}, player, {
     malus: [],
     cards: [],
-    gold: [],
-    role: gameRules.ROLES.BUILDER
+    gold: player.gold || []
   });
 
 const computeInitialBoard = () => {
@@ -114,6 +119,7 @@ const computeInitialBoard = () => {
     {
       x: 8,
       y: 0,
+      allowedUsers: [],
       hidden: true,
       layout: "1111",
       item: "EMPTY"
@@ -121,6 +127,7 @@ const computeInitialBoard = () => {
     {
       x: 8,
       y: 2,
+      allowedUsers: [],
       hidden: true,
       layout: "1111",
       item: "EMPTY"
@@ -128,6 +135,7 @@ const computeInitialBoard = () => {
     {
       x: 8,
       y: -2,
+      allowedUsers: [],
       hidden: true,
       layout: "1111",
       item: "GOLD"
@@ -163,10 +171,74 @@ const computeInitialBoard = () => {
     ]);
 };
 
+const isUserAllowedToSeeHiddenCard = (userId, allowedUsers) => {
+  const matchingUser = allowedUsers.find(user => user.id === userId);
+  if (!matchingUser) {
+    return false;
+  }
+  // allowed to reveal for 5seconds
+  const now = new Date().getTime();
+  return now - matchingUser.date <= REVEAL_DURATION;
+};
+
+const replaceLastGold = (player, goldValue) => {
+  player.gold[player.gold.length - 1] = goldValue;
+};
+
+const distributeGold = (winningPlayer, players) => {
+  const sameRolePlayers = players.filter(
+    player => player.role === winningPlayer.role
+  );
+
+  players.forEach(player => player.gold.push(0));
+
+  if (winningPlayer.role === "DESTROYER") {
+    // If there was only 1 saboteur, he gets gold nugget cards from
+    // the deck worth a total of four nuggets.
+    // If there were 2 or 3 saboteurs, they each get 3 nuggets worth of gold.
+    // If there were 4 saboteurs, each gets 2 nuggets.
+    let goldValue = 2;
+    if (sameRolePlayers.length === 1) {
+      goldValue = 4;
+    } else if (sameRolePlayers.length <= 3) {
+      goldValue = 3;
+    }
+    sameRolePlayers.forEach(player => replaceLastGold(player, goldValue));
+  } else if (winningPlayer.role === "BUILDER") {
+    // The player who played the last path card (that connected to the treasure)
+    // draws a number of gold nugget cards (face down) equal to
+    // the number of gold miners (e.g., 5 cards if there were 5 gold-diggers),
+    // looks at them in secret, and chooses 1 card to keep.
+    // Then, he passes the rest of gold nugget cards counter- clockwise to
+    // the next gold miner (not saboteur!), who also chooses
+    // 1 card and passes the rest—and so on until each gold miner gets 1 car
+    // if builders won, draw 3 gold cards and distribute
+    const winningPlayerIndex = players
+      .map(player => player.id)
+      .indexOf(winningPlayer.id);
+    let drawnGold = [];
+    for (let i = 0; i < sameRolePlayers.length + 10; i++) {
+      drawnGold.push(utils.random(1, 4));
+    }
+    drawnGold.sort().reverse();
+
+    while (sameRolePlayers[0].id !== winningPlayer.id) {
+      const movedPlayer = sameRolePlayers.shift();
+      sameRolePlayers.push(movedPlayer);
+    }
+    sameRolePlayers.forEach((player, index) =>
+      replaceLastGold(player, drawnGold[index])
+    );
+  }
+};
+
 module.exports = {
+  MAX_ROUNDS,
   buildDeck,
   computeInitialBoard,
   distributeCards,
+  distributeGold,
   distributeRoles,
-  formatPlayer
+  formatPlayer,
+  isUserAllowedToSeeHiddenCard
 };

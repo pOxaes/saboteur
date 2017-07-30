@@ -28,8 +28,16 @@ const shuffle = array => {
   return array;
 };
 
+const throwError = message => {
+  const error = new Error();
+  error.message = message;
+  return error;
+};
+
 module.exports = {
   isPromise,
   randomPick,
-  shuffle
+  random,
+  shuffle,
+  throwError
 };

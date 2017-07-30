@@ -10,7 +10,6 @@ function withAuth(WrappedComponent) {
     }
 
     _handleAuthChanged(authenticated) {
-      // TODO: understand what's happening : Not using sync api because I get in redirect loop :/
       this.setState(state => ({ authenticated }));
     }
 

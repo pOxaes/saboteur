@@ -1,9 +1,9 @@
 const uuid = require("node-uuid");
 const gameRules = require("saboteur-shared/game");
 const boardRules = require("saboteur-shared/board");
+const utils = require("saboteur-shared/utils");
 const userService = require("./user");
 const saboteurService = require("./saboteur");
-const utils = require("./utils");
 const clone = require("clone");
 
 const games = {};
@@ -25,11 +25,13 @@ games["0ef7d117-14ec-43ce-bd0f-7332fe606341"] = {
 
 games["0ef7d117-14ec-43ce-bd0f-7332fe606342"] = {
   name: "My Playing Game",
+  currentRound: 1,
   maxPlayers: 7,
   id: "0ef7d117-14ec-43ce-bd0f-7332fe606342",
   status: "PLAYING",
   creator: "0ef7d117-14ec-43ce-bd0f-7332fe606340",
   creationDate: "2017-07-29T21:08:25.718Z",
+  currentPlayerId: "0ef7d117-14ec-43ce-bd0f-7332fe606340",
   players: [
     {
       id: "0ef7d117-14ec-43ce-bd0f-7332fe606340",
@@ -49,7 +51,7 @@ games["0ef7d117-14ec-43ce-bd0f-7332fe606342"] = {
         },
         {
           type: "PATH",
-          layout: "1100",
+          layout: "1111",
           item: "EMPTY",
           id: 22
         },
@@ -59,19 +61,18 @@ games["0ef7d117-14ec-43ce-bd0f-7332fe606342"] = {
           id: 60
         },
         {
-          type: "PATH",
-          layout: "0101",
-          item: "EMPTY",
+          type: "ACTION",
+          action: "DESTROY",
           id: 14
         },
         {
-          type: "PATH",
-          layout: "1100",
-          item: "EMPTY",
+          type: "ACTION",
+          action: "FREE",
+          subtype: ["LIGHT", "CHARIOT"],
           id: 20
         }
       ],
-      gold: [],
+      gold: [0],
       role: "BUILDER"
     },
     {
@@ -114,7 +115,7 @@ games["0ef7d117-14ec-43ce-bd0f-7332fe606342"] = {
           id: 16
         }
       ],
-      gold: [],
+      gold: [3],
       role: "DESTROYER"
     }
   ],
@@ -432,27 +433,29 @@ games["0ef7d117-14ec-43ce-bd0f-7332fe606342"] = {
       id: 38
     }
   ],
-  currentPlayerId: "0ef7d117-14ec-43ce-bd0f-7332fe606340",
   board: [
     {
       x: 8,
-      y: 0,
+      y: -2,
+      allowedUsers: [],
       hidden: true,
-      layout: "1011",
+      layout: "1111",
       item: "EMPTY"
     },
     {
       x: 8,
       y: 2,
+      allowedUsers: [],
       hidden: true,
-      layout: "1010",
+      layout: "1110",
       item: "EMPTY"
     },
     {
       x: 8,
-      y: -2,
+      y: 0,
+      allowedUsers: [],
       hidden: true,
-      layout: "1011",
+      layout: "1111",
       item: "GOLD"
     },
     {
@@ -500,16 +503,10 @@ games["0ef7d117-14ec-43ce-bd0f-7332fe606342"] = {
   ]
 };
 
-const STATUSES = {
-  WAITING_FOR_PLAYERS: "WAITING_FOR_PLAYERS",
-  PLAYING: "PLAYING",
-  COMPLETED: "COMPLETED"
-};
-
 const getForUser = userId => {
   return Object.values(games).filter(
     game =>
-      game.status === STATUSES.WAITING_FOR_PLAYERS ||
+      game.status === gameRules.STATUSES.WAITING_FOR_PLAYERS ||
       game.players.some(player => player.id === userId)
   );
 };
@@ -517,7 +514,7 @@ const getForUser = userId => {
 const insert = (game, userId) => {
   const newGame = Object.assign({}, game, {
     id: uuid.v4(),
-    status: STATUSES.WAITING_FOR_PLAYERS,
+    status: gameRules.STATUSES.WAITING_FOR_PLAYERS,
     creator: userId,
     creationDate: new Date(),
     players: [
@@ -533,10 +530,13 @@ const insert = (game, userId) => {
 const getById = id => games[id];
 
 const removeSecretData = (game, userId) => {
-  if (game.status === STATUSES.PLAYING) {
+  if (game.status === gameRules.STATUSES.PLAYING) {
     game.deck = game.deck.length;
     game.board.forEach(card => {
-      if (card.hidden) {
+      if (
+        card.hidden &&
+        !saboteurService.isUserAllowedToSeeHiddenCard(userId, card.allowedUsers)
+      ) {
         delete card.layout;
         delete card.item;
       }
@@ -604,21 +604,23 @@ const addPlayer = (game, playerId) => {
 
 const canKick = (game, userId, kickedPlayerId) =>
   game.creator === userId &&
-  game.status === STATUSES.WAITING_FOR_PLAYERS &&
+  game.status === gameRules.STATUSES.WAITING_FOR_PLAYERS &&
   (typeof kickedPlayerId === "undefined" ||
     containsPlayer(game, kickedPlayerId));
 
 const canStart = (game, userId) =>
   game.creator === userId &&
-  game.status === STATUSES.WAITING_FOR_PLAYERS &&
+  (game.status === gameRules.STATUSES.WAITING_FOR_PLAYERS ||
+    (game.status === gameRules.STATUSES.ROUND_END && game.currentRound < 3)) &&
   game.players.length >= gameRules.MIN_PLAYERS_COUNT;
 
 const start = game => {
-  game.status = STATUSES.PLAYING;
+  game.status = gameRules.STATUSES.PLAYING;
   Object.assign(game, {
-    status: STATUSES.PLAYING,
+    status: gameRules.STATUSES.PLAYING,
     deck: saboteurService.buildDeck(),
-    currentPlayerId: utils.randomPick(game.players).id, // TODO: random please
+    currentRound: game.currentRound ? game.currentRound + 1 : 1,
+    currentPlayerId: utils.randomPick(game.players).id,
     board: saboteurService.computeInitialBoard(),
     players: saboteurService.distributeRoles(
       game.players.map(saboteurService.formatPlayer)
@@ -636,9 +638,9 @@ const playCardOnPlayer = (card, player) => {
   }
 };
 
-const playCardOnSlot = (card, { x, y }, board) => {
+const playCardOnSlot = (card, { x, y }, board, userId) => {
   if (card.action === "DESTROY") {
-    board = board.filter(slot => slot.x !== x || slot.y !== y);
+    return board.filter(slot => slot.x !== x || slot.y !== y);
   } else if (card.type === "PATH") {
     const newSlot = {
       x,
@@ -647,13 +649,34 @@ const playCardOnSlot = (card, { x, y }, board) => {
       item: card.item
     };
     board.push(newSlot);
+    return board;
+  } else if (card.action === "REVEAL") {
+    const slot = board.find(slot => slot.x === x && slot.y === y);
+    slot.allowedUsers.push({
+      id: userId,
+      date: new Date().getTime()
+    });
+    return board;
   }
 };
 
-const playCard = (userId, gameId, cardId, isRotated, destination) => {
-  // TODO: HANDLE DESTRUCTION CARD (not workint);
-  // TODO: HANDLE DISCARD;
+const endRound = (winningPlayer, game) => {
+  saboteurService.distributeGold(winningPlayer, game.players);
+  game.status =
+    game.currentRound === saboteurService.MAX_ROUNDS
+      ? gameRules.STATUSES.COMPLETED
+      : gameRules.STATUSES.ROUND_END;
+  game.winningPlayer = winningPlayer;
+  game.players.forEach(player => {
+    delete player.malus;
+    delete player.cards;
+  });
+  delete game.currentPlayerId;
+  delete game.board;
+  delete game.deck;
+};
 
+const playCard = (userId, gameId, cardId, isRotated, destination) => {
   const game = getById(gameId);
 
   let board;
@@ -661,16 +684,14 @@ const playCard = (userId, gameId, cardId, isRotated, destination) => {
 
   // - check if user can play
   if (userId !== game.currentPlayerId) {
-    console.log("not your playing turn");
-    return;
+    return Promise.reject("not your playing turn");
   }
 
   // - check if user has card
   const player = game.players.find(player => player.id === userId);
   const playedCard = clone(player.cards.find(card => card.id === cardId));
   if (!playedCard) {
-    console.log("wrong card played");
-    return;
+    return Promise.reject("wrong card played");
   }
 
   // if card has layout, format it and rotate if needed
@@ -685,7 +706,9 @@ const playCard = (userId, gameId, cardId, isRotated, destination) => {
   // - check if user can play card on destination
   let canPlayCardOnDestination = false;
 
-  if (destination.type === "PLAYER") {
+  if (destination.type === "DISCARD") {
+    canPlayCardOnDestination = true;
+  } else if (destination.type === "PLAYER") {
     const destPlayer = game.players.find(
       player => player.id === destination.id
     );
@@ -698,11 +721,9 @@ const playCard = (userId, gameId, cardId, isRotated, destination) => {
       playCardOnPlayer(playedCard, destPlayer);
     }
   } else if (destination.type === "SLOT") {
-    // TODO: on map play, reveal card
     board = clone(game.board);
     board.forEach(boardRules.formatCardLayout);
     board.forEach(boardRules.attachLinkedToStart);
-
     slots = boardRules.createSlotsFromCards(board);
     const slot = slots.find(
       slot => slot.x === destination.x && slot.y === destination.y
@@ -711,7 +732,7 @@ const playCard = (userId, gameId, cardId, isRotated, destination) => {
 
     if (canPlayCardOnDestination) {
       // - add card to board
-      playCardOnSlot(playedCard, slot, game.board);
+      game.board = playCardOnSlot(playedCard, slot, game.board, userId);
     }
 
     // check if path to hidden cards is opened
@@ -729,34 +750,27 @@ const playCard = (userId, gameId, cardId, isRotated, destination) => {
         sibling => sibling.item === "GOLD"
       );
       if (goldDiscovered) {
-        console.log("Builders won");
-        // TODO: on game finish, reveal roles and distribute gold
+        endRound(player, game);
         return;
       }
     }
   }
 
   if (!canPlayCardOnDestination) {
-    // TODO: reject with error
-    console.log("you cannot perform this move pal");
-    return;
+    return Promise.reject("you cannot perform this move pal");
   }
 
   // - remove card from hand
   player.cards = player.cards.filter(card => card.id !== cardId);
 
-  // - check if game is finished
-  // TODO: check game end
   // game is finished if:
-
   // - no more cards per player & deck
   const noMoreMove =
     game.deck.length === 0 &&
     game.players.every(player => player.cards.length === 0);
 
   if (noMoreMove) {
-    console.log("Destroyers won");
-    // TODO: on game finish, reveal roles and distribute gold
+    endRound({ role: "DESTROYER" }, game);
     return;
   }
 
@@ -770,18 +784,10 @@ const playCard = (userId, gameId, cardId, isRotated, destination) => {
   const playerIndex = game.players.map(player => player.id).indexOf(userId);
   const nextPlayerIndex = (playerIndex + 1) % game.players.length;
   game.currentPlayerId = game.players[nextPlayerIndex].id;
-
-  // console.log("playerCard");
-  // console.log("userId", userId);
-  // console.log("gameId", gameId);
-  // console.log("cardId", cardId);
-  // console.log("isRotated", isRotated);
-  // console.log("destination", destination);
   return "lol";
 };
 
 module.exports = {
-  STATUSES,
   addPlayer,
   canKick,
   canStart,

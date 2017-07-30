@@ -15,11 +15,18 @@ export default ({
   player,
   onCardPlay,
   selectedCard,
+  selectPlayer,
   rotateCardLayout,
   isPlaying
 }) =>
   <div className={computeCurrentPlayerClass(selectedCard, isPlaying)}>
-    <PlayerStatus player={player} direction="top" />
+    <div
+      onClick={() => {
+        selectPlayer(player);
+      }}
+    >
+      <PlayerStatus player={player} direction="top" />
+    </div>
     {player.role && <PlayerRole role={player.role} />}
     {player.cards &&
       <div className="current-player__hand">

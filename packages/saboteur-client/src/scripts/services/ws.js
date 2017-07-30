@@ -19,12 +19,6 @@ const trigger = (type, payload) =>
     payload
   });
 
-const throwError = message => {
-  const error = new Error();
-  error.message = message;
-  return error;
-};
-
 const attachDispatcher = (ws, store) => {
   // Object.keys(types).forEach(typeKey => {
   //   ws.on(types[typeKey], payload => {
@@ -46,19 +40,17 @@ const emitPromise = (command, data) =>
           resolve(response.data);
         } else {
           reject(
-            throwError(
-              typeof response.message === "string"
-                ? response.message
-                : "The request was not successful."
-            )
+            typeof response.message === "string"
+              ? response.message
+              : "The request was not successful."
           );
         }
       } else {
-        reject(throwError("The response to your request could not be parsed."));
+        reject("The response to your request could not be parsed.");
       }
     });
     setTimeout(() => {
-      reject(throwError("The request took too long to respond."));
+      reject("The request took too long to respond.");
     }, TIMEOUT_DURATION);
   });
 

@@ -11,18 +11,6 @@ import Discard from "../components/Discard";
 import actions from "../store/actions";
 import "../../styles/Game.css";
 
-const GAME_STATUS = {
-  WAITING_FOR_PLAYERS: "WAITING_FOR_PLAYERS",
-  PLAYING: "PLAYING",
-  COMPLETED: "COMPLETED"
-};
-
-const DESTINATION_TYPES = {
-  DISCARD: "DISCARD",
-  SLOT: "SLOT",
-  PLAYER: "PLAYER"
-};
-
 const computeGameClass = (game, selectedCard) =>
   [
     "game",
@@ -69,10 +57,13 @@ export class Game extends Component {
   }
 
   updateGame(game) {
-    if (game.status === GAME_STATUS.COMPLETED) {
+    if (
+      game.status === gameRules.STATUSES.COMPLETED ||
+      game.status === gameRules.STATUSES.ROUND_END
+    ) {
       this.setState({
         game,
-        leaderBoard: getPlayersByRank(game.leaderBoard)
+        leaderBoard: getPlayersByRank(game.players)
       });
       return;
     }
@@ -83,7 +74,7 @@ export class Game extends Component {
       .map(player => player.id)
       .indexOf(this.props.user.id);
 
-    if (game.status === GAME_STATUS.PLAYING) {
+    if (game.status === gameRules.STATUSES.PLAYING) {
       game.board.forEach(boardRules.formatCardLayout);
       game.board.forEach(boardRules.attachLinkedToStart);
 
@@ -140,23 +131,26 @@ export class Game extends Component {
   }
 
   confirmSelectedCardDestination(type, destinationItem) {
-    // TODO: handle destruction & reveal cards
     if (
       !this.state.selectedCard ||
-      (type !== DESTINATION_TYPES.DISCARD && !destinationItem.isHighlighted)
+      (type !== gameRules.DESTINATION_TYPES.DISCARD &&
+        !destinationItem.isHighlighted &&
+        !(type === "PLAYER" && destinationItem.id === this.props.user.id))
     ) {
       return;
     }
+
+    console.log("HEEEERE");
 
     const destination = {
       type
     };
 
-    if (type === DESTINATION_TYPES.PLAYER) {
+    if (type === gameRules.DESTINATION_TYPES.PLAYER) {
       destination.id = destinationItem.id;
     }
 
-    if (type === DESTINATION_TYPES.SLOT) {
+    if (type === gameRules.DESTINATION_TYPES.SLOT) {
       destination.x = destinationItem.x;
       destination.y = destinationItem.y;
     }
@@ -209,36 +203,52 @@ export class Game extends Component {
           slots={this.state.slots}
           selectSlot={this.confirmSelectedCardDestination.bind(
             this,
-            DESTINATION_TYPES.SLOT
+            gameRules.DESTINATION_TYPES.SLOT
           )}
         />
         <Deck count={this.state.game.deck} />
         <Discard
           onDiscard={this.confirmSelectedCardDestination.bind(
             this,
-            DESTINATION_TYPES.DISCARD
+            gameRules.DESTINATION_TYPES.DISCARD
           )}
         />
       </div>
     );
   }
 
-  renderCompletedGame() {
+  renderRoundEnd() {
     return (
       <div>
-        <LeaderBoard leaderBoard={this.state.leaderBoard} />
+        <h3>
+          Round #{this.state.game.currentRound} End
+        </h3>
+        <p>
+          {this.state.game.winningPlayer.role} team won
+        </p>
+        {this.state.game.winningPlayer &&
+          <p>
+            {this.state.game.winningPlayer.name} won
+          </p>}
+        {this.state.game._canStart &&
+          <button type="button" onClick={this.startGame.bind(this)}>
+            Start Round {this.state.game.currentRound + 1}
+          </button>}
+        {this.state.game.state === gameRules.STATUSES.COMPLETED &&
+          <LeaderBoard leaderBoard={this.state.leaderBoard} />}
       </div>
     );
   }
 
   renderByStatus() {
     switch (this.state.game.status) {
-      case GAME_STATUS.WAITING_FOR_PLAYERS:
+      case gameRules.STATUSES.WAITING_FOR_PLAYERS:
         return this.renderLobby();
-      case GAME_STATUS.PLAYING:
+      case gameRules.STATUSES.PLAYING:
         return this.renderPlayingGame();
-      case GAME_STATUS.COMPLETED:
-        return this.renderCompletedGame();
+      case gameRules.STATUSES.COMPLETED:
+      case gameRules.STATUSES.ROUND_END:
+        return this.renderRoundEnd();
       default:
         return <Redirect to="/" />;
     }
@@ -276,7 +286,7 @@ export class Game extends Component {
       >
         <div className="game__nav">
           {this.state.game &&
-            this.state.game.status === GAME_STATUS.WAITING_FOR_PLAYERS &&
+            this.state.game.status === gameRules.STATUSES.WAITING_FOR_PLAYERS &&
             <button
               type="button"
               className="game__nav__leave-button"
@@ -298,13 +308,17 @@ export class Game extends Component {
             playingId={this.state.game.currentPlayerId}
             selectPlayer={this.confirmSelectedCardDestination.bind(
               this,
-              DESTINATION_TYPES.PLAYER
+              gameRules.DESTINATION_TYPES.PLAYER
             )}
           />}
         {this.state.currentPlayer &&
           <CurrentPlayer
             player={this.state.currentPlayer}
             onCardPlay={this.onCardPlay.bind(this)}
+            selectPlayer={this.confirmSelectedCardDestination.bind(
+              this,
+              gameRules.DESTINATION_TYPES.PLAYER
+            )}
             selectedCard={this.state.selectedCard}
             isPlaying={this.state.game.currentPlayerId === this.props.user.id}
             rotateCardLayout={this.rotateCardLayout.bind(this)}

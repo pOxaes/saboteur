@@ -1,5 +1,6 @@
 const Promise = require("bluebird");
 const events = require("saboteur-shared/events");
+const gameRules = require("saboteur-shared/game");
 const gamesService = require("./services/games");
 const userService = require("./services/user");
 
@@ -10,10 +11,12 @@ module.exports = {
       (acc, game) => {
         let dest;
         switch (game.status) {
-          case gamesService.STATUSES.WAITING_FOR_PLAYERS:
+          case gameRules.STATUSES.WAITING_FOR_PLAYERS:
             dest = acc.lobby;
             break;
-          case gamesService.STATUSES.PLAYING:
+          case gameRules.STATUSES.COMPLETED:
+          case gameRules.STATUSES.ROUND_END:
+          case gameRules.STATUSES.PLAYING:
             dest = acc.playing;
             break;
         }
@@ -31,13 +34,14 @@ module.exports = {
 
   [events.GET_GAME]: async ({ ws }, gameId) => {
     const game = gamesService.getById(gameId);
+    if (!game) {
+      return Promise.reject("This game does not exists");
+    }
     // if player is not in the game
     if (!gamesService.containsPlayer(game, ws.userId)) {
       // and if game is not waiting for players then do not return it
       if (game.status !== gamesService.STATUSES.WAITING_FOR_PLAYERS) {
-        // TODO: return an error & reject
-        console.log("FORBIDDEN");
-        return;
+        return Promise.reject("You cannot get this game");
       }
       // or make him join
       gamesService.addPlayer(game, ws.userId);
@@ -62,8 +66,7 @@ module.exports = {
   [events.KICK_PLAYER]: async ({ ws }, { gameId, playerId }) => {
     const game = gamesService.getById(gameId);
     if (!gamesService.canKick(game, playerId, ws.userId)) {
-      // TODO: reject
-      return;
+      return Promise.reject("You cannot kick");
     }
     gamesService.removePlayer(gameId, playerId);
     return game;
@@ -80,8 +83,7 @@ module.exports = {
   [events.START_GAME]: ({ ws }, gameId) => {
     const game = gamesService.getById(gameId);
     if (!gamesService.canStart(game, ws.userId)) {
-      // TODO: reject
-      return;
+      return Promise.reject("You cannot start this game");
     }
     gamesService.start(game);
   },
