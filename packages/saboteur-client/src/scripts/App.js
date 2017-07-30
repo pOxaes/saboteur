@@ -29,12 +29,19 @@ class App extends Component {
     if (!authenticationService.isAuthenticated()) {
       return;
     }
-    wsService.connect(authenticationService.getToken()).then(user => {
-      this.setState({
-        wsConnected: true,
-        user
+    wsService
+      .connect(authenticationService.getToken())
+      .then(user => {
+        this.setState({
+          wsConnected: true,
+          user
+        });
+      })
+      .catch(reachedServer => {
+        if (reachedServer) {
+          this.props.history.push("/Login");
+        }
       });
-    });
   }
 
   componentWillMount() {

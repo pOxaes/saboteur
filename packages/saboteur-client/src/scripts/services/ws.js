@@ -54,16 +54,15 @@ const emitPromise = (command, data) =>
     }, TIMEOUT_DURATION);
   });
 
-// TODO: handle unauthorized
 const connect = token =>
   new Promise((resolve, reject) => {
     connected = false;
     socket = io(`ws://localhost:3008?token=${token}`);
-    socket.on("disconnect", () => {
+    socket.on("disconnect", a => {
       if (connected) {
         return;
       }
-      reject();
+      reject(!!a);
     });
     socket.on("CONNECTED", user => {
       connected = true;

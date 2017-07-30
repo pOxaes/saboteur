@@ -12,12 +12,14 @@ export default class Home extends Component {
     }
   };
 
-  componentDidMount() {
-    actions.getGames().then(games => {
-      this.setState({
-        games
+  componentWillReceiveProps() {
+    if (this.state.games) {
+      actions.getGames().then(games => {
+        this.setState({
+          games
+        });
       });
-    });
+    }
   }
 
   onSelectGame(game) {
