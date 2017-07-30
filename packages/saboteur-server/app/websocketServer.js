@@ -3,6 +3,7 @@ const io = require("socket.io");
 const logger = require("./logger");
 const userService = require("./services/user");
 const events = require("saboteur-shared/events");
+const actions = require("./actions");
 const wsService = require("./services/ws");
 
 const init = app => {
@@ -15,7 +16,7 @@ const init = app => {
         logger.info(`${email} ${id} is connected to ws`);
         ws.userId = id;
         ws.emit("CONNECTED", { email, name, id });
-        wsService.listenEmittedEvent(ws);
+        wsService.add(ws, actions, events);
       })
       .catch(() => {
         ws.disconnect("unauthorized");

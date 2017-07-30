@@ -1,9 +1,11 @@
 const uuid = require("node-uuid");
+const clone = require("clone");
 const gameRules = require("saboteur-shared/game");
 const utils = require("saboteur-shared/utils");
+const events = require("saboteur-shared/events");
 const userService = require("./user");
 const saboteurService = require("./saboteur");
-const clone = require("clone");
+const wsService = require("./ws");
 
 const games = {};
 
@@ -523,6 +525,7 @@ const insert = (game, userId) => {
     ]
   });
   games[newGame.id] = newGame;
+  wsService.trigger(events.CREATE_GAME, newGame);
   return newGame;
 };
 

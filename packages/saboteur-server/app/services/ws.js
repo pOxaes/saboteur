@@ -2,12 +2,15 @@ const Promise = require("bluebird");
 const utils = require("saboteur-shared/utils");
 const logger = require("../logger");
 
-const events = require("saboteur-shared/events");
-const actions = require("../actions");
+const clients = {};
 
-const trigger = (eventType, data) => {
-  logger.info(`${eventType} event triggered`);
-  actions[eventType](data);
+const forEachClient = cb => Object.values(clients).forEach(cb);
+
+const trigger = (event, data) => {
+  logger.info(`${event} event triggered`);
+  forEachClient(ws => {
+    ws.emit(event, data);
+  });
 };
 
 const throwError = message => {
@@ -16,7 +19,7 @@ const throwError = message => {
   return error;
 };
 
-const listenEmittedEvent = ws => {
+const listenEmittedEvent = (ws, actions, events) => {
   Object.values(events).forEach(event => {
     ws.on(event, (payload, setValueResult) => {
       logger.info(`${event} event received from ${ws} ${ws.userId}`);
@@ -49,7 +52,17 @@ const listenEmittedEvent = ws => {
   });
 };
 
+const add = (ws, actions, events) => {
+  console.log("add");
+  clients[ws.id] = ws;
+  listenEmittedEvent(ws, actions, events);
+  ws.on("disconnect", () => {
+    delete clients[ws.id];
+  });
+};
+
 module.exports = {
+  add,
   listenEmittedEvent,
   trigger
 };

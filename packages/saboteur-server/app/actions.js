@@ -41,15 +41,15 @@ module.exports = {
     // if player is not in the game
     if (!gamesService.containsPlayer(game, ws.userId)) {
       // and if game is not waiting for players then do not return it
-      if (game.status !== gamesService.STATUSES.WAITING_FOR_PLAYERS) {
+      if (game.status !== gameRules.STATUSES.WAITING_FOR_PLAYERS) {
         return Promise.reject("You cannot get this game");
       }
       // or make him join
       gamesService.addPlayer(game, ws.userId);
     }
-
+    console.log(5);
     const usersDictionnary = await userService.getAllAsDictionnary();
-
+    console.log("ici");
     return gamesService.withUsers(
       gamesService.format(game, ws.userId),
       usersDictionnary
