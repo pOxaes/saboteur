@@ -2,13 +2,13 @@ import React, { Component } from "react";
 import { Redirect, Link } from "react-router-dom";
 import boardRules from "saboteur-shared/board";
 import gameRules from "saboteur-shared/game";
+import actions from "../store/actions";
+import gameService from "../services/game";
 import PlayersList from "../components/PlayersList";
 import CurrentPlayer from "../components/CurrentPlayer";
-import LeaderBoard from "../components/LeaderBoard";
-import Board from "../components/Board";
-import Deck from "../components/Deck";
-import Discard from "../components/Discard";
-import actions from "../store/actions";
+import Lobby from "../components/Lobby";
+import RoundEnd from "../components/RoundEnd";
+import PlayingGame from "../components/PlayingGame";
 import "../../styles/Game.css";
 
 const computeGameClass = (game, selectedCard) =>
@@ -17,35 +17,6 @@ const computeGameClass = (game, selectedCard) =>
     selectedCard && "game--selected-card",
     game && `game--status-${game.status}`
   ].join(" ");
-
-const goldToPoints = gold =>
-  gold.reduce((acc, goldValue) => acc + goldValue, 0);
-
-const getPlayersByRank = leaderBoard => {
-  leaderBoard
-    .sort(
-      (playerA, playerB) =>
-        goldToPoints(playerB.gold) - goldToPoints(playerA.gold)
-    )
-    .reduce(
-      (lastPlayer, player, index) => {
-        player.rank =
-          index && goldToPoints(lastPlayer.gold) !== goldToPoints(player.gold)
-            ? index
-            : lastPlayer.rank;
-        return player;
-      },
-      { rank: 0 }
-    );
-
-  return leaderBoard.reduce((playersByRank, player) => {
-    if (!playersByRank[player.rank]) {
-      playersByRank[player.rank] = [];
-    }
-    playersByRank[player.rank].push(player);
-    return playersByRank;
-  }, []);
-};
 
 export class Game extends Component {
   state = {
@@ -62,33 +33,21 @@ export class Game extends Component {
       game.status === gameRules.STATUSES.ROUND_END
     ) {
       this.setState({
-        game,
-        leaderBoard: getPlayersByRank(game.players)
+        game
       });
       return;
     }
 
     let slots = [];
 
-    const currentPlayerIndex = game.players
-      .map(player => player.id)
-      .indexOf(this.props.user.id);
+    const currentPlayerIndex = gameService.getCurrentPlayerIndex(
+      game.players,
+      this.props.user.id
+    );
 
     if (game.status === gameRules.STATUSES.PLAYING) {
-      game.board.forEach(boardRules.formatCardLayout);
-      game.board.forEach(boardRules.attachLinkedToStart);
-
-      slots = boardRules.createSlotsFromCards(game.board);
-
-      // format current player cards
-      game.players[currentPlayerIndex].cards.forEach(card => {
-        if (card.layout) {
-          card.canRotate = true;
-          card.isRotated = false;
-        }
-        boardRules.formatCardLayout(card);
-        boardRules.attachPlayability(card, slots, game.players);
-      });
+      // TODO: refacto
+      slots = gameService.format(game, currentPlayerIndex).slots;
     }
 
     this.setState({
@@ -132,15 +91,15 @@ export class Game extends Component {
 
   confirmSelectedCardDestination(type, destinationItem) {
     if (
-      !this.state.selectedCard ||
-      (type !== gameRules.DESTINATION_TYPES.DISCARD &&
-        !destinationItem.isHighlighted &&
-        !(type === "PLAYER" && destinationItem.id === this.props.user.id))
+      !gameService.canPlay({
+        selectedCard: this.state.selectedCard,
+        type,
+        destinationItem,
+        userId: this.props.user.id
+      })
     ) {
       return;
     }
-
-    console.log("HEEEERE");
 
     const destination = {
       type
@@ -177,78 +136,32 @@ export class Game extends Component {
     actions.startGame(this.state.game.id).then(this.updateGame.bind(this));
   }
 
-  renderLobby() {
-    return (
-      <div className="game__lobby-status">
-        <p className="game__players-count">
-          {this.state.game.players.length} / {this.state.game.maxPlayers}{" "}
-          players
-        </p>
-        {this.state.game.players.length < gameRules.MIN_PLAYERS_COUNT &&
-          <p>
-            You need at least {gameRules.MIN_PLAYERS_COUNT} players to start
-          </p>}
-        {this.state.game._canStart &&
-          <button type="button" onClick={this.startGame.bind(this)}>
-            Start Game
-          </button>}
-      </div>
-    );
-  }
-
-  renderPlayingGame() {
-    return (
-      <div>
-        <Board
-          slots={this.state.slots}
-          selectSlot={this.confirmSelectedCardDestination.bind(
-            this,
-            gameRules.DESTINATION_TYPES.SLOT
-          )}
-        />
-        <Deck count={this.state.game.deck} />
-        <Discard
-          onDiscard={this.confirmSelectedCardDestination.bind(
-            this,
-            gameRules.DESTINATION_TYPES.DISCARD
-          )}
-        />
-      </div>
-    );
-  }
-
-  renderRoundEnd() {
-    return (
-      <div>
-        <h3>
-          Round #{this.state.game.currentRound} End
-        </h3>
-        <p>
-          {this.state.game.winningPlayer.role} team won
-        </p>
-        {this.state.game.winningPlayer &&
-          <p>
-            {this.state.game.winningPlayer.name} won
-          </p>}
-        {this.state.game._canStart &&
-          <button type="button" onClick={this.startGame.bind(this)}>
-            Start Round {this.state.game.currentRound + 1}
-          </button>}
-        {this.state.game.state === gameRules.STATUSES.COMPLETED &&
-          <LeaderBoard leaderBoard={this.state.leaderBoard} />}
-      </div>
-    );
-  }
-
   renderByStatus() {
     switch (this.state.game.status) {
       case gameRules.STATUSES.WAITING_FOR_PLAYERS:
-        return this.renderLobby();
+        return (
+          <Lobby game={this.state.game} startGame={this.startGame.bind(this)} />
+        );
       case gameRules.STATUSES.PLAYING:
-        return this.renderPlayingGame();
+        return (
+          <PlayingGame
+            game={this.state.game}
+            slots={this.state.slots}
+            confirmSelectedCardDestination={this.confirmSelectedCardDestination.bind(
+              this
+            )}
+          />
+        );
       case gameRules.STATUSES.COMPLETED:
       case gameRules.STATUSES.ROUND_END:
-        return this.renderRoundEnd();
+        return (
+          <RoundEnd
+            game={this.state.game}
+            leaderBoard={this.state.leaderBoard}
+            startGame={this.startGame.bind(this)}
+          />
+        );
+
       default:
         return <Redirect to="/" />;
     }

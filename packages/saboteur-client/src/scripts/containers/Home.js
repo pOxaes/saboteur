@@ -35,17 +35,14 @@ export default class Home extends Component {
     this.setState({
       eventsInitialized: true
     });
-    // TODO: kill event when container killed
     ws.on("CREATE_GAME", this.addGame.bind(this));
   }
 
   addGame(newGame) {
-    console.log("new game");
     this.state.games.lobby.push(newGame);
     this.setState({
       games: this.state.games
     });
-    console.log("from container", newGame);
   }
 
   componentWillUnmount() {
