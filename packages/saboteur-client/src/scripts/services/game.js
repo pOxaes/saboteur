@@ -1,10 +1,6 @@
 import boardRules from "saboteur-shared/board";
 import gameRules from "saboteur-shared/game";
 
-const computeSlots = () => {
-  let slots = [];
-};
-
 const getCurrentPlayerIndex = (players, userId) =>
   players.map(player => player.id).indexOf(userId);
 
@@ -30,15 +26,15 @@ const format = (game, currentPlayerIndex) => {
 
 const canPlay = ({ selectedCard, type, destinationItem, userId }) => {
   return (
-    this.state.selectedCard &&
+    selectedCard &&
     (type === gameRules.DESTINATION_TYPES.DISCARD ||
-      (destinationItem.isHighlighted &&
-        (type === "PLAYER" && destinationItem.id === this.props.user.id)))
+      (destinationItem.isHighlighted ||
+        (type === "PLAYER" && destinationItem.id === userId)))
   );
 };
 
 export default {
   canPlay,
-  computeSlots,
+  format,
   getCurrentPlayerIndex
 };
