@@ -175,7 +175,7 @@ const checkCardCompatibility = (card, slot, shouldCompareRotation = true) => {
 };
 
 const formatCardLayout = card => {
-  if (card.layout) {
+  if (card.layout && typeof card.layout === "string") {
     card.layout = {
       top: card.layout[0] === "1",
       right: card.layout[1] === "1",

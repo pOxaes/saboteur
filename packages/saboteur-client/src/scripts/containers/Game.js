@@ -5,6 +5,7 @@ import gameRules from "saboteur-shared/game";
 import events from "saboteur-shared/events";
 import actions from "../store/actions";
 import gameService from "../services/game";
+import EventsQueue from "../services/eventsQueue";
 import PlayersList from "../components/PlayersList";
 import CurrentPlayer from "../components/CurrentPlayer";
 import Lobby from "../components/Lobby";
@@ -24,6 +25,8 @@ export class Game extends Component {
     eventsInitialized: false,
     id: this.props.match.params.id
   };
+
+  queue = new EventsQueue();
 
   componentDidMount() {
     actions.getGame(this.state.id).then(this.updateGame.bind(this));
@@ -45,24 +48,113 @@ export class Game extends Component {
     this.setState({
       eventsInitialized: true
     });
-    ws.on(events.JOIN_GAME, this.checkGame.bind(this, "onAddPlayer"));
-    ws.on(events.LEAVE_GAME, this.checkGame.bind(this, "onRemovePlayer"));
-    ws.on(events.START_GAME, this.checkGame.bind(this, "onStartGame"));
+    ws.on(events.JOIN_GAME, this.checkGame.bind(this, "addPlayer"));
+    ws.on(events.LEAVE_GAME, this.checkGame.bind(this, "removePlayer"));
+    ws.on(events.START_GAME, this.checkGame.bind(this, "onGameStart"));
+    ws.on(events.PLAY_CARD, this.checkGame.bind(this, "playCard"));
+    ws.on(events.TURN_END, this.checkGame.bind(this, "endTurn"));
+    ws.on(events.DRAW_CARD, this.checkGame.bind(this, "drawCard"));
+    ws.on(
+      events.CURRENT_PLAYER_UPDATE,
+      this.checkGame.bind(this, "updateCurrentPlayer")
+    );
   }
 
   checkGame(action, payload) {
     if (payload.gameId !== this.state.id) {
       return;
     }
-    this[action](payload);
+    console.log(action);
+
+    this.queue.queue({
+      action: this[action].bind(this),
+      payload
+    });
   }
 
-  onAddPlayer(player) {
+  getPlayer(playerId) {
+    const isCurrentPlayer = playerId === this.state.currentPlayer.id;
+    const player = isCurrentPlayer
+      ? this.state.currentPlayer
+      : this.state.players.find(player => player.id === playerId);
+    return {
+      isCurrentPlayer,
+      player
+    };
+  }
+
+  drawCard({ card, playerId }) {
+    const user = this.getPlayer(playerId);
+    if (card.type === "PATH") {
+      boardRules.formatCardLayout(card);
+    }
+    user.player.cards.push(card);
+  }
+
+  updateCurrentPlayer({ currentPlayerId }) {
+    const updatedGame = this.state.game;
+    updatedGame.currentPlayerId = currentPlayerId;
+    this.setState({
+      game: updatedGame
+    });
+  }
+
+  endTurn({ game }) {
+    console.log("endTurn");
+  }
+
+  playCard({ playedCard, destination, playerId }) {
+    // update playing player
+    const playingUser = this.getPlayer(playerId);
+    const card = playingUser.player.cards.find(
+      card => card.id === playedCard.id
+    );
+
+    // remove card from player
+    if (card) {
+      playingUser.player.cards = playingUser.player.cards.filter(
+        card => card.id !== playedCard.id
+      );
+    } else {
+      playingUser.player.cards.shift();
+    }
+    if (playingUser.isCurrentPlayer) {
+      this.setState({ currentPlayer: playingUser.player });
+    } else {
+      this.setState({ players: this.state.players });
+    }
+
+    if (destination.type === "PLAYER") {
+      // update target player
+      const destUser = this.getPlayer(destination.id);
+      if (playedCard.action === "BLOCK") {
+        destUser.player.malus = playedCard.subtype;
+      } else if (playedCard.action === "FREE") {
+        destUser.player.malus = [];
+      }
+      if (destUser.isCurrentPlayer) {
+        this.setState({ currentPlayer: destUser.player });
+      } else {
+        this.setState({ players: this.state.players });
+      }
+    } else if (destination.type === "SLOT") {
+      const updatedGame = this.state.game;
+      playedCard.x = destination.x;
+      playedCard.y = destination.y;
+      updatedGame.board.push(playedCard);
+      this.updateGame(updatedGame);
+    }
+
+    // with animation, add:
+    // - discard
+  }
+
+  addPlayer(player) {
     this.state.game.players.push(player);
     this.updateGame(this.state.game);
   }
 
-  onRemovePlayer({ playerId }) {
+  removePlayer({ playerId }) {
     if (playerId === this.props.user.id) {
       return;
     }
@@ -80,7 +172,7 @@ export class Game extends Component {
     }
   }
 
-  onStartGame({ game }) {
+  onGameStart({ game }) {
     this.updateGame(game);
   }
 
@@ -130,12 +222,7 @@ export class Game extends Component {
     }
 
     if (card === this.state.selectedCard) {
-      this.setState({
-        selectedCard: undefined
-      });
-      this.state.slots.concat(this.state.players).forEach(item => {
-        item.isHighlighted = false;
-      });
+      this.reinitSelectedCard();
       return;
     }
 
@@ -144,6 +231,15 @@ export class Game extends Component {
     });
 
     this.updateHighlights(card);
+  }
+
+  reinitSelectedCard() {
+    this.setState({
+      selectedCard: undefined
+    });
+    this.state.slots.concat(this.state.players).forEach(item => {
+      item.isHighlighted = false;
+    });
   }
 
   confirmSelectedCardDestination(type, destinationItem) {
@@ -177,6 +273,7 @@ export class Game extends Component {
       isRotated: this.state.selectedCard.isRotated,
       destination
     });
+    this.reinitSelectedCard();
   }
 
   updateHighlights(card) {

@@ -11,7 +11,7 @@ const games = {};
 
 // TODO: remove me
 
-games["0ef7d117-14ec-43ce-bd0f-7332fe606341"] = {
+const tempLobbyGame = {
   name: "My Lobby Game",
   maxPlayers: 7,
   id: "0ef7d117-14ec-43ce-bd0f-7332fe606341",
@@ -24,7 +24,9 @@ games["0ef7d117-14ec-43ce-bd0f-7332fe606341"] = {
   ]
 };
 
-games["0ef7d117-14ec-43ce-bd0f-7332fe606342"] = {
+games["0ef7d117-14ec-43ce-bd0f-7332fe606341"] = clone(tempLobbyGame);
+
+const tempPlayingGame = {
   name: "My Playing Game",
   currentRound: 1,
   maxPlayers: 7,
@@ -504,8 +506,9 @@ games["0ef7d117-14ec-43ce-bd0f-7332fe606342"] = {
   ]
 };
 
+games["0ef7d117-14ec-43ce-bd0f-7332fe606342"] = clone(tempPlayingGame);
+
 const triggerForPlayers = (game, event, payload) =>
-  // TODO: individual trigger + hide secret data
   wsService.trigger(
     event,
     Object.assign({ gameId: game.id }, payload),
@@ -664,7 +667,14 @@ const start = async game => {
   return game;
 };
 
+// TODO: REMOVE
+const reinit = () => {
+  // games["0ef7d117-14ec-43ce-bd0f-7332fe606341"] = clone(tempLobbyGame);
+  // games["0ef7d117-14ec-43ce-bd0f-7332fe606342"] = clone(tempPlayingGame);
+};
+
 module.exports = {
+  reinit, // REMOVE
   addPlayer,
   canKick,
   canStart,
@@ -676,5 +686,6 @@ module.exports = {
   containsPlayer,
   remove,
   start,
+  triggerForPlayers,
   withUsers
 };

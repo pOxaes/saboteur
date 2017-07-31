@@ -1,8 +1,10 @@
-const gamesService = require("./games");
+const clone = require("clone");
 const boardRules = require("saboteur-shared/board");
 const gameRules = require("saboteur-shared/game");
+const events = require("saboteur-shared/events");
+const gamesService = require("./games");
+const wsService = require("./ws");
 const saboteurService = require("./saboteur");
-const clone = require("clone");
 
 const playCardOnPlayer = (card, player) => {
   if (card.action === "BLOCK") {
@@ -48,9 +50,16 @@ const endRound = (winningPlayer, game) => {
   delete game.currentPlayerId;
   delete game.board;
   delete game.deck;
+
+  gamesService.triggerForPlayers(game, events.TURN_END, {
+    game
+  });
 };
 
 const playCard = (userId, gameId, cardId, isRotated, destination) => {
+  // TODO: remove
+  setTimeout(gamesService.reinit, 4000);
+
   const game = gamesService.getById(gameId);
 
   let board;
@@ -78,6 +87,7 @@ const playCard = (userId, gameId, cardId, isRotated, destination) => {
   }
 
   // - check if user can play card on destination
+  let goldDiscovered = false;
   let canPlayCardOnDestination = false;
 
   if (destination.type === "DISCARD") {
@@ -120,18 +130,22 @@ const playCard = (userId, gameId, cardId, isRotated, destination) => {
       });
 
       // - gold has been discovered
-      const goldDiscovered = hiddenSiblings.some(
-        sibling => sibling.item === "GOLD"
-      );
-      if (goldDiscovered) {
-        endRound(player, game);
-        return;
-      }
+      goldDiscovered = hiddenSiblings.some(sibling => sibling.item === "GOLD");
     }
   }
 
   if (!canPlayCardOnDestination) {
     return Promise.reject("you cannot perform this move pal");
+  }
+
+  gamesService.triggerForPlayers(game, events.PLAY_CARD, {
+    playedCard,
+    playerId: userId,
+    destination
+  });
+
+  if (goldDiscovered) {
+    endRound(player, game);
   }
 
   // - remove card from hand
@@ -150,15 +164,34 @@ const playCard = (userId, gameId, cardId, isRotated, destination) => {
 
   // - make him draw a card
   if (game.deck.length > 0) {
-    player.cards.push(game.deck[0]);
+    const drawnCard = game.deck[0];
+    player.cards.push(drawnCard);
     game.deck.shift();
+    game.players.forEach(player => {
+      const isCurrentPlayer = player.id === userId;
+      wsService.trigger(
+        events.DRAW_CARD,
+        {
+          gameId: game.id,
+          card: isCurrentPlayer ? drawnCard : { type: "HIDDEN" },
+          playerId: player.id
+        },
+        [player.id]
+      );
+    });
   }
 
   // - check who is next player
-  const playerIndex = game.players.map(player => player.id).indexOf(userId);
-  const nextPlayerIndex = (playerIndex + 1) % game.players.length;
-  game.currentPlayerId = game.players[nextPlayerIndex].id;
-  return "lol";
+  const playersWithCards = game.players.filter(
+    player => player.cards.length > 0
+  );
+  const playerIndex = playersWithCards.map(player => player.id).indexOf(userId);
+  const nextPlayerIndex = (playerIndex + 1) % playersWithCards.length;
+  game.currentPlayerId = playersWithCards[nextPlayerIndex].id;
+  gamesService.triggerForPlayers(game, events.CURRENT_PLAYER_UPDATE, {
+    currentPlayerId: playersWithCards[nextPlayerIndex].id
+  });
+  return;
 };
 
 module.exports = {
