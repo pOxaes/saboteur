@@ -56,6 +56,7 @@ class App extends Component {
           <PrivateRoute
             path="/games/:id"
             wsConnected={this.state.wsConnected}
+            ws={this.state.ws}
             user={this.state.user}
             Component={GameContainer}
           />

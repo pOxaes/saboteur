@@ -504,6 +504,14 @@ games["0ef7d117-14ec-43ce-bd0f-7332fe606342"] = {
   ]
 };
 
+const triggerForPlayers = (game, event, payload) =>
+  // TODO: individual trigger + hide secret data
+  wsService.trigger(
+    event,
+    Object.assign({ gameId: game.id }, payload),
+    game.players.map(player => player.id)
+  );
+
 const getForUser = userId => {
   return Object.values(games).filter(
     game =>
@@ -592,15 +600,24 @@ const removePlayer = (gameId, playerId) => {
   if (game.creator === playerId) {
     game.creator = game.players[0].id;
   }
+  triggerForPlayers(game, events.LEAVE_GAME, {
+    playerId
+  });
 };
 
 const containsPlayer = (game, playerId) => {
   return game.players.some(player => player.id === playerId);
 };
 
-const addPlayer = (game, playerId) => {
+const addPlayer = async (game, playerId) => {
   game.players.push({
     id: playerId
+  });
+  const { id, name, avatarUrl } = await userService.getById(playerId);
+  triggerForPlayers(game, events.JOIN_GAME, {
+    id,
+    name,
+    avatarUrl
   });
 };
 
@@ -616,7 +633,7 @@ const canStart = (game, userId) =>
     (game.status === gameRules.STATUSES.ROUND_END && game.currentRound < 3)) &&
   game.players.length >= gameRules.MIN_PLAYERS_COUNT;
 
-const start = game => {
+const start = async game => {
   game.status = gameRules.STATUSES.PLAYING;
   Object.assign(game, {
     status: gameRules.STATUSES.PLAYING,
@@ -629,6 +646,21 @@ const start = game => {
     )
   });
   saboteurService.distributeCards(game);
+
+  // Trigger for each player, format game
+  const usersDictionnary = await userService.getAllAsDictionnary();
+  game = withUsers(game, usersDictionnary);
+  game.players.forEach(player => {
+    wsService.trigger(
+      events.START_GAME,
+      {
+        gameId: game.id,
+        game: format(game, player.id)
+      },
+      [player.id]
+    );
+  });
+
   return game;
 };
 

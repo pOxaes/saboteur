@@ -47,9 +47,7 @@ module.exports = {
       // or make him join
       gamesService.addPlayer(game, ws.userId);
     }
-    console.log(5);
     const usersDictionnary = await userService.getAllAsDictionnary();
-    console.log("ici");
     return gamesService.withUsers(
       gamesService.format(game, ws.userId),
       usersDictionnary
@@ -87,6 +85,7 @@ module.exports = {
       return Promise.reject("You cannot start this game");
     }
     gamesService.start(game);
+    return;
   },
 
   [events.JOIN_GAME]: async ({ ws }, gameId) =>

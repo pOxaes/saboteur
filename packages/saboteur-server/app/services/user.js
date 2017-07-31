@@ -48,6 +48,11 @@ async function getByEmail(email) {
   return user;
 }
 
+async function getById(id) {
+  const user = await db.find(DB_TABLE, user => user.id === id);
+  return user;
+}
+
 async function login(profile) {
   if (!profile.email) {
     throw new Error("An email is needed");
@@ -66,6 +71,7 @@ async function login(profile) {
 module.exports = {
   createUser,
   login,
+  getById,
   getAllAsDictionnary,
   createToken,
   getTokenPayload

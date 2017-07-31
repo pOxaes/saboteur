@@ -6,17 +6,17 @@ const clients = {};
 
 const forEachClient = cb => Object.values(clients).forEach(cb);
 
-const trigger = (event, data) => {
-  logger.info(`${event} event triggered`);
-  forEachClient(ws => {
-    ws.emit(event, data);
-  });
-};
-
-const throwError = message => {
-  const error = new Error();
-  error.message = message;
-  return error;
+const trigger = (event, data, clientIds) => {
+  logger.info(`${event} event triggered`, clientIds);
+  if (clientIds) {
+    Object.values(clients)
+      .filter(ws => clientIds.indexOf(ws.userId) !== -1)
+      .forEach(ws => ws.emit(event, data));
+  } else {
+    forEachClient(ws => {
+      ws.emit(event, data);
+    });
+  }
 };
 
 const listenEmittedEvent = (ws, actions, events) => {
@@ -53,7 +53,6 @@ const listenEmittedEvent = (ws, actions, events) => {
 };
 
 const add = (ws, actions, events) => {
-  console.log("add");
   clients[ws.id] = ws;
   listenEmittedEvent(ws, actions, events);
   ws.on("disconnect", () => {

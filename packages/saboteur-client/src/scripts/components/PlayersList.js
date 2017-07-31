@@ -99,7 +99,7 @@ export default class PlayersList extends Component {
       this.setState({
         lastResizeDate: now
       });
-      this.updatePositions();
+      this.updatePositions(this.props.players);
     } else {
       this.setState({
         resizeTimeout: setTimeout(
@@ -110,7 +110,7 @@ export default class PlayersList extends Component {
     }
   }
 
-  getPositions(bodyClientRect) {
+  getPositions(bodyClientRect, players) {
     const maxAngle = 210;
     const positions = [];
 
@@ -125,7 +125,7 @@ export default class PlayersList extends Component {
     const circleY = circleRadius + circleYPadding;
     const circleX = bodyClientRect.width / 2;
     // drawCircle(circleRadius, circleX, circleY);
-    const angle = maxAngle / this.props.players.length;
+    const angle = maxAngle / players.length;
     const angleOffset = angle / 2 - (maxAngle - 180) / 2;
 
     for (
@@ -149,19 +149,23 @@ export default class PlayersList extends Component {
     return positions;
   }
 
-  updatePositions() {
+  updatePositions(players) {
     const bodyClientRect = document.body.getBoundingClientRect();
     const isDisplayInline = bodyClientRect.width < 750;
     this.setState({
       positions: isDisplayInline
         ? undefined
-        : this.getPositions(bodyClientRect),
+        : this.getPositions(bodyClientRect, players),
       displayType: isDisplayInline ? "inline" : "circle"
     });
   }
 
   componentWillMount() {
-    this.updatePositions();
+    this.updatePositions(this.props.players);
+  }
+
+  componentWillReceiveProps({ players }) {
+    this.updatePositions(players);
   }
 
   render() {

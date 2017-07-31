@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import events from "saboteur-shared/events";
 import actions from "../store/actions";
 import Games from "../components/Games";
 import "../../styles/Home.css";
@@ -21,7 +22,6 @@ export default class Home extends Component {
   }
 
   componentWillReceiveProps({ ws }) {
-    console.log("here", ws);
     if (this.state.games) {
       this.getGames();
     }
@@ -35,7 +35,7 @@ export default class Home extends Component {
     this.setState({
       eventsInitialized: true
     });
-    ws.on("CREATE_GAME", this.addGame.bind(this));
+    ws.on(events.CREATE_GAME, this.addGame.bind(this));
   }
 
   addGame(newGame) {
@@ -46,7 +46,7 @@ export default class Home extends Component {
   }
 
   componentWillUnmount() {
-    this.props.ws.removeListener("CREATE_GAME");
+    this.props.ws.removeListener(events.CREATE_GAME);
   }
 
   getGames() {

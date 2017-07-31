@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Redirect, Link } from "react-router-dom";
 import boardRules from "saboteur-shared/board";
 import gameRules from "saboteur-shared/game";
+import events from "saboteur-shared/events";
 import actions from "../store/actions";
 import gameService from "../services/game";
 import PlayersList from "../components/PlayersList";
@@ -20,11 +21,67 @@ const computeGameClass = (game, selectedCard) =>
 
 export class Game extends Component {
   state = {
+    eventsInitialized: false,
     id: this.props.match.params.id
   };
 
   componentDidMount() {
     actions.getGame(this.state.id).then(this.updateGame.bind(this));
+    this.initEvents(this.props.ws);
+  }
+
+  componentWillUnmount() {
+    this.props.ws.removeListener(events.JOIN_GAME);
+  }
+
+  componentWillReceiveProps({ ws }) {
+    this.initEvents(ws);
+  }
+
+  initEvents(ws) {
+    if (!ws || this.state.eventsInitialized) {
+      return;
+    }
+    this.setState({
+      eventsInitialized: true
+    });
+    ws.on(events.JOIN_GAME, this.checkGame.bind(this, "onAddPlayer"));
+    ws.on(events.LEAVE_GAME, this.checkGame.bind(this, "onRemovePlayer"));
+    ws.on(events.START_GAME, this.checkGame.bind(this, "onStartGame"));
+  }
+
+  checkGame(action, payload) {
+    if (payload.gameId !== this.state.id) {
+      return;
+    }
+    this[action](payload);
+  }
+
+  onAddPlayer(player) {
+    this.state.game.players.push(player);
+    this.updateGame(this.state.game);
+  }
+
+  onRemovePlayer({ playerId }) {
+    if (playerId === this.props.user.id) {
+      return;
+    }
+    if (playerId === this.state.game.creator) {
+      actions.getGame(this.state.game.id).then(this.updateGame.bind(this));
+    } else {
+      const updatedGame = this.state.game;
+      updatedGame.players = updatedGame.players.filter(
+        player => player.id !== playerId
+      );
+      this.setState({
+        game: updatedGame
+      });
+      this.updateGame(updatedGame);
+    }
+  }
+
+  onStartGame({ game }) {
+    this.updateGame(game);
   }
 
   updateGame(game) {

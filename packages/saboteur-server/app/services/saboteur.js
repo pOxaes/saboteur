@@ -45,6 +45,7 @@ const buildDeck = () => {
 };
 
 const distributeCards = ({ players, deck, currentPlayerId }) => {
+  console.log("distribute cards");
   const playersCount = players.length;
 
   // 3 to 5 players: 6 cards
@@ -56,11 +57,13 @@ const distributeCards = ({ players, deck, currentPlayerId }) => {
   } else if (playersCount <= 7) {
     cardsPerPlayer = 5;
   }
+  console.log(1);
 
   const firstPlayerIndex = players
     .map(player => player.id)
     .indexOf(currentPlayerId);
 
+  console.log(2);
   for (
     let i = firstPlayerIndex, len = firstPlayerIndex + playersCount;
     i < len;
@@ -73,9 +76,11 @@ const distributeCards = ({ players, deck, currentPlayerId }) => {
       players[playerIndex].cards.push(deck[cardIndex]);
     }
   }
+  console.log(3);
 
   const cardToRemoveFromDeck = playersCount * cardsPerPlayer;
   deck.splice(0, cardToRemoveFromDeck);
+  console.log(4);
 };
 
 const distributeRoles = players => {
