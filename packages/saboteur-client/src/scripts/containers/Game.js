@@ -139,9 +139,15 @@ export class Game extends Component {
       }
     } else if (destination.type === "SLOT") {
       const updatedGame = this.state.game;
-      playedCard.x = destination.x;
-      playedCard.y = destination.y;
-      updatedGame.board.push(playedCard);
+      if (playedCard.action === "DESTROY") {
+        updatedGame.board = updatedGame.board.filter(
+          slot => slot.x !== destination.x || slot.y !== destination.y
+        );
+      } else if (playedCard.type === "PATH") {
+        playedCard.x = destination.x;
+        playedCard.y = destination.y;
+        updatedGame.board.push(playedCard);
+      }
       this.updateGame(updatedGame);
     }
 

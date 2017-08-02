@@ -42,6 +42,7 @@ const getSiblingsFromMultipleCards = (sourceCards, forbiddenCoords, cards) => {
 };
 
 const isLinkedToStart = (card, cards) => {
+  const maxLoop = 15;
   let loop = 0;
   if (card.x === 0 && card.y === 0) {
     return true;
@@ -57,12 +58,12 @@ const isLinkedToStart = (card, cards) => {
   while (
     !containsSlot(siblings, { x: 0, y: 0 }) &&
     siblings.length &&
-    loop < 100
+    loop < maxLoop
   ) {
     loop++;
     siblings = getSiblingsFromMultipleCards(siblings, siblingsCache, cards);
+    siblingsCache = siblingsCache.concat(siblings);
   }
-
   return !!siblings.length;
 };
 
@@ -97,6 +98,7 @@ const updateSlot = (slots, x, y, card, shouldForce) => {
 };
 
 const createSlotsFromCards = cards => {
+  console.log("createSlotsFromCards");
   // Create card slots + empty slot
   const slots = cards.reduce((acc, card) => {
     updateSlot(acc, card.x, card.y, boardItemToCard(card));
