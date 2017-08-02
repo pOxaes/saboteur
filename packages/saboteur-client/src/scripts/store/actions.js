@@ -2,8 +2,6 @@ import events from "saboteur-shared/dist/events";
 import request from "../services/request";
 import wsService from "../services/ws";
 
-const baseUrl = "http://localhost:3020/api";
-
 // TODO: check all emitPromise
 // use emit if no promise required
 
@@ -34,7 +32,7 @@ const deleteGame = gameId => wsService.emit(events.DELETE_GAME, gameId);
 const leaveGame = gameId => wsService.emitPromise(events.LEAVE_GAME, gameId);
 
 const login = googleAuthorizationCode =>
-  request.post(`${baseUrl}/login`, googleAuthorizationCode);
+  request.post("/api/login", googleAuthorizationCode);
 
 export default {
   createGame,

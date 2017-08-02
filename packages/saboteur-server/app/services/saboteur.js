@@ -1,6 +1,6 @@
-const utils = require("saboteur-shared/utils");
-const gameRules = require("saboteur-shared/game");
-const boardRules = require("saboteur-shared/board");
+const utils = require("saboteur-shared/src/utils");
+const gameRules = require("saboteur-shared/src/game");
+const boardRules = require("saboteur-shared/src/board");
 const deck = require("./deck");
 
 const REVEAL_DURATION = 5000;

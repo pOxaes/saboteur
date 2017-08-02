@@ -1,5 +1,5 @@
 const Promise = require("bluebird");
-const utils = require("saboteur-shared/utils");
+const utils = require("saboteur-shared/src/utils");
 const logger = require("../logger");
 
 const clients = {};

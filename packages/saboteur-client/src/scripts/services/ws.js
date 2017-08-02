@@ -1,5 +1,4 @@
 import io from "socket.io-client";
-import events from "saboteur-shared/dist/events";
 
 const TIMEOUT_DURATION = 3000;
 
@@ -19,15 +18,6 @@ const trigger = (type, payload) =>
     type,
     payload
   });
-
-const attachDispatcher = (ws, store) => {
-  Object.values(events).forEach(event => {
-    // ws.on(event, payload => {
-    // console.log("message received", event, payload);
-    // store.commit(types[typeKey], payload);
-    // });
-  });
-};
 
 const emit = (command, data) => {
   socket.emit(command, data);
@@ -58,7 +48,7 @@ const emitPromise = (command, data) =>
 const connect = token =>
   new Promise((resolve, reject) => {
     connected = false;
-    socket = io(`ws://localhost:3020?token=${token}`);
+    socket = io(`${process.env.REACT_APP_WS_URL}?token=${token}`);
     socket.on("disconnect", message => {
       if (connected) {
         return;
@@ -68,7 +58,6 @@ const connect = token =>
     socket.on("CONNECTED", user => {
       connected = true;
       resolve({ user, ws: socket });
-      attachDispatcher(socket);
     });
   });
 

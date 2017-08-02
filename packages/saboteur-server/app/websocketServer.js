@@ -2,7 +2,7 @@ const http = require("http");
 const io = require("socket.io");
 const logger = require("./logger");
 const userService = require("./services/user");
-const events = require("saboteur-shared/events");
+const events = require("saboteur-shared/src/events");
 const actions = require("./actions");
 const wsService = require("./services/ws");
 

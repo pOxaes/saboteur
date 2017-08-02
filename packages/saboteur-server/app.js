@@ -1,4 +1,6 @@
-require("dotenv").config();
+require("dotenv").config({
+  path: __dirname + "/.env"
+});
 
 const express = require("express");
 const cors = require("cors");
@@ -14,8 +16,7 @@ const logger = require("./app/logger");
 
 const app = express();
 
-app.use(process.env.ROUTE_BASE, express.static(process.env.DIST_PATH));
-app.use("/", express.static(process.env.DIST_PATH));
+app.use(express.static(path.join(__dirname, process.env.DIST_PATH)));
 
 app.use(cookieParser());
 app.use(
