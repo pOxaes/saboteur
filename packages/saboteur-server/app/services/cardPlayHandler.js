@@ -37,6 +37,7 @@ const playCardOnSlot = (card, { x, y }, board, userId) => {
 };
 
 const endRound = (winningPlayer, game) => {
+  console.log("end Round");
   saboteurService.distributeGold(winningPlayer, game.players);
   game.status =
     game.currentRound === saboteurService.MAX_ROUNDS
@@ -51,14 +52,12 @@ const endRound = (winningPlayer, game) => {
   delete game.board;
   delete game.deck;
 
-  gamesService.triggerForPlayers(game, events.TURN_END, {
-    game
-  });
+  gamesService.triggerForPlayersWithAuth(game, events.ROUND_END);
 };
 
 const playCard = (userId, gameId, cardId, isRotated, destination) => {
   // TODO: remove
-  setTimeout(gamesService.reinit, 4000);
+  setTimeout(gamesService.reinit, 10000);
 
   const game = gamesService.getById(gameId);
 
@@ -159,6 +158,9 @@ const playCard = (userId, gameId, cardId, isRotated, destination) => {
 
   if (noMoreMove) {
     endRound({ role: "DESTROYER" }, game);
+  }
+
+  if (goldDiscovered || noMoreMove) {
     return;
   }
 

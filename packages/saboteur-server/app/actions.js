@@ -71,12 +71,11 @@ module.exports = {
     return game;
   },
 
-  [events.DELETE_GAME]: async ({ ws }, gameId) => {
+  [events.DELETE_GAME]: ({ ws }, gameId) => {
     const game = gamesService.getById(gameId);
     if (game.creator === ws.userId) {
       gamesService.remove(gameId);
     }
-    return;
   },
 
   [events.START_GAME]: ({ ws }, gameId) => {

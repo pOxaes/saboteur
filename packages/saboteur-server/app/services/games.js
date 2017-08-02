@@ -591,6 +591,7 @@ const withUsers = (game, usersDictionnary) => {
 
 const remove = gameId => {
   delete games[gameId];
+  wsService.trigger(events.DELETE_GAME, { gameId });
 };
 
 const removePlayer = (gameId, playerId) => {
@@ -651,6 +652,12 @@ const start = async game => {
   saboteurService.distributeCards(game);
 
   // Trigger for each player, format game
+  triggerForPlayersWithAuth(game, events.START_GAME);
+
+  return game;
+};
+
+const triggerForPlayersWithAuth = async (game, event) => {
   const usersDictionnary = await userService.getAllAsDictionnary();
   game = withUsers(game, usersDictionnary);
   game.players.forEach(player => {
@@ -663,14 +670,12 @@ const start = async game => {
       [player.id]
     );
   });
-
-  return game;
 };
 
 // TODO: REMOVE
 const reinit = () => {
-  // games["0ef7d117-14ec-43ce-bd0f-7332fe606341"] = clone(tempLobbyGame);
-  // games["0ef7d117-14ec-43ce-bd0f-7332fe606342"] = clone(tempPlayingGame);
+  games["0ef7d117-14ec-43ce-bd0f-7332fe606341"] = clone(tempLobbyGame);
+  games["0ef7d117-14ec-43ce-bd0f-7332fe606342"] = clone(tempPlayingGame);
 };
 
 module.exports = {
@@ -687,5 +692,6 @@ module.exports = {
   remove,
   start,
   triggerForPlayers,
+  triggerForPlayersWithAuth,
   withUsers
 };

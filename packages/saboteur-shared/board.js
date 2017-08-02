@@ -98,7 +98,6 @@ const updateSlot = (slots, x, y, card, shouldForce) => {
 };
 
 const createSlotsFromCards = cards => {
-  console.log("createSlotsFromCards");
   // Create card slots + empty slot
   const slots = cards.reduce((acc, card) => {
     updateSlot(acc, card.x, card.y, boardItemToCard(card));

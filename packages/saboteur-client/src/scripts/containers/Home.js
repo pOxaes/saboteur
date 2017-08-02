@@ -36,12 +36,27 @@ export default class Home extends Component {
       eventsInitialized: true
     });
     ws.on(events.CREATE_GAME, this.addGame.bind(this));
+    ws.on(events.DELETE_GAME, this.removeGame.bind(this));
   }
 
   addGame(newGame) {
     this.state.games.lobby.push(newGame);
     this.setState({
       games: this.state.games
+    });
+  }
+
+  removeGame({ gameId }) {
+    const updatedGames = Object.keys(
+      this.state.games
+    ).reduce((acc, gameType) => {
+      acc[gameType] = this.state.games[gameType].filter(
+        game => game.id !== gameId
+      );
+      return acc;
+    }, {});
+    this.setState({
+      games: updatedGames
     });
   }
 
@@ -62,13 +77,7 @@ export default class Home extends Component {
   }
 
   deleteGame(type, gameId) {
-    actions.deleteGame(gameId).then(() => {
-      const gamesState = this.state.games;
-      const newGamesState = gamesState[type].filter(game => game.id !== gameId);
-      this.setState({
-        games: newGamesState
-      });
-    });
+    actions.deleteGame(gameId);
   }
 
   render() {

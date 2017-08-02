@@ -52,8 +52,9 @@ export class Game extends Component {
     ws.on(events.LEAVE_GAME, this.checkGame.bind(this, "removePlayer"));
     ws.on(events.START_GAME, this.checkGame.bind(this, "onGameStart"));
     ws.on(events.PLAY_CARD, this.checkGame.bind(this, "playCard"));
-    ws.on(events.TURN_END, this.checkGame.bind(this, "endTurn"));
+    ws.on(events.ROUND_END, this.checkGame.bind(this, "endRound"));
     ws.on(events.DRAW_CARD, this.checkGame.bind(this, "drawCard"));
+    ws.on(events.DELETE_GAME, this.checkGame.bind(this, "deleteGame"));
     ws.on(
       events.CURRENT_PLAYER_UPDATE,
       this.checkGame.bind(this, "updateCurrentPlayer")
@@ -64,12 +65,18 @@ export class Game extends Component {
     if (payload.gameId !== this.state.id) {
       return;
     }
-    console.log(action);
 
     this.queue.queue({
       action: this[action].bind(this),
       payload
     });
+  }
+
+  deleteGame(gameId) {
+    window.alert(
+      "This game has been deleted. You'll be redirected to the Home."
+    );
+    this.props.history.replace("/");
   }
 
   getPlayer(playerId) {
@@ -99,8 +106,8 @@ export class Game extends Component {
     });
   }
 
-  endTurn({ game }) {
-    console.log("endTurn");
+  endRound({ game }) {
+    this.updateGame(game);
   }
 
   playCard({ playedCard, destination, playerId }) {
@@ -188,7 +195,10 @@ export class Game extends Component {
       game.status === gameRules.STATUSES.ROUND_END
     ) {
       this.setState({
-        game
+        game,
+        slots: undefined,
+        currentPlayer: undefined,
+        players: undefined
       });
       return;
     }
@@ -293,7 +303,7 @@ export class Game extends Component {
   }
 
   startGame() {
-    actions.startGame(this.state.game.id).then(this.updateGame.bind(this));
+    actions.startGame(this.state.game.id);
   }
 
   renderByStatus() {

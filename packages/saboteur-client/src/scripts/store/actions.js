@@ -4,22 +4,19 @@ import wsService from "../services/ws";
 
 const baseUrl = "http://localhost:3008/api";
 
+// TODO: check all emitPromise
+// use emit if no promise required
+
 const kick = ({ gameId, playerId }) =>
   wsService.emitPromise(events.KICK_PLAYER, { gameId, playerId });
 
 const playCard = ({ gameId, cardId, isRotated, destination }) =>
-  wsService.emitPromise(events.PLAY_CARD, {
+  wsService.emit(events.PLAY_CARD, {
     gameId,
     cardId,
     isRotated,
     destination
   });
-
-// request
-//   .post(`${baseUrl}/games/${gameId}/play`, { cardId, isRotated, destination })
-//   .then(() => {
-//     console.log(`played card ${cardId} on ${destination.type}`);
-//   });
 
 const getGame = gameId => wsService.emitPromise(events.GET_GAME, gameId);
 
@@ -30,9 +27,9 @@ const joinGame = gameId => wsService.emitPromise(events.JOIN_GAME, gameId);
 const createGame = ({ name, maxPlayers }) =>
   wsService.emitPromise(events.CREATE_GAME, { name, maxPlayers });
 
-const startGame = gameId => wsService.emitPromise(events.START_GAME, gameId);
+const startGame = gameId => wsService.emit(events.START_GAME, gameId);
 
-const deleteGame = gameId => wsService.emitPromise(events.DELETE_GAME, gameId);
+const deleteGame = gameId => wsService.emit(events.DELETE_GAME, gameId);
 
 const leaveGame = gameId => wsService.emitPromise(events.LEAVE_GAME, gameId);
 
