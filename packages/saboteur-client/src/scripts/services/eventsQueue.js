@@ -1,4 +1,4 @@
-import { isPromise } from "saboteur-shared/utils";
+import { isPromise } from "saboteur-shared/dist/utils";
 
 class eventsQueue {
   elements = [];

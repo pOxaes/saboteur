@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const bodyParser = require("body-parser");
 const google = require("googleapis");
-const promisify = require("saboteur-shared/promisify");
+const { promisify } = require("saboteur-shared/src/utils");
 const logger = require("./logger");
 
 const { login } = require("./services/user");

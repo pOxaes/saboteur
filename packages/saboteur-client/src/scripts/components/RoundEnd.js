@@ -1,5 +1,5 @@
 import React from "react";
-import gameRules from "saboteur-shared/game";
+import gameRules from "saboteur-shared/dist/game";
 import LeaderBoard from "./LeaderBoard";
 
 const goldToPoints = gold =>

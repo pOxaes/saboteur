@@ -1,5 +1,5 @@
-import boardRules from "saboteur-shared/board";
-import gameRules from "saboteur-shared/game";
+import boardRules from "saboteur-shared/dist/board";
+import gameRules from "saboteur-shared/dist/game";
 
 const getCurrentPlayerIndex = (players, userId) =>
   players.map(player => player.id).indexOf(userId);

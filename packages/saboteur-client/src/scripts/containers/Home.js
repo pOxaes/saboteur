@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import events from "saboteur-shared/events";
+import events from "saboteur-shared/dist/events";
 import actions from "../store/actions";
 import Games from "../components/Games";
 import "../../styles/Home.css";

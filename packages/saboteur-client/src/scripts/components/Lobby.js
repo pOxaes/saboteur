@@ -1,5 +1,5 @@
 import React from "react";
-import gameRules from "saboteur-shared/game";
+import gameRules from "saboteur-shared/dist/game";
 
 export default ({ game, startGame }) =>
   <div className="game__lobby-status">

@@ -34,8 +34,17 @@ const throwError = message => {
   return error;
 };
 
+const promisify = (fn, that) => (...args) =>
+  new Promise((resolve, reject) => {
+    fn.apply(that, [
+      ...args,
+      (err, value) => (err ? reject(err) : resolve(value))
+    ]);
+  });
+
 module.exports = {
   isPromise,
+  promisify,
   randomPick,
   random,
   shuffle,

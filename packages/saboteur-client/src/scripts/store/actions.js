@@ -1,4 +1,4 @@
-import events from "saboteur-shared/events";
+import events from "saboteur-shared/dist/events";
 import request from "../services/request";
 import wsService from "../services/ws";
 

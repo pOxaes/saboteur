@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const promisify = require("saboteur-shared/promisify");
+const { promisify } = require("saboteur-shared/src/utils");
 const db = require("./db");
 const uuid = require("node-uuid");
 

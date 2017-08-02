@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { Redirect, Link } from "react-router-dom";
-import boardRules from "saboteur-shared/board";
-import gameRules from "saboteur-shared/game";
-import events from "saboteur-shared/events";
+import boardRules from "saboteur-shared/dist/board";
+import gameRules from "saboteur-shared/dist/game";
+import events from "saboteur-shared/dist/events";
 import actions from "../store/actions";
 import gameService from "../services/game";
 import EventsQueue from "../services/eventsQueue";

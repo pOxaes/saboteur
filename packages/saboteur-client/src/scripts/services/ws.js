@@ -1,5 +1,5 @@
 import io from "socket.io-client";
-import events from "saboteur-shared/events";
+import events from "saboteur-shared/dist/events";
 
 const TIMEOUT_DURATION = 3000;
 
