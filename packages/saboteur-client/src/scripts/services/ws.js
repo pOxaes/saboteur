@@ -58,7 +58,7 @@ const emitPromise = (command, data) =>
 const connect = token =>
   new Promise((resolve, reject) => {
     connected = false;
-    socket = io(`ws://localhost:3008?token=${token}`);
+    socket = io(`ws://localhost:3020?token=${token}`);
     socket.on("disconnect", message => {
       if (connected) {
         return;

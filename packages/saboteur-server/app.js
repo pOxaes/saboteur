@@ -30,7 +30,7 @@ app.use(
   noCache(),
   cors({
     credentials: true,
-    origin: ["http://localhost:3000", "http://localhost:3002"],
+    origin: [process.env.CORS_ORIGIN],
     allowedHeaders: ["Content-Type"]
   }),
   requestLogger.create(logger),

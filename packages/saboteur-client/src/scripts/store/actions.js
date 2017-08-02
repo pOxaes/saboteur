@@ -2,7 +2,7 @@ import events from "saboteur-shared/events";
 import request from "../services/request";
 import wsService from "../services/ws";
 
-const baseUrl = "http://localhost:3008/api";
+const baseUrl = "http://localhost:3020/api";
 
 // TODO: check all emitPromise
 // use emit if no promise required
