@@ -29,7 +29,12 @@ export class Game extends Component {
   queue = new EventsQueue();
 
   componentDidMount() {
-    actions.getGame(this.state.id).then(this.updateGame.bind(this));
+    actions
+      .getGame(this.state.id)
+      .then(this.updateGame.bind(this))
+      .catch(() => {
+        this.props.history.replace("/");
+      });
     this.initEvents(this.props.ws);
   }
 
@@ -183,6 +188,7 @@ export class Game extends Component {
 
   removePlayer({ playerId }) {
     if (playerId === this.props.user.id) {
+      this.props.history.replace("/");
       return;
     }
     if (playerId === this.state.game.creator) {

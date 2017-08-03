@@ -64,7 +64,7 @@ module.exports = {
 
   [events.KICK_PLAYER]: async ({ ws }, { gameId, playerId }) => {
     const game = gamesService.getById(gameId);
-    if (!gamesService.canKick(game, playerId, ws.userId)) {
+    if (!gamesService.canKick(game, ws.userId, playerId)) {
       return Promise.reject("You cannot kick");
     }
     gamesService.removePlayer(gameId, playerId);

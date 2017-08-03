@@ -2,6 +2,7 @@ const clone = require("clone");
 const boardRules = require("saboteur-shared/src/board");
 const gameRules = require("saboteur-shared/src/game");
 const events = require("saboteur-shared/src/events");
+const { randomPick } = require("saboteur-shared/src/utils");
 const gamesService = require("./games");
 const wsService = require("./ws");
 const saboteurService = require("./saboteur");
@@ -58,6 +59,18 @@ const endRound = (winningPlayer, game) => {
 const playCard = (userId, gameId, cardId, isRotated, destination) => {
   const game = gamesService.getById(gameId);
 
+  console.log("playCard", {
+    userId,
+    gameId,
+    cardId,
+    isRotated,
+    destination
+  });
+
+  if (!game) {
+    return Promise.reject("this game does not exists");
+  }
+
   let board;
   let slots;
 
@@ -67,11 +80,14 @@ const playCard = (userId, gameId, cardId, isRotated, destination) => {
   }
 
   // - check if user has card
-  const player = game.players.find(player => player.id === userId);
-  const playedCard = clone(player.cards.find(card => card.id === cardId));
+  const playingUser = game.players.find(player => player.id === userId);
+  const playedCard = clone(playingUser.cards.find(card => card.id === cardId));
   if (!playedCard) {
     return Promise.reject("wrong card played");
   }
+
+  console.log("playingUser", playingUser);
+  console.log("playedCard", playedCard);
 
   // if card has layout, format it and rotate if needed
   if (playedCard.layout) {
@@ -92,6 +108,7 @@ const playCard = (userId, gameId, cardId, isRotated, destination) => {
     const destPlayer = game.players.find(
       player => player.id === destination.id
     );
+    console.log("destination player", destPlayer);
     canPlayCardOnDestination = boardRules.canPlayCardOnPlayer(
       playedCard,
       destPlayer
@@ -108,10 +125,11 @@ const playCard = (userId, gameId, cardId, isRotated, destination) => {
     const slot = slots.find(
       slot => slot.x === destination.x && slot.y === destination.y
     );
+    console.log("destination slot", slot);
     canPlayCardOnDestination = boardRules.canPlayCardOnSlot(
       playedCard,
       slot,
-      player
+      playingUser
     );
 
     if (canPlayCardOnDestination) {
@@ -130,7 +148,18 @@ const playCard = (userId, gameId, cardId, isRotated, destination) => {
       });
 
       // - gold has been discovered
-      goldDiscovered = hiddenSiblings.some(sibling => sibling.item === "GOLD");
+      const goldSibling = hiddenSiblings.find(
+        sibling => sibling.item === "GOLD"
+      );
+
+      goldDiscovered =
+        goldSibling &&
+        playedCard.item !== "ROCK" &&
+        isPathOpen(goldSibling, {
+          x: destination.x,
+          y: destination.y,
+          layout: playedCard.layout
+        });
     }
   }
 
@@ -145,17 +174,19 @@ const playCard = (userId, gameId, cardId, isRotated, destination) => {
   });
 
   if (goldDiscovered) {
-    let winningPlayer = player;
-    if (player.role === gameRules.ROLES.DESTROYER) {
-      winningPlayer = utils.randomPick(
+    let winningPlayer = playingUser;
+    if (playingUser.role === gameRules.ROLES.DESTROYER) {
+      winningPlayer = randomPick(
         game.players.filter(player => player.role === gameRules.ROLES.BUILDER)
       );
     }
+    console.log("\n", "goldDiscovered");
     endRound(winningPlayer, game);
   }
 
   // - remove card from hand
-  player.cards = player.cards.filter(card => card.id !== cardId);
+  console.log("playingUser", playingUser);
+  playingUser.cards = playingUser.cards.filter(card => card.id !== cardId);
 
   // game is finished if:
   // - no more cards per player & deck
@@ -164,6 +195,7 @@ const playCard = (userId, gameId, cardId, isRotated, destination) => {
     game.players.every(player => player.cards.length === 0);
 
   if (noMoreMove) {
+    console.log("\n", "noMoreMove");
     endRound({ role: gameRules.ROLES.DESTROYER }, game);
   }
 
@@ -174,7 +206,7 @@ const playCard = (userId, gameId, cardId, isRotated, destination) => {
   // - make him draw a card
   if (game.deck.length > 0) {
     const drawnCard = game.deck[0];
-    player.cards.push(drawnCard);
+    playingUser.cards.push(drawnCard);
     game.deck.shift();
     game.players.forEach(player => {
       const isCurrentPlayer = player.id === userId;
