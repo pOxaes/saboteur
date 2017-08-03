@@ -3,6 +3,10 @@
   "editor.formatOnSave": false,
   "eslint.autoFixOnSave": true,
   "files.exclude": {
-    "src/client/build/": true
+    "packages/saboteur-client/build/": true,
+    "packages/saboteur-server/dist/": true,
+    "packages/saboter-server/.node-persist": true,
+    "server_build/": true,
+    "build.zip": true
   }
 }

@@ -32,7 +32,10 @@ const deleteGame = gameId => wsService.emit(events.DELETE_GAME, gameId);
 const leaveGame = gameId => wsService.emitPromise(events.LEAVE_GAME, gameId);
 
 const login = googleAuthorizationCode =>
-  request.post("/api/login", googleAuthorizationCode);
+  request.post(
+    `${process.env.REACT_APP_HOST}/api/login`,
+    googleAuthorizationCode
+  );
 
 export default {
   createGame,
