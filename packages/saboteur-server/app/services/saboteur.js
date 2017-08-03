@@ -94,7 +94,7 @@ const distributeRoles = players => {
   }
   const rolesToDispatch = players.map((player, index) => {
     return index < destroyersCount
-      ? gameRules.ROLES.DESTROYER
+      ? gameRules.ROLES.SABOTEUR
       : gameRules.ROLES.BUILDER;
   });
 
@@ -171,7 +171,7 @@ const distributeGold = (winningPlayer, players) => {
 
   players.forEach(player => player.gold.push(0));
 
-  if (winningPlayer.role === "DESTROYER") {
+  if (winningPlayer.role === gameRules.ROLES.SABOTEUR) {
     // If there was only 1 saboteur, he gets gold nugget cards from
     // the deck worth a total of four nuggets.
     // If there were 2 or 3 saboteurs, they each get 3 nuggets worth of gold.
@@ -183,7 +183,7 @@ const distributeGold = (winningPlayer, players) => {
       goldValue = 3;
     }
     sameRolePlayers.forEach(player => replaceLastGold(player, goldValue));
-  } else if (winningPlayer.role === "BUILDER") {
+  } else if (winningPlayer.role === gameRules.ROLES.BUILDER) {
     // The player who played the last path card (that connected to the treasure)
     // draws a number of gold nugget cards (face down) equal to
     // the number of gold miners (e.g., 5 cards if there were 5 gold-diggers),

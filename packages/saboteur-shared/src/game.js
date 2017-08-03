@@ -2,7 +2,7 @@ const MIN_PLAYERS_COUNT = 2;
 
 const ROLES = {
   BUILDER: "BUILDER",
-  DESTROYER: "DESTROYER"
+  SABOTEUR: "SABOTEUR"
 };
 
 const STATUSES = {

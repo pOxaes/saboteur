@@ -180,7 +180,7 @@ const playCard = (userId, gameId, cardId, isRotated, destination) => {
 
   if (goldDiscovered) {
     let winningPlayer = playingUser;
-    if (playingUser.role === gameRules.ROLES.DESTROYER) {
+    if (playingUser.role === gameRules.ROLES.SABOTEUR) {
       winningPlayer = randomPick(
         game.players.filter(player => player.role === gameRules.ROLES.BUILDER)
       );
@@ -201,7 +201,7 @@ const playCard = (userId, gameId, cardId, isRotated, destination) => {
 
   if (noMoreMove) {
     // console.log("\n", "noMoreMove");
-    endRound({ role: gameRules.ROLES.DESTROYER }, game);
+    endRound({ role: gameRules.ROLES.SABOTEUR }, game);
   }
 
   if (goldDiscovered || noMoreMove) {
