@@ -108,7 +108,11 @@ const playCard = (userId, gameId, cardId, isRotated, destination) => {
     const slot = slots.find(
       slot => slot.x === destination.x && slot.y === destination.y
     );
-    canPlayCardOnDestination = boardRules.canPlayCardOnSlot(playedCard, slot);
+    canPlayCardOnDestination = boardRules.canPlayCardOnSlot(
+      playedCard,
+      slot,
+      player
+    );
 
     if (canPlayCardOnDestination) {
       // - add card to board

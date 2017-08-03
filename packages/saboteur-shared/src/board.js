@@ -242,13 +242,24 @@ const canPlayCardOnPlayer = (card, player) =>
     (player.malus &&
       player.malus.some(malus => card.subtype.indexOf(malus) !== -1)));
 
-const canPlayCardOnSlot = (card, slot) =>
-  (card.action === "REVEAL" &&
-    (slot.card && slot.card.type === "PATH" && slot.card.hidden)) ||
-  (card.action === "DESTROY" &&
-    (slot.card && slot.card.layout && (slot.x !== 0 || slot.y !== 0))) ||
-  (card.type === "PATH" &&
-    (slot.authorizedLayout && checkCardCompatibility(card, slot, false)));
+const canPlayCardOnSlot = (card, slot, player) => {
+  if (
+    player.malus &&
+    player.malus.length &&
+    (card.type === "PATH" || card.action === "DESTROY")
+  ) {
+    return false;
+  }
+
+  return (
+    (card.action === "REVEAL" &&
+      (slot.card && slot.card.type === "PATH" && slot.card.hidden)) ||
+    (card.action === "DESTROY" &&
+      (slot.card && slot.card.layout && (slot.x !== 0 || slot.y !== 0))) ||
+    (card.type === "PATH" &&
+      (slot.authorizedLayout && checkCardCompatibility(card, slot, false)))
+  );
+};
 
 const rotateCardLayout = card => {
   card.layout = rotateLayout(card.layout);

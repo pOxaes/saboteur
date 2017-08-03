@@ -305,7 +305,11 @@ export class Game extends Component {
 
   updateHighlights(card) {
     this.state.slots.forEach(slot => {
-      slot.isHighlighted = boardRules.canPlayCardOnSlot(card, slot);
+      slot.isHighlighted = boardRules.canPlayCardOnSlot(
+        card,
+        slot,
+        this.state.currentPlayer
+      );
     });
 
     this.state.players.forEach(player => {
