@@ -18,7 +18,7 @@ const format = (game, currentPlayerIndex) => {
       card.isRotated = false;
     }
     boardRules.formatCardLayout(card);
-    boardRules.attachPlayability(card, slots, game.players);
+    // boardRules.attachPlayability(card, slots, game.players);
   });
 
   return { game, slots };

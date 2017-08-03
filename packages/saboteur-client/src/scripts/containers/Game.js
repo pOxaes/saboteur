@@ -91,6 +91,7 @@ export class Game extends Component {
   }
 
   drawCard({ card, playerId }) {
+    console.log(playerId, this.props.user.id);
     if (playerId !== this.props.user.id) {
       return;
     }
@@ -243,10 +244,7 @@ export class Game extends Component {
   };
 
   onCardPlay(card) {
-    if (
-      !card.isPlayable ||
-      this.state.game.currentPlayerId !== this.props.user.id
-    ) {
+    if (this.state.game.currentPlayerId !== this.props.user.id) {
       return;
     }
 

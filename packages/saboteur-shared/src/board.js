@@ -194,47 +194,47 @@ const formatLayoutToString = layout =>
     layout.left ? 1 : 0
   ].join("");
 
-const attachPlayability = (card, slots, players) => {
-  if (card.type === "HIDDEN") {
-    return;
-  }
-  if (card.action === "REVEAL") {
-    card.isPlayable = slots.some(
-      slot => slot.card && slot.card.type === "PATH" && slot.card.hidden
-    );
-    return;
-  }
+// const attachPlayability = (card, slots, players) => {
+//   if (card.type === "HIDDEN") {
+//     return;
+//   }
+//   if (card.action === "REVEAL") {
+//     card.isPlayable = slots.some(
+//       slot => slot.card && slot.card.type === "PATH" && slot.card.hidden
+//     );
+//     return;
+//   }
 
-  // Can destroy if a card, different from the origin, exists
-  if (card.action === "DESTROY") {
-    card.isPlayable = slots.some(
-      slot => slot.card && slot.card.layout && (slot.x !== 0 || slot.y !== 0)
-    );
-    return;
-  }
+//   // Can destroy if a card, different from the origin, exists
+//   if (card.action === "DESTROY") {
+//     card.isPlayable = slots.some(
+//       slot => slot.card && slot.card.layout && (slot.x !== 0 || slot.y !== 0)
+//     );
+//     return;
+//   }
 
-  if (card.action === "BLOCK") {
-    card.isPlayable = players.some(
-      player => !player.malus || player.malus.length === 0
-    );
-    return;
-  }
+//   if (card.action === "BLOCK") {
+//     card.isPlayable = players.some(
+//       player => !player.malus || player.malus.length === 0
+//     );
+//     return;
+//   }
 
-  if (card.action === "FREE") {
-    card.isPlayable = players.some(
-      player =>
-        player.malus &&
-        player.malus.some(malus => card.subtype.indexOf(malus) !== -1)
-    );
-    return;
-  }
+//   if (card.action === "FREE") {
+//     card.isPlayable = players.some(
+//       player =>
+//         player.malus &&
+//         player.malus.some(malus => card.subtype.indexOf(malus) !== -1)
+//     );
+//     return;
+//   }
 
-  if (card.type === "PATH") {
-    card.isPlayable = slots.some(
-      slot => !slot.card && checkCardCompatibility(card, slot)
-    );
-  }
-};
+//   if (card.type === "PATH") {
+//     card.isPlayable = slots.some(
+//       slot => !slot.card && checkCardCompatibility(card, slot)
+//     );
+//   }
+// };
 
 const canPlayCardOnPlayer = (card, player) =>
   (card.action === "BLOCK" && (!player.malus || !player.malus.length)) ||
@@ -256,7 +256,7 @@ const rotateCardLayout = card => {
 };
 
 module.exports = {
-  attachPlayability,
+  // attachPlayability,
   checkCardCompatibility,
   createSlotsFromCards,
   formatCardLayout,

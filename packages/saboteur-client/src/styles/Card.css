@@ -24,7 +24,7 @@
 }
 
 
-.card--is-playable {
+/* .card--is-playable {
   transition: transform .2s ease-out;
   cursor: pointer;
   transform: translateY(-10px);
@@ -32,7 +32,7 @@
 
 .card--is-playable:hover {
   transform: translateY(var(--card-hover-translateY));
-}
+} */
 
 .card__layout {
   position: absolute;
@@ -127,9 +127,23 @@
   border-width: var(--card-border-width--hand);
   width: var(--card-width--hand);
   height: var(--card-height--hand);
+
+  transition: transform .2s ease-out;
+  cursor: pointer;
+  transform: translateY(-10px);
 }
 
-.card--hand.card--is-playable:hover {
+/* .card--is-playable {
+  transition: transform .2s ease-out;
+  cursor: pointer;
+  transform: translateY(-10px);
+}
+
+.card--is-playable:hover {
+  transform: translateY(var(--card-hover-translateY));
+} */
+
+.card--hand:hover {
   transform: translateY(var(--card-hover-translateY--hand));
 }
 

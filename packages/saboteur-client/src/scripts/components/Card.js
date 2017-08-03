@@ -6,7 +6,7 @@ import "../../styles/Card.css";
 const computeCardClass = (card, modifiers = {}) =>
   [
     "card",
-    card.isPlayable && "card--is-playable",
+    // card.isPlayable && "card--is-playable",
     `card--${card.type}`,
     card.action && `card--action-${card.action}`,
     card.item && `card--item-${card.item}`,

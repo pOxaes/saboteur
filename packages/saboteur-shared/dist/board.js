@@ -244,50 +244,47 @@ var formatLayoutToString = function formatLayoutToString(layout) {
   ].join("");
 };
 
-var attachPlayability = function attachPlayability(card, slots, players) {
-  if (card.type === "HIDDEN") {
-    return;
-  }
-  if (card.action === "REVEAL") {
-    card.isPlayable = slots.some(function(slot) {
-      return slot.card && slot.card.type === "PATH" && slot.card.hidden;
-    });
-    return;
-  }
+// const attachPlayability = (card, slots, players) => {
+//   if (card.type === "HIDDEN") {
+//     return;
+//   }
+//   if (card.action === "REVEAL") {
+//     card.isPlayable = slots.some(
+//       slot => slot.card && slot.card.type === "PATH" && slot.card.hidden
+//     );
+//     return;
+//   }
 
-  // Can destroy if a card, different from the origin, exists
-  if (card.action === "DESTROY") {
-    card.isPlayable = slots.some(function(slot) {
-      return slot.card && slot.card.layout && (slot.x !== 0 || slot.y !== 0);
-    });
-    return;
-  }
+//   // Can destroy if a card, different from the origin, exists
+//   if (card.action === "DESTROY") {
+//     card.isPlayable = slots.some(
+//       slot => slot.card && slot.card.layout && (slot.x !== 0 || slot.y !== 0)
+//     );
+//     return;
+//   }
 
-  if (card.action === "BLOCK") {
-    card.isPlayable = players.some(function(player) {
-      return !player.malus || player.malus.length === 0;
-    });
-    return;
-  }
+//   if (card.action === "BLOCK") {
+//     card.isPlayable = players.some(
+//       player => !player.malus || player.malus.length === 0
+//     );
+//     return;
+//   }
 
-  if (card.action === "FREE") {
-    card.isPlayable = players.some(function(player) {
-      return (
-        player.malus &&
-        player.malus.some(function(malus) {
-          return card.subtype.indexOf(malus) !== -1;
-        })
-      );
-    });
-    return;
-  }
+//   if (card.action === "FREE") {
+//     card.isPlayable = players.some(
+//       player =>
+//         player.malus &&
+//         player.malus.some(malus => card.subtype.indexOf(malus) !== -1)
+//     );
+//     return;
+//   }
 
-  if (card.type === "PATH") {
-    card.isPlayable = slots.some(function(slot) {
-      return !slot.card && checkCardCompatibility(card, slot);
-    });
-  }
-};
+//   if (card.type === "PATH") {
+//     card.isPlayable = slots.some(
+//       slot => !slot.card && checkCardCompatibility(card, slot)
+//     );
+//   }
+// };
 
 var canPlayCardOnPlayer = function canPlayCardOnPlayer(card, player) {
   return (
@@ -322,7 +319,7 @@ var rotateCardLayout = function rotateCardLayout(card) {
 };
 
 module.exports = {
-  attachPlayability: attachPlayability,
+  // attachPlayability,
   checkCardCompatibility: checkCardCompatibility,
   createSlotsFromCards: createSlotsFromCards,
   formatCardLayout: formatCardLayout,

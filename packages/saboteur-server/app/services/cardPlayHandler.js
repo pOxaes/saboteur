@@ -179,7 +179,7 @@ const playCard = (userId, gameId, cardId, isRotated, destination) => {
         {
           gameId: game.id,
           card: isCurrentPlayer ? drawnCard : { type: "HIDDEN" },
-          playerId: player.id
+          playerId: userId
         },
         [player.id]
       );
