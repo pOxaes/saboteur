@@ -56,9 +56,6 @@ const endRound = (winningPlayer, game) => {
 };
 
 const playCard = (userId, gameId, cardId, isRotated, destination) => {
-  // TODO: remove
-  setTimeout(gamesService.reinit, 10000);
-
   const game = gamesService.getById(gameId);
 
   let board;
