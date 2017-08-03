@@ -141,7 +141,13 @@ const playCard = (userId, gameId, cardId, isRotated, destination) => {
   });
 
   if (goldDiscovered) {
-    endRound(player, game);
+    let winningPlayer = player;
+    if (player.role === gameRules.ROLES.DESTROYER) {
+      winningPlayer = utils.randomPick(
+        game.players.filter(player => player.role === gameRules.ROLES.BUILDER)
+      );
+    }
+    endRound(winningPlayer, game);
   }
 
   // - remove card from hand
@@ -154,7 +160,7 @@ const playCard = (userId, gameId, cardId, isRotated, destination) => {
     game.players.every(player => player.cards.length === 0);
 
   if (noMoreMove) {
-    endRound({ role: "DESTROYER" }, game);
+    endRound({ role: gameRules.ROLES.DESTROYER }, game);
   }
 
   if (goldDiscovered || noMoreMove) {
