@@ -45,7 +45,7 @@ module.exports = {
         return Promise.reject("You cannot get this game");
       }
       // or make him join
-      gamesService.addPlayer(game, ws.userId);
+      await gamesService.addPlayer(game, ws.userId);
     }
     const usersDictionnary = await userService.getAllAsDictionnary();
     return gamesService.withUsers(
@@ -90,8 +90,7 @@ module.exports = {
   [events.JOIN_GAME]: async ({ ws }, gameId) =>
     gamesService.addPlayer(gameId, playerId),
 
-  [events.PLAY_CARD]: async (
-    { ws },
-    { gameId, cardId, isRotated, destination }
-  ) => playCard(ws.userId, gameId, cardId, isRotated, destination)
+  [events.PLAY_CARD]: ({ ws }, { gameId, cardId, isRotated, destination }) => {
+    playCard(ws.userId, gameId, cardId, isRotated, destination);
+  }
 };

@@ -24,7 +24,7 @@ const getForUser = userId => {
   );
 };
 
-const insert = (game, userId) => {
+const insert = async (game, userId) => {
   const newGame = Object.assign({}, game, {
     id: uuid.v4(),
     status: gameRules.STATUSES.WAITING_FOR_PLAYERS,
@@ -115,15 +115,19 @@ const containsPlayer = (game, playerId) => {
 };
 
 const addPlayer = async (game, playerId) => {
+  const newPlayer = await userService.getById(playerId);
+  if (!newPlayer) {
+    return;
+  }
   game.players.push({
     id: playerId
   });
-  const { id, name, avatarUrl } = await userService.getById(playerId);
   triggerForPlayers(game, events.JOIN_GAME, {
-    id,
-    name,
-    avatarUrl
+    id: newPlayer.id,
+    name: newPlayer.name,
+    avatarUrl: newPlayer.avatarUrl
   });
+  return newPlayer;
 };
 
 const canKick = (game, userId, kickedPlayerId) =>

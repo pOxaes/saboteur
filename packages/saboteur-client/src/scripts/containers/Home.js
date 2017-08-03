@@ -15,7 +15,7 @@ export default class Home extends Component {
   };
 
   componentDidMount() {
-    if (!this.state.games.length) {
+    if (!this.state.games.length && this.props.wsConnected) {
       this.getGames();
     }
     this.initEvents(this.props.ws);

@@ -25,6 +25,10 @@ const emit = (command, data) => {
 
 const emitPromise = (command, data) =>
   new Promise((resolve, reject) => {
+    if (!socket) {
+      console.log("no socket");
+      return;
+    }
     socket.emit(command, data, response => {
       if (typeof response === "object") {
         if (response.success) {

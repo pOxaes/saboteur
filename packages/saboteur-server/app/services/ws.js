@@ -24,7 +24,7 @@ const listenEmittedEvent = (ws, actions, events) => {
     ws.on(event, (payload, setValueResult) => {
       logger.info(`${event} event received from ${ws} ${ws.userId}`);
       const action = actions[event]({ trigger, ws }, payload);
-      if (!utils.isPromise(action)) {
+      if (!utils.isPromise(action) || !setValueResult) {
         return;
       }
       action

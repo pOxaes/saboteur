@@ -91,6 +91,9 @@ export class Game extends Component {
   }
 
   drawCard({ card, playerId }) {
+    if (playerId !== this.props.user.id) {
+      return;
+    }
     const user = this.getPlayer(playerId);
     if (card.type === "PATH") {
       boardRules.formatCardLayout(card);
@@ -163,8 +166,18 @@ export class Game extends Component {
   }
 
   addPlayer(player) {
-    this.state.game.players.push(player);
-    this.updateGame(this.state.game);
+    if (player.id === this.props.user.id) {
+      return;
+    }
+    const updatedGame = this.state.game;
+    updatedGame.players.push(player);
+    if (
+      updatedGame.creator === this.props.user.id &&
+      updatedGame.players.length >= gameRules.MIN_PLAYERS_COUNT
+    ) {
+      updatedGame._canStart = true;
+    }
+    this.updateGame(updatedGame);
   }
 
   removePlayer({ playerId }) {
