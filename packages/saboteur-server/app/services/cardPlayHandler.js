@@ -26,15 +26,8 @@ const playCardOnSlot = (card, { x, y }, board, userId) => {
       item: card.item
     };
     board.push(newSlot);
-    return board;
-  } else if (card.action === "REVEAL") {
-    const slot = board.find(slot => slot.x === x && slot.y === y);
-    slot.allowedUsers.push({
-      id: userId,
-      date: new Date().getTime()
-    });
-    return board;
   }
+  return board;
 };
 
 const endRound = (winningPlayer, game) => {
@@ -59,13 +52,13 @@ const endRound = (winningPlayer, game) => {
 const playCard = (userId, gameId, cardId, isRotated, destination) => {
   const game = gamesService.getById(gameId);
 
-  console.log("playCard", {
-    userId,
-    gameId,
-    cardId,
-    isRotated,
-    destination
-  });
+  // console.log("playCard", {
+  //   userId,
+  //   gameId,
+  //   cardId,
+  //   isRotated,
+  //   destination
+  // });
 
   if (!game) {
     return Promise.reject("this game does not exists");
@@ -86,8 +79,8 @@ const playCard = (userId, gameId, cardId, isRotated, destination) => {
     return Promise.reject("wrong card played");
   }
 
-  console.log("playingUser", playingUser);
-  console.log("playedCard", playedCard);
+  // console.log("playingUser", playingUser);
+  // console.log("playedCard", playedCard);
 
   // if card has layout, format it and rotate if needed
   if (playedCard.layout) {
@@ -101,6 +94,7 @@ const playCard = (userId, gameId, cardId, isRotated, destination) => {
   // - check if user can play card on destination
   let goldDiscovered = false;
   let canPlayCardOnDestination = false;
+  let slot;
 
   if (destination.type === "DISCARD") {
     canPlayCardOnDestination = true;
@@ -108,7 +102,7 @@ const playCard = (userId, gameId, cardId, isRotated, destination) => {
     const destPlayer = game.players.find(
       player => player.id === destination.id
     );
-    console.log("destination player", destPlayer);
+    // console.log("destination player", destPlayer);
     canPlayCardOnDestination = boardRules.canPlayCardOnPlayer(
       playedCard,
       destPlayer
@@ -122,10 +116,10 @@ const playCard = (userId, gameId, cardId, isRotated, destination) => {
     board.forEach(boardRules.formatCardLayout);
     board.forEach(boardRules.attachLinkedToStart);
     slots = boardRules.createSlotsFromCards(board);
-    const slot = slots.find(
+    slot = slots.find(
       slot => slot.x === destination.x && slot.y === destination.y
     );
-    console.log("destination slot", slot);
+    // console.log("destination slot", slot);
     canPlayCardOnDestination = boardRules.canPlayCardOnSlot(
       playedCard,
       slot,
@@ -173,6 +167,17 @@ const playCard = (userId, gameId, cardId, isRotated, destination) => {
     destination
   });
 
+  if (playedCard.action === "REVEAL") {
+    wsService.trigger(
+      events.REVEAL_CARD,
+      {
+        gameId: game.id,
+        slot
+      },
+      [userId]
+    );
+  }
+
   if (goldDiscovered) {
     let winningPlayer = playingUser;
     if (playingUser.role === gameRules.ROLES.DESTROYER) {
@@ -180,12 +185,12 @@ const playCard = (userId, gameId, cardId, isRotated, destination) => {
         game.players.filter(player => player.role === gameRules.ROLES.BUILDER)
       );
     }
-    console.log("\n", "goldDiscovered");
+    // console.log("\n", "goldDiscovered");
     endRound(winningPlayer, game);
   }
 
   // - remove card from hand
-  console.log("playingUser", playingUser);
+  // console.log("playingUser", playingUser);
   playingUser.cards = playingUser.cards.filter(card => card.id !== cardId);
 
   // game is finished if:
@@ -195,7 +200,7 @@ const playCard = (userId, gameId, cardId, isRotated, destination) => {
     game.players.every(player => player.cards.length === 0);
 
   if (noMoreMove) {
-    console.log("\n", "noMoreMove");
+    // console.log("\n", "noMoreMove");
     endRound({ role: gameRules.ROLES.DESTROYER }, game);
   }
 

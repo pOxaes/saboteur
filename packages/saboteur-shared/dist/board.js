@@ -337,5 +337,6 @@ module.exports = {
   rotateStringLayout: rotateStringLayout,
   canPlayCardOnPlayer: canPlayCardOnPlayer,
   canPlayCardOnSlot: canPlayCardOnSlot,
-  getLinkedSiblings: getLinkedSiblings
+  getLinkedSiblings: getLinkedSiblings,
+  isPathOpen: isPathOpen
 };

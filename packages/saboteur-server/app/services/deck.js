@@ -109,7 +109,7 @@ const deck = [
   },
   {
     action: "REVEAL",
-    count: 4
+    count: 40
   },
   {
     action: "DESTROY",

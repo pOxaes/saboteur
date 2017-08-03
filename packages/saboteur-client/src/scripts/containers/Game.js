@@ -13,6 +13,8 @@ import RoundEnd from "../components/RoundEnd";
 import PlayingGame from "../components/PlayingGame";
 import "../../styles/Game.css";
 
+const REVEAL_DURATION = 5000;
+
 const computeGameClass = (game, selectedCard) =>
   [
     "game",
@@ -60,6 +62,7 @@ export class Game extends Component {
     ws.on(events.ROUND_END, this.checkGame.bind(this, "endRound"));
     ws.on(events.DRAW_CARD, this.checkGame.bind(this, "drawCard"));
     ws.on(events.DELETE_GAME, this.checkGame.bind(this, "deleteGame"));
+    ws.on(events.REVEAL_CARD, this.checkGame.bind(this, "revealCard"));
     ws.on(
       events.CURRENT_PLAYER_UPDATE,
       this.checkGame.bind(this, "updateCurrentPlayer")
@@ -75,6 +78,19 @@ export class Game extends Component {
       action: this[action].bind(this),
       payload
     });
+  }
+
+  revealCard({ slot }) {
+    const matchingSlot = this.state.slots.find(
+      boardSlot => boardSlot.x === slot.x && boardSlot.y === slot.y
+    );
+    matchingSlot.card = slot.card;
+
+    setTimeout(() => {
+      matchingSlot.card.layout = undefined;
+      matchingSlot.card.item = undefined;
+      this.forceUpdate();
+    }, REVEAL_DURATION);
   }
 
   deleteGame(gameId) {
@@ -96,7 +112,6 @@ export class Game extends Component {
   }
 
   drawCard({ card, playerId }) {
-    console.log(playerId, this.props.user.id);
     if (playerId !== this.props.user.id) {
       return;
     }

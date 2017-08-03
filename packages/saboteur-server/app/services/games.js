@@ -47,10 +47,7 @@ const removeSecretData = (game, userId) => {
   if (game.status === gameRules.STATUSES.PLAYING) {
     game.deck = game.deck.length;
     game.board.forEach(card => {
-      if (
-        card.hidden &&
-        !saboteurService.isUserAllowedToSeeHiddenCard(userId, card.allowedUsers)
-      ) {
+      if (card.hidden) {
         delete card.layout;
         delete card.item;
       }
@@ -120,7 +117,7 @@ const containsPlayer = (game, playerId) => {
 const addPlayer = async (game, playerId) => {
   const newPlayer = await userService.getById(playerId);
   if (!newPlayer) {
-    return;
+    return "this player does not exists";
   }
   game.players.push({
     id: playerId

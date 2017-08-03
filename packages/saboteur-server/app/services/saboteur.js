@@ -3,8 +3,6 @@ const gameRules = require("saboteur-shared/src/game");
 const boardRules = require("saboteur-shared/src/board");
 const deck = require("./deck");
 
-const REVEAL_DURATION = 5000;
-
 const MAX_ROUNDS = 3;
 
 // 44 path cards (40 distribuables, 4 sur le board)
@@ -117,25 +115,16 @@ const formatPlayer = player =>
 const computeInitialBoard = () => {
   const cards = [
     {
-      x: 8,
-      y: 0,
-      allowedUsers: [],
       hidden: true,
       layout: "1111",
       item: "EMPTY"
     },
     {
-      x: 8,
-      y: 2,
-      allowedUsers: [],
       hidden: true,
       layout: "1111",
       item: "EMPTY"
     },
     {
-      x: 8,
-      y: -2,
-      allowedUsers: [],
       hidden: true,
       layout: "1111",
       item: "GOLD"
@@ -169,16 +158,6 @@ const computeInitialBoard = () => {
         item: "LADDER"
       }
     ]);
-};
-
-const isUserAllowedToSeeHiddenCard = (userId, allowedUsers) => {
-  const matchingUser = allowedUsers.find(user => user.id === userId);
-  if (!matchingUser) {
-    return false;
-  }
-  // allowed to reveal for 5seconds
-  const now = new Date().getTime();
-  return now - matchingUser.date <= REVEAL_DURATION;
 };
 
 const replaceLastGold = (player, goldValue) => {
@@ -239,6 +218,5 @@ module.exports = {
   distributeCards,
   distributeGold,
   distributeRoles,
-  formatPlayer,
-  isUserAllowedToSeeHiddenCard
+  formatPlayer
 };
