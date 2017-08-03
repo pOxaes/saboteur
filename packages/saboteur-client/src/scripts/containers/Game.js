@@ -239,9 +239,7 @@ export class Game extends Component {
       game,
       slots,
       currentPlayer: game.players[currentPlayerIndex],
-      players: game.players.filter(
-        (player, index) => index !== currentPlayerIndex
-      )
+      players: gameService.shiftPlayers(game.players, currentPlayerIndex)
     });
   }
 

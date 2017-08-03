@@ -33,8 +33,23 @@ const canPlay = ({ selectedCard, type, destinationItem, userId }) => {
   );
 };
 
+const shiftPlayers = (players, currentPlayerIndex) => {
+  const shiftedPlayers = [];
+  for (
+    let i = currentPlayerIndex + 1,
+      playersLen = players.length,
+      max = currentPlayerIndex + playersLen;
+    i < max;
+    i++
+  ) {
+    shiftedPlayers.push(players[i % playersLen]);
+  }
+  return shiftedPlayers;
+};
+
 export default {
   canPlay,
   format,
-  getCurrentPlayerIndex
+  getCurrentPlayerIndex,
+  shiftPlayers
 };
