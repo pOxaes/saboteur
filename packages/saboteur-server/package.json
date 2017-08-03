@@ -10,10 +10,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "saboteur-shared": "1.0.0",
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.2",
     "clone": "^2.1.1",
+    "compression": "^1.7.0",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.3",
     "dotenv": "^4.0.0",
@@ -23,6 +23,7 @@
     "nocache": "^2.0.0",
     "node-persist": "^2.1.0",
     "node-uuid": "^1.4.8",
+    "saboteur-shared": "1.0.0",
     "socket.io": "^2.0.3",
     "winston-request-logger": "^1.0.7",
     "yargs": "^8.0.2"

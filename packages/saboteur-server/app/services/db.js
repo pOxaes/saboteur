@@ -1,6 +1,8 @@
 const storage = require("node-persist");
 
-storage.init();
+storage.init({
+  dir: process.env.NODE_PERSIST_DIR
+});
 
 const toItemName = (table, id) => `${table}_${id.trim().toLowerCase()}`;
 
