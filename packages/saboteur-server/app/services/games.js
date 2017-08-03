@@ -97,6 +97,12 @@ const remove = gameId => {
 
 const removePlayer = (gameId, playerId) => {
   const game = getById(gameId);
+  if (!game) {
+    return "this game does not exist";
+  }
+  triggerForPlayers(game, events.LEAVE_GAME, {
+    playerId
+  });
   game.players = game.players.filter(player => player.id !== playerId);
   if (game.players.length === 0) {
     remove(gameId);
@@ -105,9 +111,6 @@ const removePlayer = (gameId, playerId) => {
   if (game.creator === playerId) {
     game.creator = game.players[0].id;
   }
-  triggerForPlayers(game, events.LEAVE_GAME, {
-    playerId
-  });
 };
 
 const containsPlayer = (game, playerId) => {
