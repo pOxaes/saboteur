@@ -21,7 +21,7 @@ module.exports = {
             dest = acc.playing;
             break;
         }
-        const formattedGame = gamesService.format(game, ws.userId);
+        const formattedGame = gamesService.format(game, ws.userId, true);
         dest.push(formattedGame);
         return acc;
       },
@@ -35,18 +35,26 @@ module.exports = {
 
   [events.GET_GAME]: async ({ ws }, gameId) => {
     const game = gamesService.getById(gameId);
+
     if (!game) {
       return Promise.reject("This game does not exists");
     }
+
     // if player is not in the game
     if (!gamesService.containsPlayer(game, ws.userId)) {
+      if (game.players.length >= game.maxPlayers) {
+        return Promise.reject("This game is full");
+      }
+
       // and if game is not waiting for players then do not return it
       if (game.status !== gameRules.STATUSES.WAITING_FOR_PLAYERS) {
         return Promise.reject("You cannot get this game");
       }
+
       // or make him join
       await gamesService.addPlayer(game, ws.userId);
     }
+
     const usersDictionnary = await userService.getAllAsDictionnary();
     return gamesService.withUsers(
       gamesService.format(game, ws.userId),

@@ -25,17 +25,35 @@ const getForUser = userId => {
 };
 
 const insert = async (game, userId) => {
-  const newGame = Object.assign({}, game, {
-    id: uuid.v4(),
-    status: gameRules.STATUSES.WAITING_FOR_PLAYERS,
-    creator: userId,
-    creationDate: new Date(),
-    players: [
-      {
-        id: userId
-      }
-    ]
-  });
+  const maxPlayers = parseInt(game.maxPlayers, 10);
+  const name = game.name.substring(0, 50);
+
+  const isMaxPlayersValid =
+    typeof maxPlayers === "number" &&
+    maxPlayers >= gameRules.MIN_PLAYERS_COUNT &&
+    maxPlayers <= gameRules.MAX_PLAYERS_COUNT;
+
+  if (!isMaxPlayersValid) {
+    return Promise.reject("Max players not valid");
+  }
+
+  const newGame = Object.assign(
+    {
+      name,
+      maxPlayers
+    },
+    {
+      id: uuid.v4(),
+      status: gameRules.STATUSES.WAITING_FOR_PLAYERS,
+      creator: userId,
+      creationDate: new Date(),
+      players: [
+        {
+          id: userId
+        }
+      ]
+    }
+  );
   games[newGame.id] = newGame;
   wsService.trigger(events.CREATE_GAME, newGame);
   return newGame;
@@ -73,9 +91,29 @@ const attachAuth = (game, userId) => {
   });
 };
 
-const format = (game, userId) => {
+const format = (game, userId, lightMode) => {
   game = clone(game);
   removeSecretData(game, userId);
+  if (lightMode) {
+    const WHITE_LIST = [
+      "id",
+      "creator",
+      "creationDate",
+      "currentRound",
+      "maxPlayers",
+      "players",
+      "name",
+      "status"
+    ];
+    game = WHITE_LIST.reduce((acc, key) => {
+      acc[key] = game[key];
+      return acc;
+    }, {});
+    game.players = game.players.map(({ id, name }) => ({
+      id,
+      name
+    }));
+  }
   return attachAuth(game, userId);
 };
 
@@ -108,6 +146,10 @@ const removePlayer = (gameId, playerId) => {
   if (game.creator === playerId) {
     game.creator = game.players[0].id;
   }
+  wsService.trigger(events.UPDATE_GAME, {
+    id: game.id,
+    players: game.players
+  });
 };
 
 const containsPlayer = (game, playerId) => {
@@ -116,16 +158,23 @@ const containsPlayer = (game, playerId) => {
 
 const addPlayer = async (game, playerId) => {
   const newPlayer = await userService.getById(playerId);
+
   if (!newPlayer) {
-    return "this player does not exists";
+    return Promise.reject("this player does not exists");
   }
+
   game.players.push({
     id: playerId
   });
+
   triggerForPlayers(game, events.JOIN_GAME, {
     id: newPlayer.id,
     name: newPlayer.name,
     avatarUrl: newPlayer.avatarUrl
+  });
+  wsService.trigger(events.UPDATE_GAME, {
+    id: game.id,
+    players: game.players
   });
   return newPlayer;
 };
@@ -158,7 +207,10 @@ const start = async game => {
 
   // Trigger for each player, format game
   triggerForPlayersWithAuth(game, events.START_GAME);
-
+  wsService.trigger(events.UPDATE_GAME, {
+    id: game.id,
+    status: game.status
+  });
   return game;
 };
 

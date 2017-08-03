@@ -40,10 +40,6 @@ export class Game extends Component {
     this.initEvents(this.props.ws);
   }
 
-  componentWillUnmount() {
-    this.props.ws.removeListener(events.JOIN_GAME);
-  }
-
   componentWillReceiveProps({ ws }) {
     this.initEvents(ws);
   }
@@ -67,6 +63,18 @@ export class Game extends Component {
       events.CURRENT_PLAYER_UPDATE,
       this.checkGame.bind(this, "updateCurrentPlayer")
     );
+  }
+
+  componentWillUnmount() {
+    this.props.ws.removeListener(events.JOIN_GAME);
+    this.props.ws.removeListener(events.LEAVE_GAME);
+    this.props.ws.removeListener(events.START_GAME);
+    this.props.ws.removeListener(events.PLAY_CARD);
+    this.props.ws.removeListener(events.ROUND_END);
+    this.props.ws.removeListener(events.DRAW_CARD);
+    this.props.ws.removeListener(events.DELETE_GAME);
+    this.props.ws.removeListener(events.REVEAL_CARD);
+    this.props.ws.removeListener(events.CURRENT_PLAYER_UPDATE);
   }
 
   checkGame(action, payload) {
@@ -94,9 +102,6 @@ export class Game extends Component {
   }
 
   deleteGame(gameId) {
-    window.alert(
-      "This game has been deleted. You'll be redirected to the Home."
-    );
     this.props.history.replace("/");
   }
 

@@ -15,7 +15,7 @@ export default class Home extends Component {
   };
 
   componentDidMount() {
-    if (!this.state.games.length && this.props.wsConnected) {
+    if (this.props.wsConnected) {
       this.getGames();
     }
     this.initEvents(this.props.ws);
@@ -37,6 +37,43 @@ export default class Home extends Component {
     });
     ws.on(events.CREATE_GAME, this.addGame.bind(this));
     ws.on(events.DELETE_GAME, this.removeGame.bind(this));
+    ws.on(events.UPDATE_GAME, this.updateGame.bind(this));
+  }
+
+  findGame(id) {
+    return Object.values(this.state.games)
+      .reduce((acc, list) => {
+        return acc.concat(list);
+      })
+      .find(game => game.id === id);
+  }
+
+  updateGame({ id, players, status }) {
+    if (players) {
+      const matchingGame = this.findGame(id);
+      matchingGame.players = players;
+      this.forceUpdate();
+    } else if (status) {
+      let updatedGames = this.state.games;
+      Object.keys(updatedGames).forEach(key => {
+        updatedGames[key] = updatedGames[key].filter(game => game.id !== id);
+      });
+
+      const containsPlayer = players.some(
+        player => player.id === this.props.user.id
+      );
+
+      if (!containsPlayer) {
+        return;
+      }
+
+      const matchingGame = this.findGame(id);
+      matchingGame.status = status;
+      updatedGames.playing.push(matchingGame);
+      this.setState({
+        games: updatedGames
+      });
+    }
   }
 
   addGame(newGame) {
@@ -62,6 +99,8 @@ export default class Home extends Component {
 
   componentWillUnmount() {
     this.props.ws.removeListener(events.CREATE_GAME);
+    this.props.ws.removeListener(events.DELETE_GAME);
+    this.props.ws.removeListener(events.UPDATE_GAME);
   }
 
   getGames() {

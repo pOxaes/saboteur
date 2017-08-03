@@ -1,4 +1,5 @@
 const MIN_PLAYERS_COUNT = 2;
+const MAX_PLAYERS_COUNT = 10;
 
 const ROLES = {
   BUILDER: "BUILDER",
@@ -21,6 +22,7 @@ const DESTINATION_TYPES = {
 module.exports = {
   DESTINATION_TYPES,
   MIN_PLAYERS_COUNT,
+  MAX_PLAYERS_COUNT,
   ROLES,
   STATUSES
 };

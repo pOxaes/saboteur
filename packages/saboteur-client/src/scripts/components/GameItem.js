@@ -11,7 +11,7 @@ export default ({ game, onDeleteClick }) =>
       </span>
       <div className="game-item__players-count">
         <span className="game-item__players-count__playing">
-          {game.playersCount}
+          {game.players.length}
         </span>
         <span className="game-item__players-count__max">
           {game.maxPlayers && `/${game.maxPlayers}`}

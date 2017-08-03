@@ -31,6 +31,7 @@ export default class GameCreation extends Component {
             <input
               type="text"
               name="name"
+              maxLength="50"
               placeholder="name"
               onChange={this.handleChange.bind(this)}
               value={this.state.name}
@@ -46,7 +47,7 @@ export default class GameCreation extends Component {
               placeholder="Max players"
               onChange={this.handleChange.bind(this)}
               value={this.state.maxPlayers}
-              min="2"
+              min="3"
               max="10"
               required
             />
