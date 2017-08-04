@@ -298,11 +298,7 @@ var canPlayCardOnPlayer = function canPlayCardOnPlayer(card, player) {
 };
 
 var canPlayCardOnSlot = function canPlayCardOnSlot(card, slot, player) {
-  if (
-    player.malus &&
-    player.malus.length &&
-    (card.type === "PATH" || card.action === "DESTROY")
-  ) {
+  if (player.malus && player.malus.length && card.type === "PATH") {
     return false;
   }
 

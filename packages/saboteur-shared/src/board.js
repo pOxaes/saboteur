@@ -243,11 +243,7 @@ const canPlayCardOnPlayer = (card, player) =>
       player.malus.some(malus => card.subtype.indexOf(malus) !== -1)));
 
 const canPlayCardOnSlot = (card, slot, player) => {
-  if (
-    player.malus &&
-    player.malus.length &&
-    (card.type === "PATH" || card.action === "DESTROY")
-  ) {
+  if (player.malus && player.malus.length && card.type === "PATH") {
     return false;
   }
 

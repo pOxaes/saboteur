@@ -31,7 +31,6 @@ const playCardOnSlot = (card, { x, y }, board, userId) => {
 };
 
 const endRound = (winningPlayer, game) => {
-  console.log("end Round");
   saboteurService.distributeGold(winningPlayer, game.players);
   game.status =
     game.currentRound === saboteurService.MAX_ROUNDS
@@ -79,9 +78,6 @@ const playCard = async (userId, gameId, cardId, isRotated, destination) => {
     return Promise.reject("wrong card played");
   }
 
-  console.log("playingUser", playingUser);
-  console.log("playedCard", playedCard);
-
   // if card has layout, format it and rotate if needed
   if (playedCard.layout) {
     boardRules.formatCardLayout(playedCard);
@@ -102,7 +98,7 @@ const playCard = async (userId, gameId, cardId, isRotated, destination) => {
     const destPlayer = game.players.find(
       player => player.id === destination.id
     );
-    console.log("destination player", destPlayer);
+
     canPlayCardOnDestination = boardRules.canPlayCardOnPlayer(
       playedCard,
       destPlayer
@@ -119,7 +115,7 @@ const playCard = async (userId, gameId, cardId, isRotated, destination) => {
     slot = slots.find(
       slot => slot.x === destination.x && slot.y === destination.y
     );
-    console.log("destination slot", slot);
+
     canPlayCardOnDestination = boardRules.canPlayCardOnSlot(
       playedCard,
       slot,
@@ -190,7 +186,6 @@ const playCard = async (userId, gameId, cardId, isRotated, destination) => {
   }
 
   // - remove card from hand
-  console.log("playingUser", playingUser);
   playingUser.cards = playingUser.cards.filter(card => card.id !== cardId);
 
   // game is finished if:

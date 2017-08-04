@@ -1,5 +1,5 @@
 import Velocity from "velocity-animate";
-// import { findDOMNode } from "react-dom";
+import { getCard, setStyle } from "./utils.animation";
 
 // TODO: SO MUCH REFACTO NEEDED
 // SO MUCH WOW
@@ -25,19 +25,17 @@ const toDiscard = async (container, el) =>
 const discard = async (container, cardId, playerId) =>
   new Promise((resolve, reject) => {
     const viewBCR = document.body.getBoundingClientRect();
-    let card = container.querySelector(`#card-${cardId}`);
-    if (!card) {
-      const player = container.querySelector(`#player-${playerId}`);
-      card = player.querySelector(`.player__cards__card-wrapper`);
-    }
+    let card = getCard(container, cardId, playerId);
     if (!card) {
       resolve();
       return;
     }
     const cardBCR = card.getBoundingClientRect();
-    card.style.position = "fixed";
-    card.style.top = cardBCR.top + "px";
-    card.style.left = cardBCR.left + "px";
+    setStyle(card, {
+      position: "fixed",
+      top: `${cardBCR.top}px`,
+      left: `${cardBCR.left}px`
+    });
     Velocity(
       card,
       {
