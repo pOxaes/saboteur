@@ -86,7 +86,7 @@ module.exports = {
     }
   },
 
-  [events.START_GAME]: ({ ws }, gameId) => {
+  [events.START_GAME]: async ({ ws }, gameId) => {
     const game = gamesService.getById(gameId);
     if (!gamesService.canStart(game, ws.userId)) {
       return Promise.reject("You cannot start this game");
@@ -98,7 +98,8 @@ module.exports = {
   [events.JOIN_GAME]: async ({ ws }, gameId) =>
     gamesService.addPlayer(gameId, playerId),
 
-  [events.PLAY_CARD]: ({ ws }, { gameId, cardId, isRotated, destination }) => {
-    playCard(ws.userId, gameId, cardId, isRotated, destination);
-  }
+  [events.PLAY_CARD]: async (
+    { ws },
+    { gameId, cardId, isRotated, destination }
+  ) => playCard(ws.userId, gameId, cardId, isRotated, destination)
 };

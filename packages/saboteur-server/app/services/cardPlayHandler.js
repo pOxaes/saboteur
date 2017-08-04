@@ -49,7 +49,7 @@ const endRound = (winningPlayer, game) => {
   gamesService.triggerForPlayersWithAuth(game, events.ROUND_END);
 };
 
-const playCard = (userId, gameId, cardId, isRotated, destination) => {
+const playCard = async (userId, gameId, cardId, isRotated, destination) => {
   const game = gamesService.getById(gameId);
 
   console.log("playCard", {

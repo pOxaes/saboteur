@@ -30,6 +30,10 @@ const discard = async (container, cardId, playerId) =>
       const player = container.querySelector(`#player-${playerId}`);
       card = player.querySelector(`.player__cards__card-wrapper`);
     }
+    if (!card) {
+      resolve();
+      return;
+    }
     const cardBCR = card.getBoundingClientRect();
     card.style.position = "fixed";
     card.style.top = cardBCR.top + "px";

@@ -9,7 +9,7 @@ const kick = ({ gameId, playerId }) =>
   wsService.emitPromise(events.KICK_PLAYER, { gameId, playerId });
 
 const playCard = ({ gameId, cardId, isRotated, destination }) =>
-  wsService.emit(events.PLAY_CARD, {
+  wsService.emitPromise(events.PLAY_CARD, {
     gameId,
     cardId,
     isRotated,

@@ -325,12 +325,16 @@ export class Game extends Component {
       destination.y = destinationItem.y;
     }
 
-    actions.playCard({
-      gameId: this.state.id,
-      cardId: this.state.selectedCard.id,
-      isRotated: this.state.selectedCard.isRotated,
-      destination
-    });
+    actions
+      .playCard({
+        gameId: this.state.id,
+        cardId: this.state.selectedCard.id,
+        isRotated: this.state.selectedCard.isRotated,
+        destination
+      })
+      .catch(message => {
+        console.error(message);
+      });
     this.reinitSelectedCard();
   }
 
