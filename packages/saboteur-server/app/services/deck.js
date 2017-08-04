@@ -1,31 +1,31 @@
 const deck = [
   {
     layout: "1110",
-    count: 4
+    count: 3
   },
   {
     layout: "1101",
-    count: 4
+    count: 3
   },
   {
     layout: "1010",
-    count: 4
+    count: 3
   },
   {
     layout: "0101",
-    count: 4
+    count: 3
   },
   {
     layout: "1111",
-    count: 4
+    count: 3
   },
   {
     layout: "1100",
-    count: 4
+    count: 3
   },
   {
     layout: "0110",
-    count: 4
+    count: 3
   },
   {
     layout: "1110",
@@ -109,7 +109,7 @@ const deck = [
   },
   {
     action: "REVEAL",
-    count: 40
+    count: 4
   },
   {
     action: "DESTROY",
