@@ -19,7 +19,7 @@ const computeCardClass = (card, modifiers = {}) =>
   ].join(" ");
 
 export default ({ card, onPlay, modifiers, rotateLayout }) =>
-  <div className={computeCardClass(card, modifiers)}>
+  <div className={computeCardClass(card, modifiers)} id={`card-${card.id}`}>
     {card.canRotate &&
       <button
         className="card__rotate"

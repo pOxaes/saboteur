@@ -11,7 +11,10 @@ const computePlayerClass = (player, direction) =>
   ].join(" ");
 
 export default ({ player, kick, canKick, direction, onClick }) =>
-  <div className={computePlayerClass(player, direction)}>
+  <div
+    className={computePlayerClass(player, direction)}
+    id={`player-${player.id}`}
+  >
     {canKick &&
       <button type="button" onClick={() => kick(player)}>
         kick
@@ -23,16 +26,12 @@ export default ({ player, kick, canKick, direction, onClick }) =>
     >
       <PlayerStatus player={player} direction={direction} />
     </div>
-    {direction
-      ? <div className="player__cards">
-          {player.cards &&
-            player.cards.map((card, index) =>
-              <div className="player__cards__card-wrapper" key={index}>
-                <Card card={card} modifiers={{ isPlayer: true }} />
-              </div>
-            )}
-        </div>
-      : <div className="player__cards">
-          {player.cards && player.cards.length}
-        </div>}
+    <div className="player__cards">
+      {player.cards &&
+        player.cards.map((card, index) =>
+          <div className="player__cards__card-wrapper" key={index}>
+            <Card card={card} modifiers={{ isPlayer: true }} />
+          </div>
+        )}
+    </div>
   </div>;

@@ -11,19 +11,19 @@
 
 .player--direction-right {
   flex-direction: row;
-  transform: translateY(-50%);
+  margin-top: -25px;
 }
 
 .player--direction-left {
   right: 0;
   flex-direction: row-reverse;
-  transform: translateY(-50%);
+  margin-top: -25px;
 }
 
 .player--direction-bottom {
   top: 0;
   flex-direction: column;
-  transform: translateX(-50%);
+  margin-left: calc(var(--player-width) / -2);
 }
 
 /* CARDS */

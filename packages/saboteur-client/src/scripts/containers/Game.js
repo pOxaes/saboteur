@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { findDOMNode } from "react-dom";
 import { Redirect, Link } from "react-router-dom";
 import boardRules from "saboteur-shared/dist/board";
 import gameRules from "saboteur-shared/dist/game";
@@ -11,6 +12,7 @@ import CurrentPlayer from "../components/CurrentPlayer";
 import Lobby from "../components/Lobby";
 import RoundEnd from "../components/RoundEnd";
 import PlayingGame from "../components/PlayingGame";
+import gameAnimation from "../animation/game.animation";
 import "../../styles/Game.css";
 
 const REVEAL_DURATION = 5000;
@@ -139,12 +141,17 @@ export class Game extends Component {
     this.updateGame(game);
   }
 
-  playCard({ playedCard, destination, playerId }) {
+  async playCard({ playedCard, destination, playerId }) {
     // update playing player
     const playingUser = this.getPlayer(playerId);
     const card = playingUser.player.cards.find(
       card => card.id === playedCard.id
     );
+
+    if (destination.type === "DISCARD") {
+      // TODO:remove if no animation
+      await gameAnimation.discard(findDOMNode(this), playedCard.id, playerId);
+    }
 
     // remove card from player
     if (card) {

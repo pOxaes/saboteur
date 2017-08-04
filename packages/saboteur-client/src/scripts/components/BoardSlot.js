@@ -21,6 +21,7 @@ export default ({ slot, cardStyle, onClick }) =>
   <div
     className={computeSlotClass(slot)}
     style={computeStyle(slot, cardStyle)}
+    id={`slot_${slot.x}_${slot.y}`}
     onClick={() => {
       onClick && onClick(slot);
     }}

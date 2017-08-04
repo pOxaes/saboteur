@@ -4,7 +4,6 @@
   "private": true,
   "proxy": "http://localhost:3020",
   "dependencies": {
-    "saboteur-shared": "1.0.0",
     "bluebird": "^3.5.0",
     "prop-types": "15.5.10",
     "react": "^15.6.1",
@@ -14,7 +13,9 @@
     "react-router-dom": "^4.1.1",
     "react-scripts": "1.0.10",
     "reset-css": "^2.2.0",
-    "socket.io-client": "^2.0.3"
+    "saboteur-shared": "1.0.0",
+    "socket.io-client": "^2.0.3",
+    "velocity-animate": "^1.5.0"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -19,7 +19,10 @@ export default ({
   rotateCardLayout,
   isPlaying
 }) =>
-  <div className={computeCurrentPlayerClass(selectedCard, isPlaying)}>
+  <div
+    className={computeCurrentPlayerClass(selectedCard, isPlaying)}
+    id={`player-${player.id}`}
+  >
     <div
       onClick={() => {
         selectPlayer(player);

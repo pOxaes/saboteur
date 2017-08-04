@@ -2,7 +2,7 @@
   transition: transform .3s ease-out;
   position: fixed;
   bottom: 0;
-  right: 100%;
+  left: 0;
   transform: translateY(80%); 
   padding: 10px;
   font-size: 12px;

@@ -167,7 +167,7 @@ const playCard = (userId, gameId, cardId, isRotated, destination) => {
     destination
   });
 
-  if (playedCard.action === "REVEAL") {
+  if (playedCard.action === "REVEAL" && destination.type === "SLOT") {
     wsService.trigger(
       events.REVEAL_CARD,
       {

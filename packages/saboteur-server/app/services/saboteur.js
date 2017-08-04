@@ -36,10 +36,11 @@ const buildDeck = () => {
     }
     return acc;
   }, []);
+  utils.shuffle(computedDeck);
   computedDeck.forEach((card, index) => {
     card.id = index;
   });
-  return utils.shuffle(computedDeck);
+  return computedDeck;
 };
 
 const distributeCards = ({ players, deck, currentPlayerId }) => {
