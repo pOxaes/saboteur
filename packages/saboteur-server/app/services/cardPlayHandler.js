@@ -145,7 +145,7 @@ const playCard = async (userId, gameId, cardId, isRotated, destination) => {
       goldDiscovered =
         goldSibling &&
         playedCard.item !== "ROCK" &&
-        isPathOpen(goldSibling, {
+        boardRules.isPathOpen(goldSibling, {
           x: destination.x,
           y: destination.y,
           layout: playedCard.layout
