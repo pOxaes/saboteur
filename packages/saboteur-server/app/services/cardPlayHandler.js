@@ -148,6 +148,8 @@ const playCard = async (userId, gameId, cardId, isRotated, destination) => {
     return Promise.reject("you cannot perform this move pal");
   }
 
+  gamesService.createMessage(game, `${playingUser.name} just played a card`);
+
   gamesService.triggerForPlayers(game, events.PLAY_CARD, {
     playedCard,
     playerId: userId,

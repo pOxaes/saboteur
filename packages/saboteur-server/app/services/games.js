@@ -10,104 +10,40 @@ const wsService = require("./ws");
 const games = {};
 
 games["dad6865a-5c26-4026-9146-d9dfb789af04"] = {
+  chat: [],
   name: "My Super Game",
   maxPlayers: 5,
   id: "dad6865a-5c26-4026-9146-d9dfb789af04",
-  status: "PLAYING",
+  status: "ROUND_END",
   creator: "47cd89f3-0742-4850-bc6b-e3061ed22170",
   creationDate: "2017-09-06T09:08:07.624Z",
   players: [
     {
       id: "47cd89f3-0742-4850-bc6b-e3061ed22170",
-      malus: [],
-      cards: [
-        {
-          type: "PATH",
-          layout: "1111",
-          item: "EMPTY",
-          id: 0
-        }
-      ],
-      gold: [],
-      role: "BUILDER"
+      gold: [3],
+      role: "BUILDER",
+      name: "Hugo Pievic",
+      avatarUrl:
+        "https://lh4.googleusercontent.com/-xjC_tP2pf0A/AAAAAAAAAAI/AAAAAAAAAD0/D09zQzqcDGM/photo.jpg?sz=50"
     },
     {
       id: "a0e49070-f02a-4405-bdb7-615564d9e6af",
-      malus: [],
-      cards: [
-        {
-          type: "PATH",
-          layout: "1111",
-          item: "EMPTY",
-          id: 3
-        }
-      ],
-      gold: [],
-      role: "SABOTEUR"
+      gold: [0],
+      role: "SABOTEUR",
+      name: "pOxaes nz",
+      avatarUrl:
+        "https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg?sz=50"
     }
   ],
-  deck: [],
   currentRound: 1,
-  currentPlayerId: "47cd89f3-0742-4850-bc6b-e3061ed22170",
-  board: [
-    {
-      x: 8,
-      y: 0,
-      hidden: true,
-      layout: "1111",
-      item: "GOLD"
-    },
-    {
-      x: 8,
-      y: -2,
-      hidden: true,
-      layout: "0011",
-      item: "EMPTY"
-    },
-    {
-      x: 8,
-      y: 2,
-      hidden: true,
-      layout: "0110",
-      item: "EMPTY"
-    },
-    {
-      x: 0,
-      y: 0,
-      layout: "1111",
-      item: "LADDER"
-    },
-    {
-      x: 1,
-      y: 0,
-      layout: "1111"
-    },
-    {
-      x: 2,
-      y: 0,
-      layout: "1111"
-    },
-    {
-      x: 3,
-      y: 0,
-      layout: "1111"
-    },
-    {
-      x: 4,
-      y: 0,
-      layout: "1111"
-    },
-    {
-      x: 5,
-      y: 0,
-      layout: "1111"
-    },
-    {
-      x: 6,
-      y: 0,
-      layout: "1111"
-    }
-  ]
+  winningPlayer: {
+    id: "47cd89f3-0742-4850-bc6b-e3061ed22170",
+    gold: [3],
+    role: "BUILDER",
+    name: "Hugo Pievic",
+    avatarUrl:
+      "https://lh4.googleusercontent.com/-xjC_tP2pf0A/AAAAAAAAAAI/AAAAAAAAAD0/D09zQzqcDGM/photo.jpg?sz=50"
+  }
 };
 
 const triggerForPlayers = (game, event, payload) =>
@@ -239,6 +175,7 @@ const removePlayer = (gameId, playerId) => {
   triggerForPlayers(game, events.LEAVE_GAME, {
     playerId
   });
+  createMessage(game, `${playerId} has left the party`);
   game.players = game.players.filter(player => player.id !== playerId);
   if (game.players.length === 0) {
     remove(gameId);
@@ -246,6 +183,7 @@ const removePlayer = (gameId, playerId) => {
   }
   if (game.creator === playerId) {
     game.creator = game.players[0].id;
+    createMessage(game, `${game.creator} is now the host`);
   }
   wsService.trigger(events.UPDATE_GAME, {
     id: game.id,
@@ -277,6 +215,7 @@ const addPlayer = async (game, playerId) => {
     id: game.id,
     players: game.players
   });
+  createMessage(game, `${newPlayer.name} has join the party`);
   return newPlayer;
 };
 
@@ -312,6 +251,7 @@ const start = async game => {
     id: game.id,
     status: game.status
   });
+  createMessage(game, `Let's fight!`);
   return game;
 };
 
@@ -330,8 +270,45 @@ const triggerForPlayersWithAuth = async (game, event) => {
   });
 };
 
+const createMessage = (game, message, user) => {
+  if (!user) {
+    user = {
+      name: "Info"
+    };
+  }
+  const chatElement = {
+    user,
+    message
+  };
+  game.chat.push(chatElement);
+  triggerForPlayers(game, events.SEND_MESSAGE, chatElement);
+};
+
+const addMessage = (userId, gameId, message) => {
+  const game = games[gameId];
+  if (!game) {
+    return Promise.reject("game does not exist");
+  }
+
+  const user = game.players.find(player => player.id === userId);
+  if (!user) {
+    return Promise.reject("you are not part of this game");
+  }
+
+  message = message.trim();
+
+  if (!message || !message.length) {
+    return Promise.reject("your message is empty");
+  }
+
+  message = message.substring(0, 100);
+  createMessage(game, message, user);
+};
+
 module.exports = {
   addPlayer,
+  addMessage,
+  createMessage,
   canKick,
   canStart,
   format,

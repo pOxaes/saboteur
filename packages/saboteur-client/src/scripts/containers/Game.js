@@ -12,6 +12,7 @@ import CurrentPlayer from "../components/CurrentPlayer";
 import Lobby from "../components/Lobby";
 import RoundEnd from "../components/RoundEnd";
 import PlayingGame from "../components/PlayingGame";
+import Chat from "../components/Chat";
 import gameAnimation from "../animation/game.animation";
 import "../../styles/Game.css";
 
@@ -27,7 +28,8 @@ const computeGameClass = (game, selectedCard) =>
 export class Game extends Component {
   state = {
     eventsInitialized: false,
-    id: this.props.match.params.id
+    id: this.props.match.params.id,
+    message: ""
   };
 
   queue = new EventsQueue();
@@ -53,6 +55,7 @@ export class Game extends Component {
     this.setState({
       eventsInitialized: true
     });
+    ws.on(events.SEND_MESSAGE, this.checkGame.bind(this, "addMessage"));
     ws.on(events.JOIN_GAME, this.checkGame.bind(this, "addPlayer"));
     ws.on(events.LEAVE_GAME, this.checkGame.bind(this, "removePlayer"));
     ws.on(events.START_GAME, this.checkGame.bind(this, "onGameStart"));
@@ -163,6 +166,14 @@ export class Game extends Component {
 
   endRound({ game }) {
     this.updateGame(game);
+  }
+
+  addMessage(chatItem) {
+    console.log(chatItem);
+    const updatedGame = this.state.game;
+    updatedGame.chat.push(chatItem);
+    this.setState({ game: updatedGame });
+    this.forceUpdate();
   }
 
   async playCard({ playedCard, destination, playerId }) {
@@ -436,6 +447,18 @@ export class Game extends Component {
     });
   }
 
+  handleMessageChange = event => {
+    this.setState({ message: event.target.value });
+  };
+
+  sendMessage = event => {
+    event.preventDefault();
+    actions.sendMessage({
+      message: this.state.message,
+      gameId: this.state.game.id
+    });
+  };
+
   render() {
     return (
       <div
@@ -481,6 +504,13 @@ export class Game extends Component {
             rotateCardLayout={this.rotateCardLayout.bind(this)}
           />}
         {this.state.game && this.renderByStatus()}
+        {this.state.game &&
+          <Chat
+            chat={this.state.game.chat}
+            handleMessageChange={this.handleMessageChange}
+            sendMessage={this.sendMessage}
+            message={this.state.message}
+          />}
       </div>
     );
   }

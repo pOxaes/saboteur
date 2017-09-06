@@ -1,0 +1,9 @@
+.chat {
+  position: absolute;
+  z-index: var(--z-chat);
+  width: 300px;
+  height: 300px;
+  bottom: 0;
+  right: 0;
+  background: #F5F5F5;
+}

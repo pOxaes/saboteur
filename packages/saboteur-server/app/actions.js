@@ -101,5 +101,9 @@ module.exports = {
   [events.PLAY_CARD]: async (
     { ws },
     { gameId, cardId, isRotated, destination }
-  ) => playCard(ws.userId, gameId, cardId, isRotated, destination)
+  ) => playCard(ws.userId, gameId, cardId, isRotated, destination),
+
+  [events.SEND_MESSAGE]: ({ ws }, { gameId, message }) => {
+    gamesService.addMessage(ws.userId, gameId, message);
+  }
 };
