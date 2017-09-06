@@ -117,12 +117,12 @@ const computeInitialBoard = () => {
   const cards = [
     {
       hidden: true,
-      layout: "1111",
+      layout: "0110",
       item: "EMPTY"
     },
     {
       hidden: true,
-      layout: "1111",
+      layout: "0011",
       item: "EMPTY"
     },
     {
