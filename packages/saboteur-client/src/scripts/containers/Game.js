@@ -62,6 +62,10 @@ export class Game extends Component {
     ws.on(events.DELETE_GAME, this.checkGame.bind(this, "deleteGame"));
     ws.on(events.REVEAL_CARD, this.checkGame.bind(this, "revealCard"));
     ws.on(
+      events.REVEAL_CARD_PERMANENTLY,
+      this.checkGame.bind(this, "revealCardPermanently")
+    );
+    ws.on(
       events.CURRENT_PLAYER_UPDATE,
       this.checkGame.bind(this, "updateCurrentPlayer")
     );
@@ -101,6 +105,22 @@ export class Game extends Component {
       matchingSlot.card.item = undefined;
       this.forceUpdate();
     }, REVEAL_DURATION);
+  }
+
+  async revealCardPermanently({ x, y, hidden, item, layout }) {
+    const updatedGame = this.state.game;
+    const matchingSlot = updatedGame.board.find(
+      boardSlot => boardSlot.x === x && boardSlot.y === y
+    );
+    const timeout = item === "GOLD" ? 3000 : 0;
+    Object.assign(matchingSlot, {
+      hidden,
+      item,
+      layout
+    });
+    this.updateGame(updatedGame);
+    // TODO: animate
+    return new Promise(resolve => setTimeout(resolve, timeout));
   }
 
   deleteGame(gameId) {

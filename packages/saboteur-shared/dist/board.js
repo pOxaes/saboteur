@@ -12,15 +12,19 @@ var isPathOpen = function isPathOpen(sourceCard, card) {
   return (
     (card.y === sourceCard.y &&
       sourceCard.x === card.x + 1 &&
+      (!sourceCard.layout || sourceCard.layout.left) &&
       (card.hidden || card.layout.right)) ||
     (card.y === sourceCard.y &&
       sourceCard.x === card.x - 1 &&
+      (!sourceCard.layout || sourceCard.layout.right) &&
       (card.hidden || card.layout.left)) ||
     (card.x === sourceCard.x &&
       sourceCard.y === card.y - 1 &&
+      (!sourceCard.layout || sourceCard.layout.bottom) &&
       (card.hidden || card.layout.top)) ||
     (card.x === sourceCard.x &&
       sourceCard.y === card.y + 1 &&
+      (!sourceCard.layout || sourceCard.layout.top) &&
       (card.hidden || card.layout.bottom))
   );
 };
@@ -66,7 +70,7 @@ var getSiblingsFromMultipleCards = function getSiblingsFromMultipleCards(
 };
 
 var isLinkedToStart = function isLinkedToStart(card, cards) {
-  var maxLoop = 15;
+  var maxLoop = 30;
   var loop = 0;
   if (card.x === 0 && card.y === 0) {
     return true;

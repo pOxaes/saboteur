@@ -163,6 +163,17 @@ const playCard = async (userId, gameId, cardId, isRotated, destination) => {
     destination
   });
 
+  boardRules
+    .getLinkedSiblings(board, destination)
+    .filter(card => card.hidden)
+    .forEach(card => {
+      gamesService.triggerForPlayers(
+        game,
+        events.REVEAL_CARD_PERMANENTLY,
+        card
+      );
+    });
+
   if (playedCard.action === "REVEAL" && destination.type === "SLOT") {
     wsService.trigger(
       events.REVEAL_CARD,
@@ -183,6 +194,7 @@ const playCard = async (userId, gameId, cardId, isRotated, destination) => {
     }
     console.log("\n", "goldDiscovered");
     endRound(winningPlayer, game);
+    return;
   }
 
   // - remove card from hand
@@ -197,9 +209,6 @@ const playCard = async (userId, gameId, cardId, isRotated, destination) => {
   if (noMoreMove) {
     console.log("\n", "noMoreMove");
     endRound({ role: gameRules.ROLES.SABOTEUR }, game);
-  }
-
-  if (goldDiscovered || noMoreMove) {
     return;
   }
 
