@@ -145,6 +145,7 @@ export class Game extends Component {
     const user = this.getPlayer(playerId);
     if (card.type === "PATH") {
       boardRules.formatCardLayout(card);
+      card.canRotate = gameService.canRotate(card.layout);
     }
     user.player.cards.push(card);
   }
