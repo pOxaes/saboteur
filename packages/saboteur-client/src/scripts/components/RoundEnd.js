@@ -1,6 +1,7 @@
 import React from "react";
 import gameRules from "saboteur-shared/dist/game";
 import LeaderBoard from "./LeaderBoard";
+import PlayersByRole from "./PlayersByRole";
 
 const goldToPoints = gold =>
   gold.reduce((acc, goldValue) => acc + goldValue, 0);
@@ -39,14 +40,19 @@ export default ({ game, startGame }) =>
     <p>
       {game.winningPlayer.role} team won
     </p>
+    <h2>Builders</h2>
+    <PlayersByRole players={game.players} role="BUILDER" />
+    <h2>Saboteurs</h2>
+    <PlayersByRole players={game.players} role="SABOTEUR" />
+
     {game.winningPlayer &&
       <p>
-        {game.winningPlayer.name} won
+        {game.winningPlayer.name} won this round
       </p>}
     {game._canStart &&
       <button type="button" onClick={startGame}>
         Start Round {game.currentRound + 1}
       </button>}
-    {game.state === gameRules.STATUSES.COMPLETED &&
+    {game.status === gameRules.STATUSES.COMPLETED &&
       <LeaderBoard leaderBoard={getPlayersByRank(game.players)} />}
   </div>;

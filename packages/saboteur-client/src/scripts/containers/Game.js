@@ -138,7 +138,10 @@ export class Game extends Component {
     };
   }
 
-  drawCard({ card, playerId }) {
+  drawCard({ card, playerId, deck }) {
+    this.setState({
+      game: Object.assign(this.state.game, { deck })
+    });
     if (playerId !== this.props.user.id) {
       return;
     }

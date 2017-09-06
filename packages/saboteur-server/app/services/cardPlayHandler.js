@@ -44,20 +44,12 @@ const endRound = (winningPlayer, game) => {
   delete game.currentPlayerId;
   delete game.board;
   delete game.deck;
-
+  console.log(JSON.stringify(game, null, 2));
   gamesService.triggerForPlayersWithAuth(game, events.ROUND_END);
 };
 
 const playCard = async (userId, gameId, cardId, isRotated, destination) => {
   const game = gamesService.getById(gameId);
-
-  console.log("playCard", {
-    userId,
-    gameId,
-    cardId,
-    isRotated,
-    destination
-  });
 
   if (!game) {
     return Promise.reject("this game does not exists");
@@ -163,16 +155,18 @@ const playCard = async (userId, gameId, cardId, isRotated, destination) => {
     destination
   });
 
-  boardRules
-    .getLinkedSiblings(board, destination)
-    .filter(card => card.hidden)
-    .forEach(card => {
-      gamesService.triggerForPlayers(
-        game,
-        events.REVEAL_CARD_PERMANENTLY,
-        card
-      );
-    });
+  if (destination.type === "SLOT") {
+    boardRules
+      .getLinkedSiblings(board, destination)
+      .filter(card => card.hidden)
+      .forEach(card => {
+        gamesService.triggerForPlayers(
+          game,
+          events.REVEAL_CARD_PERMANENTLY,
+          card
+        );
+      });
+  }
 
   if (playedCard.action === "REVEAL" && destination.type === "SLOT") {
     wsService.trigger(
@@ -224,7 +218,8 @@ const playCard = async (userId, gameId, cardId, isRotated, destination) => {
         {
           gameId: game.id,
           card: isCurrentPlayer ? drawnCard : { type: "HIDDEN" },
-          playerId: userId
+          playerId: userId,
+          deck: game.deck.length
         },
         [player.id]
       );
