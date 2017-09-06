@@ -44,7 +44,6 @@ const endRound = (winningPlayer, game) => {
   delete game.currentPlayerId;
   delete game.board;
   delete game.deck;
-  console.log(JSON.stringify(game, null, 2));
   gamesService.triggerForPlayersWithAuth(game, events.ROUND_END);
 };
 
@@ -186,7 +185,6 @@ const playCard = async (userId, gameId, cardId, isRotated, destination) => {
         game.players.filter(player => player.role === gameRules.ROLES.BUILDER)
       );
     }
-    console.log("\n", "goldDiscovered");
     endRound(winningPlayer, game);
     return;
   }
@@ -201,7 +199,6 @@ const playCard = async (userId, gameId, cardId, isRotated, destination) => {
     game.players.every(player => player.cards.length === 0);
 
   if (noMoreMove) {
-    console.log("\n", "noMoreMove");
     endRound({ role: gameRules.ROLES.SABOTEUR }, game);
     return;
   }
