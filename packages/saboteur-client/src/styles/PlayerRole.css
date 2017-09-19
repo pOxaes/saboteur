@@ -1,9 +1,17 @@
 .player-role {
-  transition: transform .3s ease-out;
-  position: fixed;
+  position: absolute;
+  left: 100%;
   bottom: 0;
-  left: 0;
-  transform: translateY(80%); 
+  width: 80px;
+  height: 40px;
+  overflow: hidden;
+}
+
+.player-role__inner {
+  transition: transform .3s ease-out .5s;
+  position: absolute;
+  top: 100%;
+  transform: translateY(-20%);
   padding: 10px;
   font-size: 12px;
   text-transform: lowercase;
@@ -11,6 +19,7 @@
   border: 2px solid #CCC;
 }
 
-.player-role:hover {
-  transform: translateY(0);
+
+.player-role:hover .player-role__inner {
+  transform: translateY(-100%);
 }

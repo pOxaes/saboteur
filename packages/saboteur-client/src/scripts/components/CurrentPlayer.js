@@ -1,7 +1,8 @@
 import React from "react";
 import Card from "./Card";
-import PlayerStatus from "./PlayerStatus";
 import PlayerRole from "./PlayerRole";
+import PlayerMalus from "./PlayerMalus";
+import PlayerGold from "./PlayerGold";
 import "../../styles/CurrentPlayer.css";
 
 const computeCurrentPlayerClass = (selectedCard, isPlaying) =>
@@ -17,6 +18,7 @@ export default ({
   selectedCard,
   selectPlayer,
   rotateCardLayout,
+  discardCard,
   isPlaying
 }) =>
   <div
@@ -24,11 +26,13 @@ export default ({
     id={`player-${player.id}`}
   >
     <div
+      className="current-player__head"
       onClick={() => {
         selectPlayer(player);
       }}
     >
-      <PlayerStatus player={player} direction="top" />
+      <PlayerGold gold={player.gold} />
+      <PlayerMalus malus={player.malus} />
     </div>
     {player.role && <PlayerRole role={player.role} />}
     {player.cards &&
@@ -39,6 +43,7 @@ export default ({
               card={card}
               onPlay={onCardPlay}
               rotateLayout={rotateCardLayout}
+              discard={discardCard}
               modifiers={{
                 isHand: true,
                 isSelected: selectedCard && selectedCard.id === card.id

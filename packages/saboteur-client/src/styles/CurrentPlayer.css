@@ -1,12 +1,11 @@
 .current-player {
   position: absolute;
   bottom: 0;
-  left: 60px;
+  left: 10px;
   z-index: var(--z-currentPlayer);
 
   display: flex;
   flex-direction: column;
-  align-items: center;
 }
 
 .current-player--playing {
@@ -21,7 +20,7 @@
 }
 
 .current-player__hand__card-wrapper {
-  max-width: 20vw;
+  margin-left: 3px;
 }
 
 .current-player__hand__card-wrapper .card {
@@ -30,6 +29,16 @@
 
 .game--status-WAITING_FOR_PLAYERS .current-player {
   margin-bottom: 40px;
+}
+
+.current-player__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.current-player .player-malus .card {
+  transform: scale(2) translateY(-30%);
 }
 
 @media only screen and (max-width: 530px) {

@@ -3,18 +3,24 @@
   z-index: var(--z-discard);
   width: var(--card-width);
   height: var(--card-height);
-  bottom: 30px;
-  right: 30px;
-  border: 2px dotted rgba(255, 0, 0, .3);
+  top: 50%;
+  left: 30px;
+  transform: translateY(-180%);
+  margin-left: 4px;
+  border: 2px dotted rgba(255, 255, 255, .3);
   border-radius: var(--card-border-radius);
 }
 
-@media only screen and (max-width: 530px) {
+.card--header-actions--discard {
+  display: none;
+}
+
+@media only screen and (max-width: 700px) {
   .discard {
     display: none;
   }
 
-  .game--selected-card .discard {
+  .card--header-actions--discard {
     display: block;
   }
 }

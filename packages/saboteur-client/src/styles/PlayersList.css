@@ -1,69 +1,24 @@
 .players-list {
   list-style: none;
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: var(--z-playersList);
-}
-
-.player-list__item {
-  position: absolute;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-}
-
-.player-list__item--playing {
-  background: rgb(100, 220, 150);
-}
-
-/* DISPLAY INLINE */
-
-.players-list--display-inline {
-  bottom: auto;
   display: flex;
-  justify-content: space-around;
+  height: 68px;
+  justify-content: space-between;
+  z-index: var(--z-playersList);
+  background: #4d207f;
+  padding: 0 18px;
 }
 
-.players-list--display-inline .player-list__item {
-  position: static;
-  margin-left: 8px;
+.player-list__item--playing .player-avatar {
+  background: rgb(100, 220, 150);
+  box-shadow: 0 0 3px 3px rgba(100, 220, 150, 0.5);
 }
 
-.players-list--display-inline .player {
-  flex: 1 1;
-  position: relative;
-  transform: none;
-  flex-direction: row;
-  width: auto;
-  /* min-width: 40px;  */
+.player-list__item--playing .player__name {
+  color: rgb(100, 220, 150);
 }
 
-.players-list--display-inline .player-status__name {
-  font-size: 12px;
-  flex-direction: row;
-  max-width: 35px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow-x: hidden;
-}
-
-.game--status-WAITING_FOR_PLAYERS .players-list--display-inline {
-  flex-direction: column;
-  border: 1px solid red;
-}
-
-.game--status-WAITING_FOR_PLAYERS .players-list--display-inline .player {
-  flex-direction: row-reverse;
-}
-
-.game--status-WAITING_FOR_PLAYERS .players-list--display-inline .player-status__name {
-  max-width: none;
-  margin-right: 10px;
-}
-
-.game--status-WAITING_FOR_PLAYERS .players-list--display-inline .player-status {
-  border: none;
+.player-list__item:first-child:last-child {
+  flex: 1;
+  display: flex;
+  justify-content: center;
 }

@@ -1,44 +1,44 @@
 .svg-card-path {
-  max-width: 100%;
-  max-height: 100%;  
+  width: 101%;
+  height: 101%;  
 }
 
-[class*="svg-card-path__path"] {
-  fill: #FFFFFF;
+.svg-card-path__path{
+  fill:#CEA386;
 }
-
-.svg-card-path .rock-color-1 {
-  fill: #545452;
+.svg-card-path__grass{
+  fill:#4A9980;
 }
-
-.svg-card-path .rock-color-2 {
-  fill: #686867;
+.svg-card-path__snake{
+  fill:#B23D3D;
 }
-
-.svg-card-path .gold-color-1 {
-  fill: #FFD255;
+.svg-card-path__car-grey{
+  fill:#5E5C5B;
 }
-
-.svg-card-path .gold-color-2 {
-  fill: #FFC70C;
+.svg-card-path__car-light{
+  fill:#FBEF5B;
+  fill-opacity:0.32;}
+.svg-card-path__car-main{
+  fill:#E24D25;
 }
-
-.svg-card-path .gold-color-3 {
-  fill: #FFF2CF;
+.svg-card-path__car-glass{
+  fill:#E8E7E6;
 }
-
-.svg-card-path .gold-color-4 {
-  fill: #FFE69F;
+.svg-card-path__car-secondary{
+  fill:#C93E23;
 }
-
-.svg-card-path .ladder-color-1 {
-  fill: #AA0C00;
+.svg-card-path__gold-glow{
+  fill: url(#ITEM-GOLD-GLOW_1_);
 }
-
-.svg-card-path .ladder-color-2 {
-  fill: #D11900;
+.svg-card-path__gold-light{
+  fill:#FDEA3A;
 }
-
-.svg-card-path .ladder-color-3 {
-  fill: #E81B00;
+.svg-card-path__gold-dark{
+  fill:#C4852C;
+}
+.svg-card-path__vege-light{
+  fill:#367F60;
+}
+.svg-card-path__vege-dark{
+  fill:#2A664E;
 }

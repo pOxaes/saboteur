@@ -1,0 +1,20 @@
+.player-gold {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  height: 34px;
+}
+
+.player-gold__item {
+  width: 15px;
+  height: 15px;
+  margin: 2px 2px 0 0;
+}
+
+.player-gold__light {
+  fill: #FDEA3A;
+}
+
+.player-gold__dark {
+  fill: #C4852C;
+}

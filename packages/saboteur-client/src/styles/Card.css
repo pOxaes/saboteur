@@ -7,7 +7,7 @@
   max-width: 100%;
   max-height: 100%;
   box-sizing: border-box;
-  border: var(--card-border-width) solid rgba(0, 0, 0, .1);
+  box-shadow: 1px 1px 2px rgba(0,0,0,.3);
 }
 
 .card__inner {
@@ -16,23 +16,14 @@
   right: 0;
   bottom: 0;
   left: 0;
+  border-radius: var(--card-border-radius);
 
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
-
-
-/* .card--is-playable {
-  transition: transform .2s ease-out;
-  cursor: pointer;
-  transform: translateY(-10px);
-}
-
-.card--is-playable:hover {
-  transform: translateY(var(--card-hover-translateY));
-} */
 
 .card__layout {
   position: absolute;
@@ -44,37 +35,48 @@
 
 /* ACTION */
 
-.card--ACTION .card__inner::after {
-  content: "";
-  font-size: 8px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 30px;
-  height: 30px;
-  margin-top: -17px;
-  margin-left: -17px;
-
-  border: 2px solid grey;
-  border-radius: 50%;
+.card--action-BLOCK .card__inner {
+  background-color: #e63c5c;
 }
 
-.card--action-BLOCK .card__inner::after {
-  border-color: red;
+.card--action-FREE .card__inner {
+  background-color: #a9ef00;
 }
 
-.card--action-FREE .card__inner::after {
-  border-color: green;
+.card--action-FREE svg {
+  fill: #567a00;
 }
 
-.card--action-DESTROY .card__inner::after {
-  border-color: grey;
-  background-color: grey;
+.card--action-FREE--bg {
+  fill: #9ada00;
 }
 
-.card--action-REVEAL .card__inner::after {
-  border-color: yellowgreen;
-  background-color: yellowgreen;
+.card--action-BLOCK svg {
+  fill: #FFFFFF;
+}
+
+.card--multiple-subtype svg g {
+  transform: translate(28px, 35px) scale(.7);
+}
+
+.card--multiple-subtype svg g + g {
+  transform: translate(-10px, -8px) scale(.7);
+}
+
+.card--action-DESTROY .card__inner {
+  background-color: #f8ba00;
+}
+
+.card--action-DESTROY svg {
+  fill: #e63c5c;
+}
+
+.card--action-REVEAL .card__inner {
+  background-color: #f8ba00;
+}
+
+.card--action-REVEAL svg {
+  fill: #FFF;
 }
 
 .card__subtype {
@@ -84,41 +86,10 @@
 
 /* PATH */
 
-.card--PATH {
-  background: #DDD;
-}
-
-.card--PATH .card__inner::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 10px;
-  height: 10px;
-  margin-top: -5px;
-  margin-left: -5px;
-
-  border-radius: 50%;
-}
-
-.card--PATH.card--subtype-GOLD .card__inner::after {
-    background-color: yellow;
-}
-
-.card--PATH.card--subtype-ROCK .card__inner::after {
-    background-color: darkslategrey;
-}
-
-.card--PATH.card--subtype-LADDER .card__inner::after {
-  content: "H";
-  font-weight: bold;
-  color: red;
-}
-
 /* HIDDEN */
 
 .card--HIDDEN {
-  background: #BBB;
+  background: #5c2799;
 }
 
 /* HAND */
@@ -133,30 +104,26 @@
   transform: translateY(-10px);
 }
 
-/* .card--is-playable {
-  transition: transform .2s ease-out;
-  cursor: pointer;
-  transform: translateY(-10px);
-}
-
-.card--is-playable:hover {
-  transform: translateY(var(--card-hover-translateY));
-} */
-
 .card--hand:hover {
   transform: translateY(var(--card-hover-translateY--hand));
 }
 
 .card--hand.card--selected {
   transform: translateY(var(--card-hover-translateY--hand));
-  border-color: red;
+  box-shadow: 0 0 10px 5px rgba(100, 200, 255, 1);
 }
 
-.card__rotate {
+.card--header-actions {
   position: absolute;
   bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.card--header-actions--discard {
+  flex: 1;
+  text-align: right;
 }
 
 /* MALUS */

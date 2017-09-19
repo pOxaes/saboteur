@@ -3,5 +3,7 @@ import "../../styles/PlayerRole.css";
 
 export default ({ role }) =>
   <div className="player-role">
-    {role}
+    <div className="player-role__inner">
+      {role}
+    </div>
   </div>;

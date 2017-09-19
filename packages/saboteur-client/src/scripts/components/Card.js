@@ -1,36 +1,54 @@
 import React from "react";
 import CardLayout from "./CardLayout";
 import CardGold from "./CardGold";
+import CardAction from "./CardAction";
 import "../../styles/Card.css";
 
 const computeCardClass = (card, modifiers = {}) =>
   [
     "card",
-    // card.isPlayable && "card--is-playable",
     `card--${card.type}`,
+    card.hidden && "card--HIDDEN",
     card.action && `card--action-${card.action}`,
     card.item && `card--item-${card.item}`,
     card.subtype &&
       card.subtype.map(subtype => `card--subtype-${subtype}`).join(" "),
+    card.subtype && card.subtype.length > 1 && "card--multiple-subtype",
     modifiers.isHand && "card--hand",
     modifiers.isPlayer && "card--player",
     modifiers.isMalus && "card--malus",
     modifiers.isSelected && "card--selected"
   ].join(" ");
 
-export default ({ card, onPlay, modifiers, rotateLayout }) =>
+export default ({ card, onPlay, modifiers, rotateLayout, discard }) =>
   <div className={computeCardClass(card, modifiers)} id={`card-${card.id}`}>
-    {card.canRotate &&
-      <button
-        className="card__rotate"
-        type="button"
-        onClick={() => {
-          rotateLayout && rotateLayout(card);
-        }}
-      >
-        rotate
-      </button>}
-
+    <div className="card--header-actions">
+      {card.canRotate &&
+        <div className="card--header-actions--rotate">
+          <button
+            className="card__rotate"
+            type="button"
+            onClick={() => {
+              rotateLayout && rotateLayout(card);
+            }}
+          >
+            rotate
+          </button>
+        </div>}
+      {modifiers &&
+        modifiers.isSelected &&
+        <div className="card--header-actions--discard">
+          <button
+            className="card__discard"
+            type="button"
+            onClick={() => {
+              discard && discard(card);
+            }}
+          >
+            discard
+          </button>
+        </div>}
+    </div>
     <div
       className="card__inner"
       onClick={() => {
@@ -38,15 +56,10 @@ export default ({ card, onPlay, modifiers, rotateLayout }) =>
       }}
     >
       {card.item && <div className={`card__item card__item--${card.item}`} />}
-      {card.subtype &&
-        card.subtype.length &&
-        card.subtype.map((subtype, index) =>
-          <span className="card__subtype" key={index}>
-            {subtype}
-          </span>
-        )}
       {card.layout && <CardLayout layout={card.layout} item={card.item} />}
       {card.count && <CardGold count={card.count} />}
+      {card.action &&
+        <CardAction action={card.action} subtype={card.subtype} />}
     </div>
   </div>;
 

@@ -1,0 +1,17 @@
+.player-avatar {
+  position: relative;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  background-color: #FFF;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, .6);
+}
+
+.player-avatar__inner {
+  position: absolute;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  margin: 4px 0 0 2px;
+  background-size: cover;
+}

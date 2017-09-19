@@ -28,7 +28,7 @@ games["dad6865a-5c26-4026-9146-d9dfb789af04"] = {
     },
     {
       id: "a0e49070-f02a-4405-bdb7-615564d9e6af",
-      gold: [0],
+      gold: [2],
       role: "SABOTEUR",
       name: "pOxaes nz",
       avatarUrl:

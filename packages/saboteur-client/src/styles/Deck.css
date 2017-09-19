@@ -1,9 +1,10 @@
 .deck {
   position: absolute;
-  bottom: 30px;
+  top: 50%;
   left: 30px;
   box-sizing: border-box;
   border-radius: 12px;
+  transform: translateY(-50%);
 }
 
 .deck--empty {

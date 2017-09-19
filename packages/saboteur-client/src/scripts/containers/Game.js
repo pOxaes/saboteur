@@ -430,6 +430,10 @@ export class Game extends Component {
     this.forceUpdate();
   }
 
+  discardCard(card) {
+    console.log("discardCard", card);
+  }
+
   leave() {
     const confirmationSentence =
       this.state.game.hostId === this.state.currentPlayer.id
@@ -501,6 +505,7 @@ export class Game extends Component {
             )}
             selectedCard={this.state.selectedCard}
             isPlaying={this.state.game.currentPlayerId === this.props.user.id}
+            discardCard={this.discardCard.bind(this)}
             rotateCardLayout={this.rotateCardLayout.bind(this)}
           />}
         {this.state.game && this.renderByStatus()}
