@@ -65,3 +65,5 @@ build_and_deploy.sh
 server_build/
 build.zip
 packages/saboteur-client/.env.production
+.data
+package-lock.json

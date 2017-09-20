@@ -7,15 +7,15 @@ const gamesService = require("./games");
 const wsService = require("./ws");
 const saboteurService = require("./saboteur");
 
-const playCardOnPlayer = (card, player) => {
+function playCardOnPlayer(card, player) {
   if (card.action === "BLOCK") {
     player.malus = card.subtype;
   } else if (card.action === "FREE") {
     player.malus = [];
   }
-};
+}
 
-const playCardOnSlot = (card, { x, y }, board, userId) => {
+function playCardOnSlot(card, { x, y }, board, userId) {
   if (card.action === "DESTROY") {
     return board.filter(slot => slot.x !== x || slot.y !== y);
   } else if (card.type === "PATH") {
@@ -28,9 +28,9 @@ const playCardOnSlot = (card, { x, y }, board, userId) => {
     board.push(newSlot);
   }
   return board;
-};
+}
 
-const endRound = (winningPlayer, game) => {
+function endRound(winningPlayer, game) {
   saboteurService.distributeGold(winningPlayer, game.players);
   game.status =
     game.currentRound === saboteurService.MAX_ROUNDS
@@ -45,9 +45,9 @@ const endRound = (winningPlayer, game) => {
   delete game.board;
   delete game.deck;
   gamesService.triggerForPlayersWithAuth(game, events.ROUND_END);
-};
+}
 
-const playCard = async (userId, gameId, cardId, isRotated, destination) => {
+async function playCard(userId, gameId, cardId, isRotated, destination) {
   const game = gamesService.getById(gameId);
 
   if (!game) {
@@ -235,8 +235,7 @@ const playCard = async (userId, gameId, cardId, isRotated, destination) => {
   gamesService.triggerForPlayers(game, events.CURRENT_PLAYER_UPDATE, {
     currentPlayerId: playersWithCards[nextPlayerIndex].id
   });
-  return;
-};
+}
 
 module.exports = {
   playCard

@@ -19,7 +19,7 @@ async function createUser(profile) {
     avatarUrl: profile.avatarUrl
   };
 
-  db.insert(DB_TABLE, DB_PRIMARY_KEY, user);
+  await db.insert(DB_TABLE, DB_PRIMARY_KEY, user);
   return user;
 }
 
@@ -44,13 +44,11 @@ async function getTokenPayload(token) {
 }
 
 async function getByEmail(email) {
-  const user = await db.find(DB_TABLE, user => user.email === email);
-  return user;
+  return db.find(DB_TABLE, user => user.email === email);
 }
 
 async function getById(id) {
-  const user = await db.find(DB_TABLE, user => user.id === id);
-  return user;
+  return db.find(DB_TABLE, user => user.id === id);
 }
 
 async function login(profile) {

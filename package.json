@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "lerna run start",
+    "bootstrap": "lerna bootstrap",
     "test": "echo \"Error: no test specified\" && exit 1",
     "precommit": "lint-staged"
   },
@@ -28,8 +30,8 @@
     "eslint-plugin-react": "7.1.0",
     "husky": "0.14.3",
     "lerna": "^2.0.0",
-    "lint-staged": "4.0.1",
-    "prettier": "1.5.2"
+    "lint-staged": "4.2.1",
+    "prettier": "1.7.0"
   },
   "lint-staged": {
     "*.js": [

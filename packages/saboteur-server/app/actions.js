@@ -1,4 +1,3 @@
-const Promise = require("bluebird");
 const events = require("saboteur-shared/src/events");
 const gameRules = require("saboteur-shared/src/game");
 const gamesService = require("./services/games");

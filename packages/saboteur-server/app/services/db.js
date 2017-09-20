@@ -7,23 +7,19 @@ storage.init({
 const toItemName = (table, id) => `${table}_${id.trim().toLowerCase()}`;
 
 async function insert(table, primaryKey, data) {
-  const item = await storage.setItem(toItemName(table, data[primaryKey]), data);
-  return item;
+  return storage.setItem(toItemName(table, data[primaryKey]), data);
 }
 
 async function remove(table, id) {
-  const item = await storage.removeItem(toItemName(table, id));
-  return item;
+  return storage.removeItem(toItemName(table, id));
 }
 
 async function get(table, id) {
-  const item = await storage.getItem(toItemName(table, id));
-  return item;
+  return storage.getItem(toItemName(table, id));
 }
 
 async function getAll(table) {
-  const items = await storage.valuesWithKeyMatch(`${table}_`);
-  return items;
+  return storage.valuesWithKeyMatch(`${table}_`);
 }
 
 async function find(table, findFoo) {

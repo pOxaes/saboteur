@@ -46,22 +46,23 @@ games["dad6865a-5c26-4026-9146-d9dfb789af04"] = {
   }
 };
 
-const triggerForPlayers = (game, event, payload) =>
-  wsService.trigger(
+function triggerForPlayers(game, event, payload) {
+  return wsService.trigger(
     event,
     Object.assign({ gameId: game.id }, payload),
     game.players.map(player => player.id)
   );
+}
 
-const getForUser = userId => {
+function getForUser(userId) {
   return Object.values(games).filter(
     game =>
       game.status === gameRules.STATUSES.WAITING_FOR_PLAYERS ||
       game.players.some(player => player.id === userId)
   );
-};
+}
 
-const insert = async (game, userId) => {
+async function insert(game, userId) {
   const maxPlayers = parseInt(game.maxPlayers, 10);
   const name = game.name.substring(0, 50);
 
@@ -75,10 +76,7 @@ const insert = async (game, userId) => {
   }
 
   const newGame = Object.assign(
-    {
-      name,
-      maxPlayers
-    },
+    { name, maxPlayers },
     {
       id: uuid.v4(),
       status: gameRules.STATUSES.WAITING_FOR_PLAYERS,
@@ -91,14 +89,18 @@ const insert = async (game, userId) => {
       ]
     }
   );
+
   games[newGame.id] = newGame;
   wsService.trigger(events.CREATE_GAME, newGame);
+
   return newGame;
-};
+}
 
-const getById = id => games[id];
+function getById(id) {
+  return games[id];
+}
 
-const removeSecretData = (game, userId) => {
+function removeSecretData(game, userId) {
   if (game.status === gameRules.STATUSES.PLAYING) {
     game.deck = game.deck.length;
     game.board.forEach(card => {
@@ -116,9 +118,9 @@ const removeSecretData = (game, userId) => {
       }
     });
   }
-};
+}
 
-const attachAuth = (game, userId) => {
+function attachAuth(game, userId) {
   const isCreator = userId === game.creator;
   return Object.assign({}, game, {
     _canKick: canKick(game, userId),
@@ -126,22 +128,22 @@ const attachAuth = (game, userId) => {
     _hasJoined: containsPlayer(game, userId),
     _canStart: canStart(game, userId)
   });
-};
+}
 
-const format = (game, userId, lightMode) => {
+const WHITE_LIST = [
+  "id",
+  "creator",
+  "creationDate",
+  "currentRound",
+  "maxPlayers",
+  "players",
+  "name",
+  "status"
+];
+function format(game, userId, lightMode) {
   game = clone(game);
   removeSecretData(game, userId);
   if (lightMode) {
-    const WHITE_LIST = [
-      "id",
-      "creator",
-      "creationDate",
-      "currentRound",
-      "maxPlayers",
-      "players",
-      "name",
-      "status"
-    ];
     game = WHITE_LIST.reduce((acc, key) => {
       acc[key] = game[key];
       return acc;
@@ -152,22 +154,23 @@ const format = (game, userId, lightMode) => {
     }));
   }
   return attachAuth(game, userId);
-};
+}
 
-const withUsers = (game, usersDictionnary) => {
+function withUsers(game, usersDictionnary) {
+  game = clone(game);
   game.players.forEach(player => {
     player.name = usersDictionnary[player.id].name;
     player.avatarUrl = usersDictionnary[player.id].avatarUrl;
   });
   return game;
-};
+}
 
-const remove = gameId => {
+function remove(gameId) {
   delete games[gameId];
   wsService.trigger(events.DELETE_GAME, { gameId });
-};
+}
 
-const removePlayer = (gameId, playerId) => {
+function removePlayer(gameId, playerId) {
   const game = getById(gameId);
   if (!game) {
     return "this game does not exist";
@@ -189,13 +192,13 @@ const removePlayer = (gameId, playerId) => {
     id: game.id,
     players: game.players
   });
-};
+}
 
-const containsPlayer = (game, playerId) => {
+function containsPlayer(game, playerId) {
   return game.players.some(player => player.id === playerId);
-};
+}
 
-const addPlayer = async (game, playerId) => {
+async function addPlayer(game, playerId) {
   const newPlayer = await userService.getById(playerId);
 
   if (!newPlayer) {
@@ -217,21 +220,28 @@ const addPlayer = async (game, playerId) => {
   });
   createMessage(game, `${newPlayer.name} has join the party`);
   return newPlayer;
-};
+}
 
-const canKick = (game, userId, kickedPlayerId) =>
-  game.creator === userId &&
-  game.status === gameRules.STATUSES.WAITING_FOR_PLAYERS &&
-  (typeof kickedPlayerId === "undefined" ||
-    containsPlayer(game, kickedPlayerId));
+function canKick(game, userId, kickedPlayerId) {
+  return (
+    game.creator === userId &&
+    game.status === gameRules.STATUSES.WAITING_FOR_PLAYERS &&
+    (typeof kickedPlayerId === "undefined" ||
+      containsPlayer(game, kickedPlayerId))
+  );
+}
 
-const canStart = (game, userId) =>
-  game.creator === userId &&
-  (game.status === gameRules.STATUSES.WAITING_FOR_PLAYERS ||
-    (game.status === gameRules.STATUSES.ROUND_END && game.currentRound < 3)) &&
-  game.players.length >= gameRules.MIN_PLAYERS_COUNT;
+function canStart(game, userId) {
+  return (
+    game.creator === userId &&
+    (game.status === gameRules.STATUSES.WAITING_FOR_PLAYERS ||
+      (game.status === gameRules.STATUSES.ROUND_END &&
+        game.currentRound < 3)) &&
+    game.players.length >= gameRules.MIN_PLAYERS_COUNT
+  );
+}
 
-const start = async game => {
+async function start(game) {
   game.status = gameRules.STATUSES.PLAYING;
   Object.assign(game, {
     status: gameRules.STATUSES.PLAYING,
@@ -252,10 +262,11 @@ const start = async game => {
     status: game.status
   });
   createMessage(game, `Let's fight!`);
-  return game;
-};
 
-const triggerForPlayersWithAuth = async (game, event) => {
+  return game;
+}
+
+async function triggerForPlayersWithAuth(game, event) {
   const usersDictionnary = await userService.getAllAsDictionnary();
   game = withUsers(game, usersDictionnary);
   game.players.forEach(player => {
@@ -268,9 +279,9 @@ const triggerForPlayersWithAuth = async (game, event) => {
       [player.id]
     );
   });
-};
+}
 
-const createMessage = (game, message, user) => {
+function createMessage(game, message, user) {
   let chatElement = {
     messages: [message]
   };
@@ -291,9 +302,9 @@ const createMessage = (game, message, user) => {
     game.chat.push(chatElement);
   }
   triggerForPlayers(game, events.SEND_MESSAGE, chatElement);
-};
+}
 
-const addMessage = (userId, gameId, message) => {
+function addMessage(userId, gameId, message) {
   const game = games[gameId];
   if (!game) {
     return Promise.reject("game does not exist");
@@ -312,7 +323,7 @@ const addMessage = (userId, gameId, message) => {
 
   message = message.substring(0, 100);
   createMessage(game, message, user);
-};
+}
 
 module.exports = {
   addPlayer,

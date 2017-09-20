@@ -7,7 +7,7 @@ const MAX_ROUNDS = 3;
 
 // 44 path cards (40 distribuables, 4 sur le board)
 
-const stackItemToCard = stack => {
+function stackItemToCard(stack) {
   if (stack.layout) {
     return {
       type: "PATH",
@@ -27,9 +27,9 @@ const stackItemToCard = stack => {
     type: "ACTION",
     action: stack.action
   };
-};
+}
 
-const buildDeck = () => {
+function buildDeck() {
   const computedDeck = deck.reduce((acc, stack) => {
     for (let i = 0; i < stack.count; i++) {
       acc.push(stackItemToCard(stack));
@@ -41,9 +41,9 @@ const buildDeck = () => {
     card.id = index;
   });
   return computedDeck;
-};
+}
 
-const distributeCards = ({ players, deck, currentPlayerId }) => {
+function distributeCards({ players, deck, currentPlayerId }) {
   const playersCount = players.length;
 
   // 3 to 5 players: 6 cards
@@ -75,9 +75,9 @@ const distributeCards = ({ players, deck, currentPlayerId }) => {
 
   const cardToRemoveFromDeck = playersCount * cardsPerPlayer;
   deck.splice(0, cardToRemoveFromDeck);
-};
+}
 
-const distributeRoles = players => {
+function distributeRoles(players) {
   let destroyersCount;
 
   // 3 to 4 players, 1 destroyer
@@ -104,16 +104,17 @@ const distributeRoles = players => {
     .forEach((role, index) => (players[index].role = role));
 
   return players;
-};
+}
 
-const formatPlayer = player =>
-  Object.assign({}, player, {
+function formatPlayer(player) {
+  return Object.assign({}, player, {
     malus: [],
     cards: [],
     gold: player.gold || []
   });
+}
 
-const computeInitialBoard = () => {
+function computeInitialBoard() {
   const cards = [
     {
       hidden: true,
@@ -159,13 +160,13 @@ const computeInitialBoard = () => {
         item: "LADDER"
       }
     ]);
-};
+}
 
-const replaceLastGold = (player, goldValue) => {
+function replaceLastGold(player, goldValue) {
   player.gold[player.gold.length - 1] = goldValue;
-};
+}
 
-const distributeGold = (winningPlayer, players) => {
+function distributeGold(winningPlayer, players) {
   const sameRolePlayers = players.filter(
     player => player.role === winningPlayer.role
   );
@@ -210,7 +211,7 @@ const distributeGold = (winningPlayer, players) => {
       replaceLastGold(player, drawnGold[index])
     );
   }
-};
+}
 
 module.exports = {
   MAX_ROUNDS,

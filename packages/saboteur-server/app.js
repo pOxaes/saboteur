@@ -18,10 +18,9 @@ const html5middleware = require("./app/html5middleware");
 
 const app = express();
 
-app
-  .use(html5middleware)
-  .use(compression())
-  .use(express.static(path.join(__dirname, process.env.DIST_PATH)));
+app.use(html5middleware);
+app.use(compression());
+app.use(express.static(path.join(__dirname, process.env.DIST_PATH)));
 
 app.use(cookieParser());
 app.use(
@@ -32,7 +31,7 @@ app.use(
 app.use(bodyParser.json());
 
 app.use(
-  path.join(process.env.ROUTE_BASE, "/api"),
+  `${process.env.ROUTE_BASE}/api`,
   noCache(),
   cors({
     credentials: true,

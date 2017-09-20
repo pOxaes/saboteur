@@ -37,7 +37,7 @@ loginRouter.post("/login", async (req, res) => {
   }
 });
 
-function simpleProfile(googleProfile) {
+const simpleProfile = googleProfile => {
   const email = googleProfile.emails.find(
     email => email.type === "account"
   ) || {
@@ -49,6 +49,6 @@ function simpleProfile(googleProfile) {
     avatarUrl: googleProfile.image ? googleProfile.image.url : "",
     email: email.value
   };
-}
+};
 
 module.exports = loginRouter;
