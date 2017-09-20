@@ -18,11 +18,14 @@ import "../../styles/Game.css";
 
 const REVEAL_DURATION = 5000;
 
-const computeGameClass = (game, selectedCard) =>
+const computeGameClass = (game, selectedCard, currentPlayer) =>
   [
     "game",
     selectedCard && "game--selected-card",
-    game && `game--status-${game.status}`
+    game && `game--status-${game.status}`,
+    game &&
+      game.currentPlayerId === currentPlayer.id &&
+      "game--current-player-turn"
   ].join(" ");
 
 export class Game extends Component {
@@ -480,7 +483,11 @@ export class Game extends Component {
   render() {
     return (
       <div
-        className={computeGameClass(this.state.game, this.state.selectedCard)}
+        className={computeGameClass(
+          this.state.game,
+          this.state.selectedCard,
+          this.state.currentPlayer
+        )}
       >
         <div className="game__nav">
           {this.state.game &&
@@ -494,7 +501,7 @@ export class Game extends Component {
             >
               Leave
             </button>}
-          <Link className="game__nav__back-button" to="/">
+          <Link className="game__nav__back-button link" to="/">
             Home
           </Link>
         </div>

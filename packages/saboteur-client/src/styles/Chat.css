@@ -20,6 +20,10 @@
   right: 100%;
 }
 
+.chat__toggler .button {
+  border-top-left-radius: 50%;
+}
+
 .chat__messages {
   flex: 1;
   transition: background .3s ease-out;

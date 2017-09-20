@@ -1,6 +1,5 @@
 .card {
   position: relative;
-  background: #fff;
   border-radius: var(--card-border-radius);
   width: var(--card-width);
   height: var(--card-height);
@@ -37,6 +36,11 @@
 
 .card--action-BLOCK .card__inner {
   background-color: #e63c5c;
+}
+
+.card__backface {
+  fill: #E175D7;
+  transform: scale(1.1);
 }
 
 .card--action-FREE .card__inner {
@@ -119,6 +123,7 @@
   display: flex;
   justify-content: space-between;
   width: 100%;
+  margin-bottom: 5px;
 }
 
 .card--header-actions--discard {

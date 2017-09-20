@@ -1,15 +1,8 @@
 .current-player {
-  /* position: absolute;
-  bottom: 0;
-  left: 10px; */
   z-index: var(--z-currentPlayer);
 
   display: flex;
   flex-direction: column;
-}
-
-.current-player--playing {
-  background: rgb(100, 220, 150);
 }
 
 .current-player__hand {
@@ -35,6 +28,8 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
+  margin-bottom: 22px;
+  padding-left: 3px;
 }
 
 .current-player .player-malus .card {

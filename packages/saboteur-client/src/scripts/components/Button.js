@@ -5,6 +5,7 @@ const computeButtonClass = (modifiers = {}) =>
   [
     "button",
     modifiers.small && "button--small",
+    modifiers.verySmall && "button--very-small",
     modifiers.square && "button--square",
     modifiers.warning && "button--warning"
   ].join(" ");

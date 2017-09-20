@@ -1,20 +1,31 @@
 .players-list {
+  position: relative;
   list-style: none;
   display: flex;
-  height: 68px;
+  height: 44px;
   justify-content: space-between;
   z-index: var(--z-playersList);
+  padding: 0 58px;
   background: #4d207f;
-  padding: 0 18px;
+}
+
+.players-list::before {
+  content:"";
+  position: absolute;
+  left: 0;
+  top: 100%;
+  right: 0;
+  height: 26px;
+  background:  url('../assets/header-bg.png') repeat-x bottom;
 }
 
 .player-list__item--playing .player-avatar {
-  background: rgb(100, 220, 150);
-  box-shadow: 0 0 3px 3px rgba(100, 220, 150, 0.5);
+  background: var(--color-green);
+  box-shadow: 0 0 13px 5px rgba(169, 239, 0, .3);
 }
 
 .player-list__item--playing .player__name {
-  color: rgb(100, 220, 150);
+  color: var(--color-green);
 }
 
 .player-list__item:first-child:last-child {

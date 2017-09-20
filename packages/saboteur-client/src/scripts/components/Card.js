@@ -3,6 +3,7 @@ import Button from "./Button";
 import CardLayout from "./CardLayout";
 import CardGold from "./CardGold";
 import CardAction from "./CardAction";
+import CardBackfaceSvg from "./CardBackfaceSvg";
 import "../../styles/Card.css";
 
 const computeCardClass = (card, modifiers = {}) =>
@@ -33,20 +34,25 @@ export default ({ card, onPlay, modifiers, rotateLayout, discard }) =>
               rotateLayout && rotateLayout(card);
             }}
             text="rotate"
+            modifiers={{
+              verySmall: true
+            }}
           />
         </div>}
       {modifiers &&
         modifiers.isSelected &&
         <div className="card--header-actions--discard">
-          <button
+          <Button
             className="card__discard"
             type="button"
             onClick={() => {
               discard && discard(card);
             }}
-          >
-            discard
-          </button>
+            text="discard"
+            modifiers={{
+              verySmall: true
+            }}
+          />
         </div>}
     </div>
     <div
@@ -55,6 +61,7 @@ export default ({ card, onPlay, modifiers, rotateLayout, discard }) =>
         onPlay && onPlay(card);
       }}
     >
+      {(card.hidden || card.type === "HIDDEN") && <CardBackfaceSvg />}
       {card.item && <div className={`card__item card__item--${card.item}`} />}
       {card.layout && <CardLayout layout={card.layout} item={card.item} />}
       {card.count && <CardGold count={card.count} />}

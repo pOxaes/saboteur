@@ -10,6 +10,7 @@
   border-radius: 3px;
   min-width: 220px;
   cursor: pointer;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, .2);
 }
 
 .button:hover,
@@ -20,6 +21,12 @@
 .button--small {
   padding: 6px 12px;
   font-size: 16px;
+  min-width: 0;
+}
+
+.button--very-small {
+  padding: 3px 6px;
+  font-size: 12px;
   min-width: 0;
 }
 
