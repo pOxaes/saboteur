@@ -1,7 +1,7 @@
 .current-player {
-  position: absolute;
+  /* position: absolute;
   bottom: 0;
-  left: 10px;
+  left: 10px; */
   z-index: var(--z-currentPlayer);
 
   display: flex;

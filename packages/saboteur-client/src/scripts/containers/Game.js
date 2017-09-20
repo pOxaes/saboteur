@@ -29,7 +29,8 @@ export class Game extends Component {
   state = {
     eventsInitialized: false,
     id: this.props.match.params.id,
-    message: ""
+    message: "",
+    lastMessageDate: new Date().getTime()
   };
 
   queue = new EventsQueue();
@@ -169,10 +170,20 @@ export class Game extends Component {
   }
 
   addMessage(chatItem) {
-    console.log(chatItem);
     const updatedGame = this.state.game;
-    updatedGame.chat.push(chatItem);
-    this.setState({ game: updatedGame });
+    const lastMessage = this.state.game.chat[this.state.game.chat.length - 1];
+
+    if (
+      lastMessage &&
+      lastMessage.user &&
+      chatItem.user &&
+      lastMessage.user.id === chatItem.user.id
+    ) {
+      lastMessage.messages = chatItem.messages;
+    } else {
+      updatedGame.chat.push(chatItem);
+    }
+    this.setState({ game: updatedGame, lastMessageDate: new Date().getTime() });
     this.forceUpdate();
   }
 
@@ -461,6 +472,9 @@ export class Game extends Component {
       message: this.state.message,
       gameId: this.state.game.id
     });
+    this.setState({
+      message: ""
+    });
   };
 
   render() {
@@ -495,27 +509,32 @@ export class Game extends Component {
               gameRules.DESTINATION_TYPES.PLAYER
             )}
           />}
-        {this.state.currentPlayer &&
-          <CurrentPlayer
-            player={this.state.currentPlayer}
-            onCardPlay={this.onCardPlay.bind(this)}
-            selectPlayer={this.confirmSelectedCardDestination.bind(
-              this,
-              gameRules.DESTINATION_TYPES.PLAYER
-            )}
-            selectedCard={this.state.selectedCard}
-            isPlaying={this.state.game.currentPlayerId === this.props.user.id}
-            discardCard={this.discardCard.bind(this)}
-            rotateCardLayout={this.rotateCardLayout.bind(this)}
-          />}
         {this.state.game && this.renderByStatus()}
-        {this.state.game &&
-          <Chat
-            chat={this.state.game.chat}
-            handleMessageChange={this.handleMessageChange}
-            sendMessage={this.sendMessage}
-            message={this.state.message}
-          />}
+        <div className="game__bottom-wrapper">
+          {this.state.currentPlayer &&
+            <CurrentPlayer
+              player={this.state.currentPlayer}
+              onCardPlay={this.onCardPlay.bind(this)}
+              selectPlayer={this.confirmSelectedCardDestination.bind(
+                this,
+                gameRules.DESTINATION_TYPES.PLAYER
+              )}
+              selectedCard={this.state.selectedCard}
+              isPlaying={this.state.game.currentPlayerId === this.props.user.id}
+              discardCard={this.discardCard.bind(this)}
+              rotateCardLayout={this.rotateCardLayout.bind(this)}
+            />}
+          {this.state.game &&
+            this.state.currentPlayer &&
+            <Chat
+              currentUser={this.state.currentPlayer.id}
+              lastMessageDate={this.state.lastMessageDate}
+              chat={this.state.game.chat}
+              handleMessageChange={this.handleMessageChange}
+              sendMessage={this.sendMessage}
+              message={this.state.message}
+            />}
+        </div>
       </div>
     );
   }

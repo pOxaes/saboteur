@@ -1,4 +1,5 @@
 import React from "react";
+import Button from "./Button";
 import CardLayout from "./CardLayout";
 import CardGold from "./CardGold";
 import CardAction from "./CardAction";
@@ -25,15 +26,14 @@ export default ({ card, onPlay, modifiers, rotateLayout, discard }) =>
     <div className="card--header-actions">
       {card.canRotate &&
         <div className="card--header-actions--rotate">
-          <button
+          <Button
             className="card__rotate"
             type="button"
             onClick={() => {
               rotateLayout && rotateLayout(card);
             }}
-          >
-            rotate
-          </button>
+            text="rotate"
+          />
         </div>}
       {modifiers &&
         modifiers.isSelected &&

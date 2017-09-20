@@ -41,9 +41,9 @@ export default ({ game, startGame }) =>
       {game.winningPlayer.role} team won
     </p>
     <h2>Builders</h2>
-    <PlayersByRole players={game.players} role="BUILDER" />
+    <PlayersByRole players={game.players} playerRole="BUILDER" />
     <h2>Saboteurs</h2>
-    <PlayersByRole players={game.players} role="SABOTEUR" />
+    <PlayersByRole players={game.players} playerRole="SABOTEUR" />
 
     {game.winningPlayer &&
       <p>

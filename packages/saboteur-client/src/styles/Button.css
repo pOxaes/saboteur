@@ -1,0 +1,37 @@
+.button {
+  transition: background .3s ease-out;
+  background: var(--color-yellow);
+  outline: none;
+  border: none;
+  color: #FFF;
+  padding: 12px 24px;
+  font-family: "Caveat";
+  font-size: 24px;
+  border-radius: 3px;
+  min-width: 220px;
+  cursor: pointer;
+}
+
+.button:hover,
+.button:focus {
+  background: var(--color-yellow-dark);
+}
+
+.button--small {
+  padding: 6px 12px;
+  font-size: 16px;
+  min-width: 0;
+}
+
+.button--square {
+  border-radius: 0;
+}
+
+.button--warning {
+  background: var(--color-red);
+}
+
+.button--warning:hover,
+.button--warning:focus {
+  background: var(--color-red-dark);
+}

@@ -1,10 +1,10 @@
 import React from "react";
 
-export default ({ players, role }) =>
+export default ({ players, playerRole }) =>
   <ul>
-    {players.filter(player => player.role === role).map(player =>
+    {players.filter(player => player.role === playerRole).map(player =>
       <li key={player.id}>
-        <img src={player.avatarUrl} />
+        <img src={player.avatarUrl} alt={player.name} />
         <p>
           {player.name}
         </p>

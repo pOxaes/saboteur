@@ -271,16 +271,25 @@ const triggerForPlayersWithAuth = async (game, event) => {
 };
 
 const createMessage = (game, message, user) => {
-  if (!user) {
-    user = {
-      name: "Info"
-    };
-  }
-  const chatElement = {
-    user,
-    message
+  let chatElement = {
+    messages: [message]
   };
-  game.chat.push(chatElement);
+  if (user) {
+    const { avatarUrl, id, name } = user;
+    chatElement.user = { avatarUrl, id, name };
+  }
+  var lastMessage = game.chat[game.chat.length - 1];
+  if (
+    lastMessage &&
+    lastMessage.user &&
+    user &&
+    lastMessage.user.id === user.id
+  ) {
+    lastMessage.messages.push(message);
+    chatElement = lastMessage;
+  } else {
+    game.chat.push(chatElement);
+  }
   triggerForPlayers(game, events.SEND_MESSAGE, chatElement);
 };
 

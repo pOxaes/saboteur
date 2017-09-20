@@ -1,5 +1,12 @@
 :root {
-  --background-color: #8d3be9;
+  --color-yellow: #f8ba00;
+  --color-yellow-dark: #e3aa00;
+  --color-purple: #8d3be9;
+  --color-red: #e63c5c;
+  --color-red-dark: #be324c;
+  --color-green: #a9ef00;
+  
+  --background-color: var(--color-purple);
 
   --card-width: 63px;
   --card-height: 88px;
@@ -35,6 +42,8 @@
 
   --board-width: calc(var(--board-initial-width) * var(--board-coef));
   --board-height: calc(var(--board-initial-height) * var(--board-coef));
+
+  --message-border-radius: 30px;
 
   /* Z-INDEX */
 

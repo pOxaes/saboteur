@@ -4,6 +4,25 @@
   src: local('Caveat'), url("../assets/fonts/CaveatBrush-Regular.ttf") format('truetype');
 }
 
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 100;
+  src: local('Roboto Thin'), local('Roboto-Thin'), url("../assets/fonts/Roboto/Roboto-Thin.ttf") format('truetype');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Roboto Light'), local('Roboto-Light'), url("../assets/fonts/Roboto/Roboto-Light.ttf") format('truetype');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Roboto'), local('Roboto-Regular'), url("../assets/fonts/Roboto/Roboto-Regular.ttf") format('truetype');
+}
+
 body {
   background: var(--background-color);
   height: 100vh;

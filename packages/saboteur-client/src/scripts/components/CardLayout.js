@@ -895,9 +895,12 @@ export default ({ item, layout }) =>
             r="45.3339"
             gradientUnits="userSpaceOnUse"
           >
-            <stop offset="0" style="stop-color:#FFFFFF" />
-            <stop offset="0.5116" style="stop-color:#FFFF00" />
-            <stop offset="1" style="stop-color:#FFFF00;stop-opacity:0" />
+            <stop offset="0" style={{ "stop-color": "#FFFFFF" }} />
+            <stop offset="0.5116" style={{ "stop-color": "#FFFF00" }} />
+            <stop
+              offset="1"
+              style={{ "stop-color": "#FFFF00", "stop-opacity": 0 }}
+            />
           </radialGradient>
           <circle
             name="ITEM-GOLD-GLOW"
