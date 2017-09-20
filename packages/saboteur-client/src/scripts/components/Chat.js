@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import Button from "./Button";
 import ChatMessage from "./ChatMessage";
 import "../../styles/Chat.css";
@@ -10,7 +11,7 @@ const computeChatClassName = ({ isVisible, hasNewMessage }) =>
     hasNewMessage && "chat--new-message"
   ].join(" ");
 
-export default class Chat extends Component {
+class Chat extends Component {
   state = {
     isVisible: true,
     hasNewMessage: false,
@@ -88,3 +89,16 @@ export default class Chat extends Component {
     );
   }
 }
+
+Chat.propTypes = {
+  chat: PropTypes.array.isRequired,
+  currentUser: PropTypes.any.isRequired,
+  sendMessage: PropTypes.func.isRequired,
+  handleMessageChange: PropTypes.func.isRequired
+};
+
+Chat.defaultProps = {
+  chat: []
+};
+
+export default Chat;

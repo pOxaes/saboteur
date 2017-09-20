@@ -83,6 +83,7 @@ const insert = async (game, userId) => {
       id: uuid.v4(),
       status: gameRules.STATUSES.WAITING_FOR_PLAYERS,
       creator: userId,
+      chat: [],
       creationDate: new Date(),
       players: [
         {

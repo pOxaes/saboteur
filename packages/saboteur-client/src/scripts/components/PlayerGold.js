@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import GoldSvg from "./GoldSvg";
 import "../../styles/PlayerGold.css";
 
@@ -11,7 +12,7 @@ const goldToArray = gold =>
     return acc.concat(arr);
   }, []);
 
-export default class playerGold extends Component {
+class PlayerGold extends Component {
   state = {
     flattenedGold: []
   };
@@ -39,3 +40,13 @@ export default class playerGold extends Component {
     );
   }
 }
+
+PlayerGold.propTypes = {
+  gold: PropTypes.array.isRequired
+};
+
+PlayerGold.defaultProps = {
+  gold: []
+};
+
+export default PlayerGold;

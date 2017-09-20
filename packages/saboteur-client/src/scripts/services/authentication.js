@@ -1,7 +1,6 @@
 import actions from "../store/actions";
 
-const GOOGLE_CLIENT_ID =
-  "262090290445-aa1mmt5fpg34dcfkcb1ful7us6fqtjhk.apps.googleusercontent.com";
+const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 const TOKEN_STORAGE_KEY = "token";
 
 function login(googleAuthorizationCode) {
