@@ -1,0 +1,49 @@
+.discard {
+  transition: background-color .3s ease-out, border-color .3s ease-out;
+  position: absolute;
+  z-index: var(--z-discard);
+  width: var(--card-width);
+  height: var(--card-height);
+  bottom: 50%;
+  left: 15px;
+  margin: 0 0 10px 4px;
+  border: 8px solid rgba(255, 255, 255, .3);
+  border-radius: var(--card-border-radius);
+  background-color: rgba(255, 255, 255, .05);
+}
+
+.card--header-actions--discard {
+  display: none;
+}
+
+.discard svg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 30px;
+}
+
+.discard svg path {
+  transition: fill .3s ease-out;
+  fill: rgba(255, 255, 255, .3)
+}
+
+.discard--highlight {
+  background-color: rgba(225, 117, 215, 0.17);
+  border-color: rgba(225, 117, 215, 0.7);
+}
+
+.discard--highlight svg path {
+  fill: rgba(225, 117, 215, 0.7);
+}
+
+@media only screen and (max-width: 500px) {
+  .discard {
+    display: none;
+  }
+
+  .card--header-actions--discard {
+    display: block;
+  }
+}

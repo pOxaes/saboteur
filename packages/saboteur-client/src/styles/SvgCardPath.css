@@ -1,0 +1,45 @@
+.svg-card-path {
+  width: 100%;
+  height: 100%;
+  transform: scale(1.05);
+}
+
+.svg-card-path__path{
+  fill:#CEA386;
+}
+.svg-card-path__grass{
+  fill:#4A9980;
+}
+.svg-card-path__snake{
+  fill:#B23D3D;
+}
+.svg-card-path__car-grey{
+  fill:#5E5C5B;
+}
+.svg-card-path__car-light{
+  fill:#FBEF5B;
+  fill-opacity:0.32;}
+.svg-card-path__car-main{
+  fill:#E24D25;
+}
+.svg-card-path__car-glass{
+  fill:#E8E7E6;
+}
+.svg-card-path__car-secondary{
+  fill:#C93E23;
+}
+.svg-card-path__gold-glow{
+  fill: url(#ITEM-GOLD-GLOW_1_);
+}
+.svg-card-path__gold-light{
+  fill:#FDEA3A;
+}
+.svg-card-path__gold-dark{
+  fill:#C4852C;
+}
+.svg-card-path__vege-light{
+  fill:#367F60;
+}
+.svg-card-path__vege-dark{
+  fill:#2A664E;
+}

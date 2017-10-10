@@ -1,0 +1,132 @@
+.current-player {
+  z-index: var(--z-currentPlayer);
+  position: fixed;
+  left: 0;
+}
+
+.current-player__hand {
+  position: relative;
+  margin: 20px 0 -30px 150px;
+  display: flex;
+  max-width: 100%;
+}
+
+.current-player__hand::after {
+  content: "";
+  transition: opacity .3s ease-out;
+  pointer-events: none;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  transform: translate(-38%, 50%);
+  width: 700px;
+  height: 400px;
+  background: radial-gradient(ellipse at center, rgba(0,0,0,1) 0%,rgba(0,0,0,0) 60%);
+  border-radius: 50%;
+  z-index: 15;
+}
+
+.current-player__hand:hover::after {
+  opacity: 0.6;
+}
+
+.current-player__hand__card-wrapper {
+  transition: background .3s ease-out;
+  margin-left: -35px;
+}
+
+.current-player__hand .current-player__hand__card-wrapper:hover {
+  background: rgba(0, 0, 0, .4);
+  position: relative;
+  z-index: 7;
+}
+
+.current-player__hand__card-wrapper .card--hand:not(.card--entered) .card__inner {
+  transform: translateY(100%);
+}
+
+.current-player__hand__card-wrapper:hover .card--hand {
+  transform: translateY(var(--card-hover-translateY--hand));
+}
+
+.current-player__hand__card-wrapper {
+  transform-origin: bottom center;
+}
+
+.current-player__hand__card-wrapper:nth-child(1) {
+  transform: rotate(-25deg);
+  z-index: 6;
+}
+
+.current-player__hand__card-wrapper:nth-child(2) {
+  transform: rotate(-15deg);
+  margin-top: -10px;
+  z-index: 5;
+}
+
+.current-player__hand__card-wrapper:nth-child(3) {
+  transform: rotate(-5deg);
+  margin-top: -15px;
+  z-index: 4;
+}
+
+.current-player__hand__card-wrapper:nth-child(4) {
+  transform: rotate(5deg);
+  margin-top: -15px;
+  z-index: 3;
+}
+
+.current-player__hand__card-wrapper:nth-child(5) {
+  transform: rotate(15deg);
+  margin-top: -10px;
+  z-index: 2;
+}
+
+.current-player__hand__card-wrapper:nth-child(6) {
+  transform: rotate(25deg);
+  z-index: 1;
+}
+
+
+.current-player__hand__card-wrapper .card {
+  max-width: none;
+}
+
+.game--status-WAITING_FOR_PLAYERS .current-player {
+  margin-bottom: 40px;
+}
+
+.current-player__malus {
+  position: absolute;
+  left: 18px;
+  bottom: 70px;
+}
+
+.current-player__gold {
+  position: absolute;
+  bottom: 18px;
+  left: 18px;
+}
+
+@media only screen and (max-width: 530px) {
+  .current-player--selected-card {
+    left: 10px;
+    transform: none;
+  }
+
+  .current-player--selected-card .player-status,
+  .current-player--selected-card .card:not(.card--selected) {
+    display: none;
+  }
+
+  .current-player--selected-card .card--selected {
+    left: 0;
+  }
+  
+  .current-player--selected-card .card--selected .card__rotate {
+    left: 100%;
+    bottom: 50%;
+    margin-left: 20px;
+    transform: none;
+  }
+}

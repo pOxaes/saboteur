@@ -1,0 +1,41 @@
+.players-list {
+  position: relative;
+  list-style: none;
+  display: flex;
+  height: 44px;
+  /* width: 100%; */
+  justify-content: space-between;
+  z-index: var(--z-playersList);
+  padding: 0 58px;
+}
+
+.player-list__item--playing .player-avatar {
+  background: #FFF;
+  box-shadow: 0 0 13px 5px rgba(255, 255, 255, .3);
+}
+
+.player-list__item--playing .player__name {
+  color: #FFF;
+}
+
+.player-list__item:first-child:last-child {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.players-list--lobby {
+  /* justify-content: center; */
+  margin-top: 100px;
+  height: auto;
+  flex-wrap: wrap;
+  margin-left: -20px;
+}
+
+.players-list--lobby .player-list__item {
+  margin-left: 20px;
+}
+
+.players-list--leaderboard {
+  height: auto;
+}

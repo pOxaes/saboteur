@@ -1,0 +1,168 @@
+.card {
+  position: relative;
+  border-radius: var(--card-border-radius);
+  width: var(--card-width);
+  height: var(--card-height);
+  max-width: 100%;
+  max-height: 100%;
+  box-sizing: border-box;
+  box-shadow: 1px 1px 2px rgba(0,0,0,.3);
+}
+
+.card__inner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border-radius: var(--card-border-radius);
+
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.card__layout {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+/* ACTION */
+
+.card--action-BLOCK .card__inner {
+  background-color: #e63c5c;
+}
+
+.card--action-FREE .card__inner {
+  background-color: #a9ef00;
+}
+
+.card--action-FREE svg {
+  fill: #567a00;
+}
+
+.card--action-FREE--bg {
+  fill: #9ada00;
+}
+
+.card--action-BLOCK svg {
+  fill: #FFFFFF;
+}
+
+.card--multiple-subtype svg g {
+  transform: translate(28px, 35px) scale(.7);
+}
+
+.card--multiple-subtype svg g + g {
+  transform: translate(-10px, -8px) scale(.7);
+}
+
+.card--action-DESTROY .card__inner {
+  background-color: #f8ba00;
+}
+
+.card--action-DESTROY svg {
+  fill: #e63c5c;
+}
+
+.card--action-REVEAL .card__inner {
+  background-color: #f8ba00;
+}
+
+.card--action-REVEAL svg {
+  fill: #FFF;
+}
+
+.card__subtype {
+  font-size: 10px;
+  text-align: center;
+}
+
+/* PATH */
+
+/* HIDDEN */
+
+.card--HIDDEN {
+  background: #6d4688;
+}
+
+.card__backface {
+  fill: #e175d7;
+  transform: scale(1);
+}
+
+.card--player .card__backface {
+  display: none;
+}
+
+/* HAND */
+
+.card--hand {
+  border-width: var(--card-border-width--hand);
+  width: var(--card-width--hand);
+  height: var(--card-height--hand);
+
+  transition: transform .2s ease-out, box-shadow .3s ease-out;
+  cursor: pointer;
+  transform: translateY(-10px);
+}
+
+.card--hand:hover {
+  transform: translateY(var(--card-hover-translateY--hand));
+}
+
+.card--hand.card--selected {
+  transform: translateY(var(--card-hover-translateY--hand));
+  box-shadow: 0 0 6px 3px rgba(0, 0, 0, .4);
+}
+
+.card--header-actions {
+  position: absolute;
+  bottom: 100%;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+.card--header-actions--discard {
+  flex: 1;
+  text-align: right;
+}
+
+/* MALUS */
+
+.card--malus {
+  border-width: var(--card-border-width--malus);
+  width: var(--card-width--malus);
+  height: var(--card-height--malus);
+  border-radius: var(--card-border-radius--malus);
+}
+
+.card--malus .card__inner {
+  border-radius: var(--card-border-radius--malus);
+}
+
+.card--malus.card--is-playable:hover {
+  transform: translateY(var(--card-hover-translateY--malus));
+}
+
+/* PLAYER */
+
+.card--player {
+  border-width: var(--card-border-width--player);
+  width: var(--card-width--player);
+  height: var(--card-height--player);
+  border-radius: var(--card-border-radius--player);
+  box-shadow: none;
+  border: 1px solid rgba(0,0,0, 0.5);
+}
+
+.card--player.card--is-playable:hover {
+  transform: translateY(var(--card-hover-translateY--player));
+}

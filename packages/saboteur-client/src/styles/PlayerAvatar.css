@@ -1,0 +1,32 @@
+.player-avatar {
+  position: relative;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+.player-avatar__inner {
+  position: absolute;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  margin: 4px 0 0 2px;
+  background-size: cover;
+}
+
+.player-avatar--big {
+  width: 100px;
+  height: 100px;
+}
+
+.player-avatar--big .player-avatar__inner{
+  width: 84px;
+  height: 84px;
+  margin: 8px 0 0 4px;
+}
+
+.player-avatar--plain-background {
+  background: #FFF;
+  box-shadow: 2px 2px 3px rgba(0, 6, 117, .3);
+}

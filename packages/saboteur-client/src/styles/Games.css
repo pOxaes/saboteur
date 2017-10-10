@@ -1,0 +1,25 @@
+.games__list {
+  margin-left: -15px;
+}
+
+.game__list__item {
+  margin-bottom: 15px;
+  margin-left: 15px;
+  display: block;
+  width: 260px;
+  background: rgba(0, 0, 0, .1);
+  color: #FFF;
+  float: left;
+}
+
+.games__list::before,
+.games__list::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.games__empty {
+  display: block;
+  text-align: center;
+}

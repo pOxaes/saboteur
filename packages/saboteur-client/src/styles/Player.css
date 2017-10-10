@@ -1,0 +1,129 @@
+.player {  
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.player--empty {
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  border: 4px solid rgba(255, 255, 255, 0.2);
+}
+
+.player--highlighted .player-avatar {
+  background: #e175d7;
+  box-shadow: 0 0 13px 5px rgba(225, 117, 215, .6);
+}
+
+.player--highlighted .player__name {
+  color: #e175d7;
+}
+
+.player__inner {
+  display: flex;
+  flex-direction: column;
+}
+
+.player__name,
+.player-avatar {
+  transition-duration: .3s;
+  transition-timing-function: ease-out;
+}
+
+.player-avatar {
+  transition-property: background-color, box-shadow;
+}
+
+.player__name {
+  transition-property: color;
+  white-space: nowrap;
+  width: 100%;
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 5px 0;
+}
+
+.player .player-gold {
+  margin-left: 5px;
+}
+
+.player__group {
+  display: flex;
+  justify-content: space-between;
+}
+
+.player__group--cards {
+  margin-top: 10px;
+}
+
+.player .player-malus {
+  margin-top: -5px;
+}
+
+/* CARDS */
+
+.player__cards {
+  display: flex;
+  width: var(--card-width--player);
+  height: var(--card-height--player);
+}
+
+.player__cards__card-wrapper {
+  position: absolute;
+  transform-origin: bottom right;
+}
+
+.player__cards__card-wrapper:nth-child(1) {
+  transform: rotate(25deg);
+}
+
+.player__cards__card-wrapper:nth-child(2) {
+  transform: rotate(15deg);
+}
+
+.player__cards__card-wrapper:nth-child(3) {
+  transform: rotate(5deg);
+}
+
+.player__cards__card-wrapper:nth-child(4) {
+  transform: rotate(-5deg);
+}
+
+.player__cards__card-wrapper:nth-child(5) {
+  transform: rotate(-15deg);
+}
+
+.player__cards__card-wrapper:nth-child(6) {
+  transform: rotate(-25deg);
+}
+
+/* LOBBY */
+
+.player--lobby {
+  position: relative;
+}
+
+.player--lobby .player__inner {
+  flex-direction: column-reverse;
+  text-align: center;
+}
+
+.player--lobby .player-avatar {
+  background: #FFF;
+  box-shadow: 2px 2px 3px rgba(0, 6, 117, .3);
+}
+
+.player--lobby .player__name {
+  font-family: 'Roboto';
+  margin-top: 18px;
+  color: #FFF;
+  font-weight: 100;
+  font-size: 14px;
+  overflow: visible;
+}
+
+.player__kick-button {
+  position: absolute;
+  bottom: 40px;
+  right: -20px;
+}

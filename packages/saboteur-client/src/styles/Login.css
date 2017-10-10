@@ -1,0 +1,43 @@
+.login {
+  justify-content: center;
+}
+
+.login .view__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.login__google-button {
+  transition: background .3s ease-out;
+  background: #3d82f0;
+  border: none;
+  position: relative;
+  padding: 0 24px 0 72px;
+  height: 48px;
+  line-height: 48px;
+  color: #FFF;
+  border-radius: 3px;
+  overflow: hidden;
+  font-family: 'Roboto';
+  font-weight: 400;
+  font-size: 18px;
+  box-shadow: 1px 1px 3px rgba(0, 6, 117, 0.22);
+  cursor: pointer;
+  width: 300px;
+}
+
+.login__google-button:hover {
+  background: #4B89E6;
+}
+
+.login__google-button::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 48px;
+  bottom: 0;
+  background: #FFF  url('../assets/google.png') center center no-repeat;
+}

@@ -1,0 +1,30 @@
+.round-end__winner {
+  margin: 100px 12px 12px;
+  font-size: 40px;
+  color: var(--color-yellow);
+  text-align: center;
+  text-shadow: 2px 2px 3px rgba(0, 0, 50, .6);
+}
+
+.round-end__winner--final {
+  margin-top: 0;
+  font-size: 60px;
+}
+
+.round-end__start {
+  text-align: center;
+  margin-top: 24px;
+}
+
+.round-end__team {
+  margin: 24px 12px;
+}
+
+.round-end__team-title {
+  font-family: 'Roboto';
+  font-weight: 100;
+  font-size: 13px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 12px;
+}

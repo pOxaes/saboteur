@@ -1,0 +1,87 @@
+.game__lobby-status {
+  color: #FFF;
+  text-align: center;
+  margin-top: 40px;
+  font-size: 24px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.game__nav__leave-button {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+
+.game__nav__back-button {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+}
+
+.game__players-count {
+  margin-bottom: 48px;
+}
+
+.game__players-feedback {
+  margin-bottom: 48px;
+  font-family: 'Roboto';
+  font-weight: 100;
+  font-size: 16px;
+}
+
+.game__nav {
+  position: absolute;
+  z-index: var(--z-gameBackButton);
+  top: 12px;
+  left: 12px;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.game__bottom-wrapper {
+  /* overflow: hidden; */
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+}
+
+.game__bottom-wrapper > div {
+  pointer-events: all;
+}
+
+.game__bottom-wrapper .current-player {
+  flex: 1;
+}
+
+.game  .view__title{
+  margin-top: 50px;
+}
+
+.game::before {
+  transition: bottom .3s ease-out;
+  pointer-events: none;
+  content: "";
+  position: fixed;
+  bottom: -80px;
+  left: 0;
+  right: 0;
+  height: 80px;
+  z-index: 100;
+  background: linear-gradient(to bottom, rgba(248,186,0,0) 10%,rgba(248,186,0,.5) 100%);
+}
+
+.game--current-player-turn::before {
+  bottom: 0;
+}
+
+.game--current-player-malus::before {
+  background: linear-gradient(to bottom, rgba(230,60,92,0) 10%,rgba(230,60,92,.9) 100%);
+}

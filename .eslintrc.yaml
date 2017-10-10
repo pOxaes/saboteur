@@ -1,0 +1,14 @@
+extends:
+  # - "airbnb"
+  - "prettier"
+  - "prettier/react"
+parser: "babel-eslint"
+env:
+  es6: true
+plugins:
+  - "react"
+  - "prettier"
+parserOptions:
+    ecmaVersion: 2016
+rules:
+  "prettier/prettier": "error"

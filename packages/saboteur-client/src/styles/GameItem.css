@@ -1,0 +1,70 @@
+.game-item {
+  transition: color .3s ease-out, background-color .3s ease-out, box-shadow .3s ease-out;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 260px;
+  border-radius: 3px;
+}
+
+.game-item__link {
+  display: flex;
+  justify-content: space-between;
+  text-decoration: none;
+}
+
+.game-item__joined {
+  font-size: 12px;
+  width: 32px;
+  text-align: center;
+}
+
+.game-item__name {
+  flex: 1;
+  text-align: left;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  margin-right: 12px;
+}
+
+.game-item__players-count {
+  text-align: right;
+  margin-right: 15px;
+  text-align: left;
+}
+
+.game-item__remove-button {
+  position: absolute;
+  top: 100%;
+  margin-top: 5px;
+  left: 20px;
+}
+
+.game-item .button {
+  background-color: rgba(0, 0, 0, .1);
+  color: var(--color-yellow);
+  box-shadow: none;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+
+.game-item:hover,
+.game-item:focus {
+  background: #FFF;
+  color: var(--color-yellow);
+}
+
+.game-item:hover .button,
+.game-item:focus .button {
+  color: #FFF;
+  background: var(--color-yellow);
+  box-shadow: 2px 0 3px rgba(0, 6, 117, .2);
+}
+
+.game-item .button:hover,
+.game-item .button:focus {
+  color: #FFF;
+  background: var(--color-yellow-dark);
+}

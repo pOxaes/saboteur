@@ -1,0 +1,14 @@
+.home__avatar {
+  position: absolute;
+  top: 10px;
+  transform: translateY(-50%);
+  left: 50%;
+  margin-left: 200px;
+}
+
+.home__game-creation-button {
+  display: block;
+  text-align: center;
+  width: 150px;
+  margin-top: 50px;
+}

@@ -1,0 +1,72 @@
+.button {
+  transition: background .3s ease-out;
+  background: var(--color-yellow);
+  outline: none;
+  border: none;
+  color: #FFF;
+  padding: 12px 24px;
+  font-family: "Caveat";
+  font-size: 24px;
+  border-radius: 3px;
+  min-width: 220px;
+  cursor: pointer;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, .2);
+  text-decoration: none;
+}
+
+.button:hover,
+.button:focus {
+  background: var(--color-yellow-dark);
+}
+
+.button--small {
+  padding: 6px 12px;
+  font-size: 16px;
+  min-width: 0;
+}
+
+.button--very-small {
+  padding: 3px 6px;
+  font-size: 12px;
+  min-width: 0;
+}
+
+.button--square {
+  border-radius: 0;
+}
+
+.button--warning {
+  background: var(--color-red);
+}
+
+.button--warning:hover,
+.button--warning:focus {
+  background: var(--color-red-dark);
+}
+
+.button--drop {
+  cursor: pointer;
+  transition: transform .3s ease-out .3s;
+  background: var(--color-red);
+  color: #FFF;
+  border: none;
+  font-size: 18px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border-top-left-radius: 0;
+  transform: rotate(45deg) scale(0);
+  transform-origin: top left;
+  box-shadow: 2px 0 3px rgba(0, 6, 117, .3);
+  z-index: 1;
+}
+
+.button--drop > span {
+  display: block;
+  transform: rotate(-45deg);
+}
+
+.game-item:hover .button--drop,
+.player:hover .button--drop {
+  transform: rotate(45deg) scale(1);
+}

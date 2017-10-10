@@ -1,0 +1,34 @@
+.player-gold {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  height: 34px;
+}
+
+.player-gold__item {
+  width: 15px;
+  height: 15px;
+  margin: 2px 2px 0 0;
+}
+
+.player-gold__text {
+  color: var(--color-yellow);
+}
+
+.player-gold__light {
+  fill: var(--color-yellow);
+}
+
+.player-gold__dark {
+  fill: #C4852C;
+}
+
+.gold-color-1,
+.gold-color-2 {
+  fill: var(--color-yellow);
+}
+
+.gold-color-3,
+.gold-color-4 {
+  fill: #C4852C;
+}
