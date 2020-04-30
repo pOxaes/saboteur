@@ -67,3 +67,4 @@ build.zip
 packages/saboteur-client/.env.production
 .data
 package-lock.json
+static/
