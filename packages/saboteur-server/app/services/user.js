@@ -35,7 +35,7 @@ async function createUser(profile) {
     id: uuid.v4(),
     name: profile.name,
     email: profile.email,
-    avatarUrl: profile.avatarUrl,
+    avatarUrl: profile.avatarURL,
   };
 
   await db.insert(DB_TABLE, DB_PRIMARY_KEY, user);
@@ -75,6 +75,7 @@ async function login(profile) {
     throw new Error("An email is needed");
   }
   let user = await getByEmail(profile.email);
+
   if (!user) {
     user = await createUser(profile);
   }
