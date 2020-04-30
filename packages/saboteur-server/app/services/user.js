@@ -35,7 +35,7 @@ async function createUser(profile) {
     id: uuid.v4(),
     name: profile.name,
     email: profile.email,
-    avatarUrl: withoutParam(profile.avatarUrl, "sz")
+    avatarUrl: profile.avatarUrl,
   };
 
   await db.insert(DB_TABLE, DB_PRIMARY_KEY, user);
@@ -52,22 +52,22 @@ async function getAllAsDictionnary() {
 
 async function createToken({ email, name, id, avatarUrl }) {
   return jwtSign({ email, name, id, avatarUrl }, JWT_SECRET, {
-    algorithm: JWT_ALGORITHM
+    algorithm: JWT_ALGORITHM,
   });
 }
 
 async function getTokenPayload(token) {
   return jwtVerify(token, JWT_SECRET, {
-    algorithms: [JWT_ALGORITHM]
+    algorithms: [JWT_ALGORITHM],
   });
 }
 
 async function getByEmail(email) {
-  return db.find(DB_TABLE, user => user.email === email);
+  return db.find(DB_TABLE, (user) => user.email === email);
 }
 
 async function getById(id) {
-  return db.find(DB_TABLE, user => user.id === id);
+  return db.find(DB_TABLE, (user) => user.id === id);
 }
 
 async function login(profile) {
@@ -81,7 +81,7 @@ async function login(profile) {
   const token = await createToken(user);
   return {
     user,
-    token
+    token,
   };
 }
 
@@ -91,5 +91,5 @@ module.exports = {
   getById,
   getAllAsDictionnary,
   createToken,
-  getTokenPayload
+  getTokenPayload,
 };

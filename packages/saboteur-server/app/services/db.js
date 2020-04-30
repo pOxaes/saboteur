@@ -1,7 +1,7 @@
 const storage = require("node-persist");
 
 storage.init({
-  dir: process.env.NODE_PERSIST_DIR
+  dir: process.env.NODE_PERSIST_DIR,
 });
 
 const toItemName = (table, id) => `${table}_${id.trim().toLowerCase()}`;
@@ -32,5 +32,5 @@ module.exports = {
   get,
   getAll,
   insert,
-  remove
+  remove,
 };
